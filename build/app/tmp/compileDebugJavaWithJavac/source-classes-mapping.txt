@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/unistal/meter_reader/BuildConfig.java
+ com.unistal.meter_reader.BuildConfig

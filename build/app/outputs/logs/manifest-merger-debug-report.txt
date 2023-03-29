@@ -1,0 +1,326 @@
+-- Merging decision tree log ---
+application
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:20:5-60:19
+MERGED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:9:5-15:19
+MERGED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:9:5-15:19
+MERGED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-17:19
+MERGED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-17:19
+MERGED from [com.google.android.gms:play-services-location:21.0.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\88318095df9412921147190457dc5884\jetified-play-services-location-21.0.1\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-location:21.0.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\88318095df9412921147190457dc5884\jetified-play-services-location-21.0.1\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-base:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6dbd245b0d8fde38e1c7ac1578da9221\jetified-play-services-base-18.1.0\AndroidManifest.xml:19:5-23:19
+MERGED from [com.google.android.gms:play-services-base:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6dbd245b0d8fde38e1c7ac1578da9221\jetified-play-services-base-18.1.0\AndroidManifest.xml:19:5-23:19
+MERGED from [com.google.android.gms:play-services-tasks:18.0.2] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\02e195af7563de55ab818c0bdfd07674\jetified-play-services-tasks-18.0.2\AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-tasks:18.0.2] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\02e195af7563de55ab818c0bdfd07674\jetified-play-services-tasks-18.0.2\AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\24c6e5612b1a43d4bd22c163913f8814\jetified-play-services-basement-18.1.0\AndroidManifest.xml:20:5-24:19
+MERGED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\24c6e5612b1a43d4bd22c163913f8814\jetified-play-services-basement-18.1.0\AndroidManifest.xml:20:5-24:19
+MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:24:5-31:19
+MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:24:5-31:19
+MERGED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:28:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\f5eafe47b6744b9d6fce9d2f508593c5\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\f5eafe47b6744b9d6fce9d2f508593c5\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:28:18-86
+	android:name
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml
+manifest
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:1:1-61:12
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:1:1-61:12
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:1:1-61:12
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:1:1-61:12
+MERGED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:1:1-61:12
+MERGED from [:bluetooth_thermal_printer] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\bluetooth_thermal_printer\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-10:12
+MERGED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-17:12
+MERGED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-17:12
+MERGED from [:camera_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\camera_android\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-12:12
+MERGED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-19:12
+MERGED from [:flutter_plugin_android_lifecycle] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_plugin_android_lifecycle\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:path_provider_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\path_provider_android\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:shared_preferences_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\shared_preferences_android\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:permission_handler_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\permission_handler_android\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:connectivity] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:geocoding_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geocoding_android\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:fluttertoast] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:flutter_bluetooth_basic] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_bluetooth_basic\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [com.google.android.gms:play-services-location:21.0.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\88318095df9412921147190457dc5884\jetified-play-services-location-21.0.1\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-base:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6dbd245b0d8fde38e1c7ac1578da9221\jetified-play-services-base-18.1.0\AndroidManifest.xml:16:1-24:12
+MERGED from [com.google.android.gms:play-services-tasks:18.0.2] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\02e195af7563de55ab818c0bdfd07674\jetified-play-services-tasks-18.0.2\AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\24c6e5612b1a43d4bd22c163913f8814\jetified-play-services-basement-18.1.0\AndroidManifest.xml:16:1-26:12
+MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\816e6b42c09a1b6e597cc572f3a17589\fragment-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.6.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\4e572d13a243cd3b1ef7577cf62c7ee0\jetified-activity-1.6.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2799de8c94d7928f032a0c93fe6e835e\loader-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\401f74203a22236f443008d5f7ba429a\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\4bebf379e8208865d4273c23d194524d\jetified-lifecycle-viewmodel-savedstate-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\4ff8182d1b777fa9b1c9b82a6b221980\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\e55a4fa628324a33d327f8ada4a51070\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\7ec55ea2230b5a90c23326d0508f913b\jetified-core-ktx-1.9.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\8fd8bbd611262ac5cb6b577cf553038d\customview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6c84d8e9291be07fc3fc6539d1b9783e\jetified-annotation-experimental-1.3.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\1d2373a625729fb23d00c95cf1e24ad8\exifinterface-1.3.6\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\c41730030e4f8e702000cd1ebee6ce9f\jetified-tracing-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\f5eafe47b6744b9d6fce9d2f508593c5\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\c2a392726d2f83f685b1e9d56ca2cc05\lifecycle-runtime-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\16cdf84cfd5d78c62b935f33b7ca651b\jetified-savedstate-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6abc46d96e2b85ce69cad917aef94b95\lifecycle-livedata-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\b6f4919913ecf7b3513b12b9244fb399\lifecycle-livedata-core-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\bf5b96e9abd2aed653efd48f3521888d\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\debug\AndroidManifest.xml:1:1-7:12
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\debug\AndroidManifest.xml:1:1-7:12
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\debug\AndroidManifest.xml:1:1-7:12
+	package
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:3:5-39
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\debug\AndroidManifest.xml
+	android:versionName
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:1:1-61:12
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\debug\AndroidManifest.xml
+	xmlns:tools
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:2:5-51
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:2:5-51
+	android:versionCode
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:1:1-61:12
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\debug\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.INTERNET
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:9:5-66
+MERGED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:9:5-66
+MERGED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:9:5-66
+	android:name
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:9:22-64
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:10:5-80
+	android:name
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:10:22-78
+uses-permission#android.permission.CAMERA
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:11:5-64
+MERGED from [:camera_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\camera_android\intermediates\library_manifest\debug\AndroidManifest.xml:9:5-65
+MERGED from [:camera_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\camera_android\intermediates\library_manifest\debug\AndroidManifest.xml:9:5-65
+	android:name
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:11:22-62
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:12:5-80
+MERGED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-80
+MERGED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-80
+	android:name
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:12:22-77
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:13:5-79
+	android:name
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:13:22-76
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:14:5-81
+MERGED from [:flutter_bluetooth_basic] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_bluetooth_basic\intermediates\library_manifest\debug\AndroidManifest.xml:9:5-81
+MERGED from [:flutter_bluetooth_basic] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_bluetooth_basic\intermediates\library_manifest\debug\AndroidManifest.xml:9:5-81
+	android:name
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:14:22-78
+uses-permission#android.permission.BLUETOOTH
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:15:5-68
+MERGED from [:bluetooth_thermal_printer] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\bluetooth_thermal_printer\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-68
+MERGED from [:bluetooth_thermal_printer] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\bluetooth_thermal_printer\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-68
+MERGED from [:flutter_bluetooth_basic] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_bluetooth_basic\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-68
+MERGED from [:flutter_bluetooth_basic] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_bluetooth_basic\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-68
+	android:name
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:15:22-65
+uses-permission#android.permission.BLUETOOTH_SCAN
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:16:5-73
+	android:name
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:16:22-70
+uses-permission#android.permission.BLUETOOTH_CONNECT
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:17:5-76
+	android:name
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:17:22-73
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:18:5-74
+MERGED from [:bluetooth_thermal_printer] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\bluetooth_thermal_printer\intermediates\library_manifest\debug\AndroidManifest.xml:8:5-74
+MERGED from [:bluetooth_thermal_printer] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\bluetooth_thermal_printer\intermediates\library_manifest\debug\AndroidManifest.xml:8:5-74
+MERGED from [:flutter_bluetooth_basic] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_bluetooth_basic\intermediates\library_manifest\debug\AndroidManifest.xml:8:5-74
+MERGED from [:flutter_bluetooth_basic] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_bluetooth_basic\intermediates\library_manifest\debug\AndroidManifest.xml:8:5-74
+	android:name
+		ADDED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml:18:22-71
+uses-sdk
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml
+MERGED from [:bluetooth_thermal_printer] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\bluetooth_thermal_printer\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:bluetooth_thermal_printer] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\bluetooth_thermal_printer\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:camera_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\camera_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:camera_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\camera_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_plugin_android_lifecycle] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_plugin_android_lifecycle\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_plugin_android_lifecycle] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_plugin_android_lifecycle\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:path_provider_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\path_provider_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:path_provider_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\path_provider_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\shared_preferences_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\shared_preferences_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:permission_handler_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\permission_handler_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:permission_handler_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\permission_handler_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:connectivity] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:connectivity] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:geocoding_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geocoding_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:geocoding_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geocoding_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:fluttertoast] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:fluttertoast] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_bluetooth_basic] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_bluetooth_basic\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_bluetooth_basic] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\flutter_bluetooth_basic\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-location:21.0.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\88318095df9412921147190457dc5884\jetified-play-services-location-21.0.1\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-location:21.0.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\88318095df9412921147190457dc5884\jetified-play-services-location-21.0.1\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-base:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6dbd245b0d8fde38e1c7ac1578da9221\jetified-play-services-base-18.1.0\AndroidManifest.xml:18:5-43
+MERGED from [com.google.android.gms:play-services-base:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6dbd245b0d8fde38e1c7ac1578da9221\jetified-play-services-base-18.1.0\AndroidManifest.xml:18:5-43
+MERGED from [com.google.android.gms:play-services-tasks:18.0.2] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\02e195af7563de55ab818c0bdfd07674\jetified-play-services-tasks-18.0.2\AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-tasks:18.0.2] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\02e195af7563de55ab818c0bdfd07674\jetified-play-services-tasks-18.0.2\AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\24c6e5612b1a43d4bd22c163913f8814\jetified-play-services-basement-18.1.0\AndroidManifest.xml:18:5-43
+MERGED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\24c6e5612b1a43d4bd22c163913f8814\jetified-play-services-basement-18.1.0\AndroidManifest.xml:18:5-43
+MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\816e6b42c09a1b6e597cc572f3a17589\fragment-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\816e6b42c09a1b6e597cc572f3a17589\fragment-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.6.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\4e572d13a243cd3b1ef7577cf62c7ee0\jetified-activity-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.6.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\4e572d13a243cd3b1ef7577cf62c7ee0\jetified-activity-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2799de8c94d7928f032a0c93fe6e835e\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2799de8c94d7928f032a0c93fe6e835e\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\401f74203a22236f443008d5f7ba429a\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\401f74203a22236f443008d5f7ba429a\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\4bebf379e8208865d4273c23d194524d\jetified-lifecycle-viewmodel-savedstate-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\4bebf379e8208865d4273c23d194524d\jetified-lifecycle-viewmodel-savedstate-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\4ff8182d1b777fa9b1c9b82a6b221980\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:19:5-21:41
+MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\4ff8182d1b777fa9b1c9b82a6b221980\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:19:5-21:41
+MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\e55a4fa628324a33d327f8ada4a51070\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\e55a4fa628324a33d327f8ada4a51070\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\7ec55ea2230b5a90c23326d0508f913b\jetified-core-ktx-1.9.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\7ec55ea2230b5a90c23326d0508f913b\jetified-core-ktx-1.9.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\8fd8bbd611262ac5cb6b577cf553038d\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\8fd8bbd611262ac5cb6b577cf553038d\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6c84d8e9291be07fc3fc6539d1b9783e\jetified-annotation-experimental-1.3.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6c84d8e9291be07fc3fc6539d1b9783e\jetified-annotation-experimental-1.3.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\1d2373a625729fb23d00c95cf1e24ad8\exifinterface-1.3.6\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\1d2373a625729fb23d00c95cf1e24ad8\exifinterface-1.3.6\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\c41730030e4f8e702000cd1ebee6ce9f\jetified-tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\c41730030e4f8e702000cd1ebee6ce9f\jetified-tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\f5eafe47b6744b9d6fce9d2f508593c5\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\f5eafe47b6744b9d6fce9d2f508593c5\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\c2a392726d2f83f685b1e9d56ca2cc05\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\c2a392726d2f83f685b1e9d56ca2cc05\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\16cdf84cfd5d78c62b935f33b7ca651b\jetified-savedstate-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\16cdf84cfd5d78c62b935f33b7ca651b\jetified-savedstate-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6abc46d96e2b85ce69cad917aef94b95\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6abc46d96e2b85ce69cad917aef94b95\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\b6f4919913ecf7b3513b12b9244fb399\lifecycle-livedata-core-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.1] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\b6f4919913ecf7b3513b12b9244fb399\lifecycle-livedata-core-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\bf5b96e9abd2aed653efd48f3521888d\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\bf5b96e9abd2aed653efd48f3521888d\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\debug\AndroidManifest.xml
+INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\debug\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\debug\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\main\AndroidManifest.xml
+		INJECTED from D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\android\app\src\debug\AndroidManifest.xml
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-77
+	android:name
+		ADDED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:7:22-74
+service#com.baseflow.geolocator.GeolocatorLocationService
+ADDED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:10:9-14:56
+	android:enabled
+		ADDED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:12:13-35
+	android:exported
+		ADDED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:13:13-37
+	android:foregroundServiceType
+		ADDED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:14:13-53
+	android:name
+		ADDED from [:geolocator_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\geolocator_android\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-77
+queries
+ADDED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:9:5-15:15
+intent#action:name:android.intent.action.GET_CONTENT+data:mimeType:*/*
+ADDED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:10:9-14:18
+action#android.intent.action.GET_CONTENT
+ADDED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-72
+	android:name
+		ADDED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:11:21-69
+data
+ADDED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:13:13-44
+	android:mimeType
+		ADDED from [:file_picker] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\file_picker\intermediates\library_manifest\debug\AndroidManifest.xml:13:19-41
+uses-permission#android.permission.RECORD_AUDIO
+ADDED from [:camera_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\camera_android\intermediates\library_manifest\debug\AndroidManifest.xml:10:5-71
+	android:name
+		ADDED from [:camera_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\camera_android\intermediates\library_manifest\debug\AndroidManifest.xml:10:22-68
+provider#io.flutter.plugins.imagepicker.ImagePickerFileProvider
+ADDED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-16:20
+	android:grantUriPermissions
+		ADDED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:12:13-47
+	android:authorities
+		ADDED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:10:13-74
+	android:exported
+		ADDED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-37
+	android:name
+		ADDED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-82
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:13:13-15:75
+	android:resource
+		ADDED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:15:17-72
+	android:name
+		ADDED from [:image_picker_android] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\image_picker_android\intermediates\library_manifest\debug\AndroidManifest.xml:14:17-67
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [:connectivity] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-79
+	android:name
+		ADDED from [:connectivity] D:\Project Unistal\meeter_reader 13-3-23\meeter_reader\build\connectivity\intermediates\library_manifest\debug\AndroidManifest.xml:7:22-76
+activity#com.google.android.gms.common.api.GoogleApiActivity
+ADDED from [com.google.android.gms:play-services-base:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6dbd245b0d8fde38e1c7ac1578da9221\jetified-play-services-base-18.1.0\AndroidManifest.xml:20:9-22:45
+	android:exported
+		ADDED from [com.google.android.gms:play-services-base:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6dbd245b0d8fde38e1c7ac1578da9221\jetified-play-services-base-18.1.0\AndroidManifest.xml:22:19-43
+	android:theme
+		ADDED from [com.google.android.gms:play-services-base:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6dbd245b0d8fde38e1c7ac1578da9221\jetified-play-services-base-18.1.0\AndroidManifest.xml:21:19-78
+	android:name
+		ADDED from [com.google.android.gms:play-services-base:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\6dbd245b0d8fde38e1c7ac1578da9221\jetified-play-services-base-18.1.0\AndroidManifest.xml:20:19-85
+meta-data#com.google.android.gms.version
+ADDED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\24c6e5612b1a43d4bd22c163913f8814\jetified-play-services-basement-18.1.0\AndroidManifest.xml:21:9-23:69
+	android:value
+		ADDED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\24c6e5612b1a43d4bd22c163913f8814\jetified-play-services-basement-18.1.0\AndroidManifest.xml:23:13-66
+	android:name
+		ADDED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\24c6e5612b1a43d4bd22c163913f8814\jetified-play-services-basement-18.1.0\AndroidManifest.xml:22:13-58
+uses-library#androidx.window.extensions
+ADDED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
+	android:required
+		ADDED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:26:13-54
+uses-library#androidx.window.sidecar
+ADDED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:28:9-30:40
+	android:required
+		ADDED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:30:13-37
+	android:name
+		ADDED from [androidx.window:window:1.0.0-beta04] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\83c0701f163fc8f853a35a495a15ad62\jetified-window-1.0.0-beta04\AndroidManifest.xml:29:13-51
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:23:9-81
+permission#com.unistal.meter_reader.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:26:22-94
+uses-permission#com.unistal.meter_reader.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.9.0] C:\Users\admin\.gradle\caches\transforms-2\files-2.1\2508e2ae7245bba1534fce80b5e8ee75\core-1.9.0\AndroidManifest.xml:26:22-94
