@@ -67,6 +67,7 @@ class CustomTextEmailField extends StatelessWidget {
         controller: controller,
         obscureText: null == isPassword ? false : true,
         onChanged: onChanged,
+        autofocus: false,
         toolbarOptions: ToolbarOptions(
           cut: true,
           copy: false,
@@ -78,7 +79,7 @@ class CustomTextEmailField extends StatelessWidget {
         cursorColor: Theme.of(context).primaryColor,
         decoration: InputDecoration(
             alignLabelWithHint: true,
-            labelText: labelText,
+            labelText: labelText ?? null,
             contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             labelStyle: listItemSubTitleStyle.copyWith(
                 fontSize: 16, color: Colors.black87),

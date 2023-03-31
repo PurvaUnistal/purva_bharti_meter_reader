@@ -13,6 +13,8 @@ class BillPrintPageLoaderEvent extends BillPrintEvent {
   List<Object?> get props => [context, billId, schema];
 }
 
+
+
 class BillPrintSetConnectEvent extends BillPrintEvent {
   final String mac;
   final String connectedPrinterName;
@@ -26,4 +28,11 @@ class BillSetPrintEvent extends BillPrintEvent {
    BillSetPrintEvent({required this.context, required });
    @override
    List<Object?> get props => [ context];
+}
+
+class BillReloadPage extends BillPrintEvent {
+  final BuildContext context;
+  BillReloadPage({required this.context, required });
+@override
+List<Object?> get props => [ context];
 }

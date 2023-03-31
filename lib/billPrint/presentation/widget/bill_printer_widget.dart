@@ -76,11 +76,21 @@ class _BillPrinterWidgetState extends State<BillPrinterWidget> {
                               }
                             },
                           ),
-                          subtitle: Text(
-                              dataState.availableBluetoothDevices[index].toString() ==
-                              dataState.connectedPrinterName? "Connected" : "Click to connect",
-                            style: TextStyle(color: dataState.availableBluetoothDevices[index].toString() ==
-                                dataState.connectedPrinterName? Colors.green : Colors.grey)),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  dataState.availableBluetoothDevices[index].toString() ==
+                                  dataState.connectedPrinterName? "Connected" : "Click to connect",
+                                style: TextStyle(color: dataState.availableBluetoothDevices[index].toString() ==
+                                    dataState.connectedPrinterName? Colors.green : Colors.grey)),
+                              dataState.isLoader == true
+                                  ? Align(
+                                   alignment: Alignment.center,
+                                   child: SpinKitCubeGrid(color: Colors.lightBlueAccent, size: 50),)
+                                  : SizedBox.shrink(),
+                            ],
+                          ),
                         ),
                       );
                }) : Center(child: Text("Printer Bluetooth no found \n Please check bluetooth printer connection",

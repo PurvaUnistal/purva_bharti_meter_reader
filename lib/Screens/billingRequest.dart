@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:meter_reader/billHistory/presentation/pages/bill_history_page.dart';
 import 'package:meter_reader/billPrint/domain/bloc/bill_print_bloc.dart';
 import 'package:meter_reader/billPrint/presentation/pages/bill_printer_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -363,75 +364,17 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
               style: TextStyle(fontSize: 16, color: Colors.white)),
           automaticallyImplyLeading: false,
           actions: [
-            IconButton(
-                icon: Icon(Icons.logout),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) =>  AlertDialog(
-                  content: Stack(
-                  clipBehavior: Clip.none, children: <Widget>[
-                    Positioned(
-                      right: -40.0, top: -40.0,
-                      child: InkResponse(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: CircleAvatar(
-                          child: Icon(Icons.close),
-                          backgroundColor: Colors.red,
-                        ),
-                      ),
-                    ),
-                    Form(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text("Meter Reader",
-                                  style: TextStyle(color: Colors.black),),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text("Do you want logout ?",
-                                style: TextStyle(color: Colors.black),),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.blue),
-                              child: Text("OK",
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () async {
-                                Navigator.of(context, rootNavigator: false)
-                                    .pop();
-                                SharedPreferences preferences = await SharedPreferences
-                                    .getInstance();
-                                await preferences.clear();
-                                EasyLoading.showInfo("Logout Successfully");
-                                Navigator.pushReplacement(context,
-                                    MaterialPageRoute(builder: (context) =>
-                                        LoginScreen()));
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                  ),
-                  )
+            PopupMenuButton<String>(
+              onSelected: handleClick,
+              itemBuilder: (BuildContext context) {
+                return {'Logout', 'History'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
                   );
-                }
-            )
+                }).toList();
+              },
+            ),
           ],
         ),
         body: Stack(
@@ -1213,5 +1156,83 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
       },
     );
     return Future.value(true);
+  }
+  void handleClick(String value) {
+    switch (value) {
+      case 'Logout':
+        logOutPop();
+        break;
+      case 'History':
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => BillHistoryPage()));
+        break;
+    }
+  }
+
+  logOutPop() {
+    showDialog(
+        context: context,
+        builder: (_) =>  AlertDialog(
+          content: Stack(
+            clipBehavior: Clip.none, children: <Widget>[
+            Positioned(
+              right: -40.0, top: -40.0,
+              child: InkResponse(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: CircleAvatar(
+                  child: Icon(Icons.close),
+                  backgroundColor: Colors.red,
+                ),
+              ),
+            ),
+            Form(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text("Meter Reader",
+                          style: TextStyle(color: Colors.black),),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text("Do you want logout ?",
+                        style: TextStyle(color: Colors.black),),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.blue),
+                      child: Text("OK",
+                          style: TextStyle(color: Colors.white)),
+                      onPressed: () async {
+                        Navigator.of(context, rootNavigator: false)
+                            .pop();
+                        SharedPreferences preferences = await SharedPreferences
+                            .getInstance();
+                        await preferences.clear();
+                        EasyLoading.showInfo("Logout Successfully");
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) =>
+                                LoginScreen()));
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+          ),
+        )
+    );
   }
 }

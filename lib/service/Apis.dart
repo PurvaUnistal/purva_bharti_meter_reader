@@ -8,4 +8,5 @@ class Apis {
  static String getPendingBillsMeterReader =  baseUrl+'customer/getPendingBillsMeterReader';
  static String generate =  baseUrl+'customer/meter-reading/generate';
  static String billPrintData = baseUrl +'customer/getBillsbyBillID?bill_id=';
+ static String billHistoryAApi = baseUrl +'customer/getAllBillsbyUserID?user_id=';
 }

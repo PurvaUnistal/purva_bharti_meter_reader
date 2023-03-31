@@ -25,15 +25,25 @@ class BillPrintBloc extends Bloc<BillPrintEvent, BillPrintState> {
   String _connectedPrinterName =  "";
   String get connectedPrinterName => _connectedPrinterName;
 
+  String _billId = "";
+  String get billId => _billId;
+
+  String _schema = "";
+  String get schema => _schema;
+
+  bool _isLoader =  false;
+  bool get isLoader => _isLoader;
+
   BillPrintBloc() : super(BillPrintInitial()) {
     on<BillPrintPageLoaderEvent>(_pageLoad);
     on<BillPrintSetConnectEvent>(_setBluetoothConnect);
     on<BillSetPrintEvent>(_billPrint);
+    on<BillReloadPage>(_pageReload);
   }
 
   _pageLoad(BillPrintPageLoaderEvent event, emit) async {
-
     _connected = false;
+    _isLoader =  false;
     String? isConnected = await BluetoothThermalPrinter.connectionStatus;
     if (isConnected == "true") {
       _connected =  true;
@@ -51,12 +61,15 @@ class BillPrintBloc extends Bloc<BillPrintEvent, BillPrintState> {
   }
 
   _setBluetoothConnect(BillPrintSetConnectEvent event, emit) async {
+    _isLoader = true;
+    _eventCompleted(emit);
     final String? result = await BluetoothThermalPrinter.connect(event.mac);
     if (result == "true") {
        _connected =  true;
        _connectedPrinterName =  event.connectedPrinterName;
-       _eventCompleted(emit);
     }
+    _isLoader = false;
+    _eventCompleted(emit);
   }
 
   _billPrint(BillSetPrintEvent event, emit) async {
@@ -70,9 +83,23 @@ class BillPrintBloc extends Bloc<BillPrintEvent, BillPrintState> {
     }
   }
 
+  _pageReload(BillReloadPage event, emit) async {
+    emit(BillPrintPageLoadState());
+    _connected = false;
+    _isLoader =  false;
+    String? isConnected = await BluetoothThermalPrinter.connectionStatus;
+    if (isConnected == "true") {
+      _connected =  true;
+    }
+    _availableBluetoothDevices = [];
+    List? bluetoothList = await BluetoothThermalPrinter.getBluetooths;
+    _availableBluetoothDevices = bluetoothList!;
+    _eventCompleted(emit);
+  }
+
   _eventCompleted(Emitter<BillPrintState> emit) {
     emit(FetchBillPrinterDataState(connected: connected,
         availableBluetoothDevices: availableBluetoothDevices,
-        connectedPrinterName: connectedPrinterName));
+        connectedPrinterName: connectedPrinterName, isLoader: isLoader));
   }
 }

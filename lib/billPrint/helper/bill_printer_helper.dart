@@ -133,78 +133,47 @@ class BillPrinterHelper {
         styles: PosStyles(align: PosAlign.center));
 
          bytes += generator.row([
-      PosColumn(
-        text: '=============  ',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '  =============',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '  =============',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
+           PosColumn(
+             text: '=====================  ',
+             width: 6,
+             styles: PosStyles(align: PosAlign.center),
+           ),
+           PosColumn(
+             text: '  ================== ',
+             width: 6,
+             styles: PosStyles(align: PosAlign.center),
+           ),
     ]);
     bytes += generator.row([
+
       PosColumn(
-        text: '|  Previous   ',
-        width: 4,
+        text: '|  Previous Balance  ',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
       PosColumn(
-        text: '|  Previous   ',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '|  Adjustment |',
-        width: 4,
+        text: '|  Previous Payment  |',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
     ]);
 
     bytes += generator.row([
       PosColumn(
-        text: '|  Balance    ',
-        width: 4,
+        text: '=====================  ',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
       PosColumn(
-        text: '|  Payment    ',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '|             |',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-    ]);
-    bytes += generator.row([
-      PosColumn(
-        text: '=============  ',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '  =============',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '  =============',
-        width: 4,
+        text: '  ================== ',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
     ]);
 
     String balanceValue =  "${billPrintData.previousBill!.previousBillAmount.toString()}";
     String balanceValueSpace =  "";
-    for(int i = 0; i < 13; i++){
+    for(int i = 0; i < 18; i++){
       if(i > balanceValue.length-1){
         balanceValueSpace += " ";
       }
@@ -213,36 +182,23 @@ class BillPrinterHelper {
 
     String paymentValue =  "${billPrintData.previousBill!.previousPayment.toString()}";
     String paymentValueSpace =  "";
-    for(int i = 0; i < 13; i++){
+    for(int i = 0; i < 18; i++){
       if(i > paymentValue.length-1){
         paymentValueSpace += " ";
       }
     }
     String totalPayment = "${paymentValueSpace+paymentValue}";
 
-    String adjustmentValue =  "${billPrintData.previousBill!.adjustment.toString()}";
-    String adjustmentValueSpace =  "";
-    for(int i = 0; i < 13; i++){
-      if(i > adjustmentValue.length-1){
-        adjustmentValueSpace += " ";
-      }
-    }
-    String totalAdjustment = "${adjustmentValueSpace+adjustmentValue}";
 
     bytes += generator.row([
       PosColumn(
-        text: '|${totalBalance}',
-        width: 4,
+        text: '|${totalBalance}  ',
+        width: 6,
         styles: PosStyles(align: PosAlign.right,),
       ),
       PosColumn(
-        text: '|${totalPayment}',
-        width: 4,
-        styles: PosStyles(align: PosAlign.right,),
-      ),
-      PosColumn(
-        text: '|${totalAdjustment}|',
-        width: 4,
+        text: '|${totalPayment}  |',
+        width: 6,
         styles: PosStyles(align: PosAlign.right,),
       ),
     ]);
@@ -254,132 +210,82 @@ class BillPrinterHelper {
     // Current Bill Amount -
     bytes += generator.row([
       PosColumn(
-        text: '=============  ',
-        width: 4,
+        text: '=====================  ',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
       PosColumn(
-        text: '  =============',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '  =============',
-        width: 4,
+        text: '  ================== ',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
     ]);
     bytes += generator.row([
       PosColumn(
-        text: '|Current Bill  ',
-        width: 4,
+        text: '|  Current Bill Amount  ',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
       PosColumn(
-        text: '| Due Amount   ',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '|Amount After |',
-        width: 4,
+        text: '|    Due Amount     |',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
     ]);
 
     bytes += generator.row([
       PosColumn(
-        text: '|      Amount  ',
-        width: 4,
+        text: '=====================  ',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
       PosColumn(
-        text: '|              ',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '|     Due Date|',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-    ]);
-    bytes += generator.row([
-      PosColumn(
-        text: '=============  ',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '  =============',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '  =============',
-        width: 4,
+        text: '  ================== ',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
     ]);
 
     String currentValue =  "${billPrintData.data!.amountAfterGasDeposit.toString()}";
     String currentValueSpace =  "";
-    for(int i = 0; i < 14; i++){
+    for(int i = 0; i < 18; i++){
       if(i > currentValue.length-1){
         currentValueSpace += " ";
       }
     }
     String totalCurrent = "${currentValueSpace+currentValue}";
 
-    String dueAmountValue =  "${billPrintData.data!.amountAfterGasDeposit.toString()}";
+    String dueAmountValue =  "${billPrintData.data!.finalBillAmount.toString()}";
     String dueAmountValueSpace =  "";
-    for(int i = 0; i < 14; i++){
+    for(int i = 0; i < 18; i++){
       if(i > dueAmountValue.length-1){
         dueAmountValueSpace += " ";
       }
     }
     String totaldueAmount = "${dueAmountValueSpace+dueAmountValue}";
 
-    String amountAfetrValue =  "${billPrintData.data!.amountAfterGasDeposit.toString()}";
-    String amountAfetrValueSpace =  "";
-    for(int i = 0; i < 13; i++){
-      if(i > amountAfetrValue.length-1){
-        amountAfetrValueSpace += " ";
-      }
-    }
-    String totalAmountAfetr = "${amountAfetrValueSpace+amountAfetrValue}";
 
     bytes += generator.row([
       PosColumn(
-        text: '|${totalCurrent}',
-        width: 4,
+        text: '|${totalCurrent}  ',
+        width: 6,
         styles: PosStyles(align: PosAlign.right,),
       ),
       PosColumn(
-        text: '|${totaldueAmount}',
-        width: 4,
-        styles: PosStyles(align: PosAlign.right,),
-      ),
-      PosColumn(
-        text: '|${totalAmountAfetr}|',
-        width: 4,
+        text: '|${totaldueAmount}  |',
+        width: 6,
         styles: PosStyles(align: PosAlign.right,),
       ),
     ]);
     bytes += generator.row([
       PosColumn(
-        text: '=============  ',
-        width: 4,
+        text: '=====================  ',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
       PosColumn(
-        text: '  =============',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '  =============',
-        width: 4,
+        text: '  ================== ',
+        width: 6,
         styles: PosStyles(align: PosAlign.center),
       ),
     ]);
@@ -465,17 +371,13 @@ class BillPrinterHelper {
         styles: PosStyles(align: PosAlign.center));
     bytes += generator.hr(ch: "=");*/
 
-    bytes += generator.text('Current Invoice Amount           : ${billPrintData.data!.amountAfterTax.toString()}',
+    bytes += generator.text('Current Invoice Amount           : ${billPrintData.data!.actualReadingPrice.toString()}',
         styles: PosStyles(align: PosAlign.left));
-    bytes += generator.text('${billPrintData.data!.taxName.toString().replaceAll("@", "")}                       : ${billPrintData.data!.taxPercentageValue.toString()}',
+    bytes += generator.text('${billPrintData.data!.taxName.toString().replaceAll("@", "")}                       : ${billPrintData.data!.billingTaxAmount.toString()}',
         styles: PosStyles(align: PosAlign.left));
-    bytes += generator.text('Flexi Charges                    : 0.0',
+    bytes += generator.text('Total Amount                     : ${billPrintData.data!.amountAfterTax.toString()}',
         styles: PosStyles(align: PosAlign.left));
-    bytes += generator.text('Vat On Flexi Charges 10.0%       : 0.0',
-        styles: PosStyles(align: PosAlign.left));
-    bytes += generator.text('Total Amount                     : ${billPrintData.data!.amountAfterGasDeposit.toString()}',
-        styles: PosStyles(align: PosAlign.left));
-    bytes += generator.text('PAYABLE Amount (Rs.)   ${billPrintData.data!.amountAfterGasDeposit.toString()}',
+    bytes += generator.text('PAYABLE Amount (Rs.)   ${billPrintData.data!.finalBillAmount.toString()}',
         styles: PosStyles(align: PosAlign.center));
 
     bytes += generator.text('*Cheque/DD Should be payable to "${billPrintData.data!.lable.toString()}" (Cash payment are not accepted).',

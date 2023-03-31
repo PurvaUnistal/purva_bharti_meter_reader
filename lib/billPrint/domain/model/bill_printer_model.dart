@@ -21,7 +21,8 @@ class BillPrintModel {
          error : json['error'],
          data : json['data'] != null ? new Data.fromJson(json['data']) : null,
          qrCode: json['qrCode'] ?? "HCPL",
-         previousBill: json['previous_bill'] != null ? PreviousBill.fromJson(json['previous_bill']) : null,
+         previousBill: json['previous_bill'] != null ? PreviousBill.fromJson(json['previous_bill'])
+             : PreviousBill(previousPayment: "0.0", previousBillAmount: "0.0", adjustment: "0.0"),
      );
   }
 
@@ -48,9 +49,9 @@ class PreviousBill {
 
   factory PreviousBill.fromJson(Map<String, dynamic> json) {
     return PreviousBill(
-       previousBillAmount: json['previous_bill_amount'] ?? "0",
-      previousPayment: json['previous_payment'] ?? "0",
-      adjustment: json['adjustment'] ?? "0",
+       previousBillAmount: json['previous_bill_amount'] ?? "0.0",
+      previousPayment: json['previous_payment'] ?? "0.0",
+      adjustment: json['adjustment'] ?? "0.0",
     );
   }
 }

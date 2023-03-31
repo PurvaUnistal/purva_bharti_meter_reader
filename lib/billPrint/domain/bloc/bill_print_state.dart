@@ -19,9 +19,10 @@ class FetchBillPrinterDataState extends BillPrintInitial {
   final bool connected;
   final List availableBluetoothDevices;
   final String connectedPrinterName;
+  final bool isLoader;
   FetchBillPrinterDataState({required this.connected,
-     required this.availableBluetoothDevices, required this.connectedPrinterName});
+     required this.availableBluetoothDevices, required this.connectedPrinterName, required this.isLoader});
 
   @override
-  List<Object> get props => [connected, availableBluetoothDevices, connectedPrinterName];
+  List<Object> get props => [connected, availableBluetoothDevices, connectedPrinterName, isLoader];
 }
