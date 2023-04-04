@@ -275,7 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final jsonString = json.encode(data);
     var res = await http.post((Uri.parse(Apis.auth)), body: jsonString);
     print("Apis auth Url" + Apis.auth);
-    print("login----> ${Apis.baseUrl + Apis.auth}");
+    print("login----> ${Apis.auth}");
     setState(() {
       EasyLoading.dismiss();
     });

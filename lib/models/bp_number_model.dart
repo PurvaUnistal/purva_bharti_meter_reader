@@ -18,9 +18,9 @@ class BpNumberModel {
       json['data'].forEach((v) {
         data.add(new DataList.fromJson(v));
       });
-    } }
+    }
+    }
     catch(exception ) {
-      data = json['data'];
       print('catch error model--> : $exception');
     }
 

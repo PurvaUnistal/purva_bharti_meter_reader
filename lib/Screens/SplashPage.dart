@@ -23,7 +23,6 @@ class _PageState extends State<SplashPage> {
       resizeToAvoidBottomInset: false,
         extendBody: true,
         body: SafeArea(
-
           child : Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
