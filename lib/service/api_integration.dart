@@ -10,7 +10,7 @@ import 'Apis.dart';
 
 class ApiIntegration{
 
-  Future<List<DataList>?> bpNumberSearch(BPNumberRequestModel bpNumberRequestModel) async{
+  Future<dynamic> bpNumberSearch(BPNumberRequestModel bpNumberRequestModel) async{
     String queryString = Uri(queryParameters: bpNumberRequestModel.toJson()).query;
     var billsMeterReaderUrl = Apis.getPendingBillsMeterReader+'?' + queryString;
     print("getPendingBillsMeterReader-->"+ billsMeterReaderUrl);
@@ -22,15 +22,19 @@ class ApiIntegration{
           BpNumberModel resp = BpNumberModel.fromJson(jsonDecode(response.body.toString()));
             return resp.data;
         } else if (response.statusCode == 500) {
-          BpNumberModel resp = BpNumberModel.fromJson(jsonDecode(response.body.toString()));
-          print("500-->" + resp.data.toString());
-          ShowCustomToast.showToast(resp.data.toString());
-          return resp.data;
+          var resMessage =  jsonDecode(response.body.toString());
+          if(resMessage['data'] != null){
+            print("500-->" +resMessage['data']);
+            ShowCustomToast.showToast(resMessage['data'].toString());
+          }
+          return null;
         } else if (response.statusCode == 400) {
-          BpNumberModel resp = BpNumberModel.fromJson(jsonDecode(response.body.toString()));
-          print("400-->" + resp.data.toString());
-          ShowCustomToast.showToast(resp.data.toString());
-          return resp.data;
+          var resMessage =  jsonDecode(response.body.toString());
+          if(resMessage['data'] != null){
+            print("500-->" +resMessage['data']);
+            ShowCustomToast.showToast(resMessage['data'].toString());
+          }
+          return null;
         }
       }
       catch (e) {

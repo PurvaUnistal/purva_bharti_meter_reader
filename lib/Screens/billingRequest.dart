@@ -155,20 +155,19 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
     var response = await apiIntegration?.bpNumberSearch(bpNumberRequestModel!);
     setState(() {
       try {
-        searchList = response!;
-        print("searchList-->" + response.toString());
-        dataClear();
-        meterNumberController.text = searchList[0].meterSerialNumber.toString();
-        bpNumberFieldController.text = searchList[0].bpNumber.toString();
-        customerNameController.text = searchList[0].firstName.toString() + " " + searchList[0].lastName.toString();
-        customerAddressController.text = searchList[0].houseNumber.toString() + "\n" + searchList[0].locality.toString() +
-            "\n" + searchList[0].town.toString() + "\n" + searchList[0].pinCode.toString();
-        previousReadingController.text = searchList[0].oldReading.toString() ?? "";
-
-
-        // setState(() {
-        //   loading = false;
-        // });
+        if(response != null){
+          searchList = response!;
+          dataClear();
+          meterNumberController.text = searchList[0].meterSerialNumber.toString();
+          bpNumberFieldController.text = searchList[0].bpNumber.toString();
+          customerNameController.text = searchList[0].firstName.toString() + " " + searchList[0].lastName.toString();
+          customerAddressController.text = searchList[0].houseNumber.toString() + "\n" + searchList[0].locality.toString() +
+              "\n" + searchList[0].town.toString() + "\n" + searchList[0].pinCode.toString();
+          previousReadingController.text = searchList[0].oldReading.toString() ?? "";
+        }else{
+          searchList = [];
+          dataClear();
+        }
       } catch (e) {
         setState(() {
           loading = false;
