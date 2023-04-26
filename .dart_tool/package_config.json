@@ -279,7 +279,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///E:/Software/Flutter/flutter_windows_3.7.6-stable/flutter/packages/flutter",
+      "rootUri": "file:///D:/Software/flutter_windows_3.7.6-stable/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -315,13 +315,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///E:/Software/Flutter/flutter_windows_3.7.6-stable/flutter/packages/flutter_test",
+      "rootUri": "file:///D:/Software/flutter_windows_3.7.6-stable/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///E:/Software/Flutter/flutter_windows_3.7.6-stable/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///D:/Software/flutter_windows_3.7.6-stable/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -542,6 +542,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "package_info_plus",
+      "rootUri": "file:///C:/Users/admin/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus-3.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "package_info_plus_platform_interface",
+      "rootUri": "file:///C:/Users/admin/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus_platform_interface-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path",
       "rootUri": "file:///C:/Users/admin/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.8.2",
       "packageUri": "lib/",
@@ -747,7 +759,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///E:/Software/Flutter/flutter_windows_3.7.6-stable/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///D:/Software/flutter_windows_3.7.6-stable/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -854,7 +866,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-04-26T04:39:20.463348Z",
+  "generated": "2023-04-13T11:23:24.663447Z",
   "generator": "pub",
   "generatorVersion": "2.19.3"
 }

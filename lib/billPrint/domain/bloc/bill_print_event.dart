@@ -25,7 +25,7 @@ class BillPrintSetConnectEvent extends BillPrintEvent {
 
 class BillSetPrintEvent extends BillPrintEvent {
    final BuildContext context;
-   BillSetPrintEvent({required this.context, required });
+   BillSetPrintEvent({required this.context, required});
    @override
    List<Object?> get props => [ context];
 }

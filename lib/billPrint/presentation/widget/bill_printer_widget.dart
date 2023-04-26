@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meter_reader/Utils/reused_text_style.dart';
 import 'package:meter_reader/billPrint/domain/bloc/bill_print_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:image/image.dart' as imgs;
 
 class BillPrinterWidget extends StatefulWidget {
   const BillPrinterWidget({Key? key}) : super(key: key);
@@ -17,6 +19,14 @@ class BillPrinterWidget extends StatefulWidget {
 
 class _BillPrinterWidgetState extends State<BillPrinterWidget> {
 
+  late var imageBytes = null;
+  Image? image;
+
+
+   @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +44,7 @@ class _BillPrinterWidgetState extends State<BillPrinterWidget> {
   }
 
   Widget _itemBuilder({required FetchBillPrinterDataState dataState}) {
+
     return Container(
         child:  Column(
           children: [
@@ -45,6 +56,7 @@ class _BillPrinterWidgetState extends State<BillPrinterWidget> {
                       fontWeight: FontWeight.w600),),
                 ),
               ),
+
 
             Expanded(
                 child: dataState.availableBluetoothDevices.isNotEmpty ?
@@ -100,6 +112,7 @@ class _BillPrinterWidgetState extends State<BillPrinterWidget> {
                 ),),)
             ),
 
+
             GestureDetector(
               onTap: () {
                 /* Navigator.push(context,MaterialPageRoute( builder: (context) => LoginScreen()), );*/
@@ -110,7 +123,6 @@ class _BillPrinterWidgetState extends State<BillPrinterWidget> {
                     children: <Widget>[
                       TextButton(
                         onPressed: () {
-
                           if(dataState.availableBluetoothDevices.isNotEmpty){
                             if(dataState.connected == false){
                               Fluttertoast.showToast(
@@ -137,7 +149,6 @@ class _BillPrinterWidgetState extends State<BillPrinterWidget> {
                                 fontSize: 14.0
                             );
                           }
-
 
                         },
                         style: ButtonStyle(

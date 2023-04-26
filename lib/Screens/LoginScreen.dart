@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Utils/Constants.dart';
 import '../Utils/CustomEmailTextField.dart';
@@ -39,8 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isObscure = true;
   var check = true;
 
+  String _appInformation = "";
+  String get appInformation => _appInformation;
+
   @override
   void initState() {
+    getAppVersionAndRelease();
     initConnectivity();
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
@@ -51,6 +56,17 @@ class _LoginScreenState extends State<LoginScreen> {
     emailController.dispose();
     _connectivitySubscription?.cancel();
     super.dispose();
+  }
+
+  void getAppVersionAndRelease() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appName = packageInfo.appName;
+    String version = packageInfo.version;
+    String releaseDate = "2023-04-07";
+    setState(() {
+      _appInformation = "App Version :  ${version} \n Release Date : ${releaseDate}";
+    });
+
   }
 
   @override
@@ -203,6 +219,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 width: 200,
                                 height: 30,
                                 child: Image.asset('assets/images/smartgasnet.png')),
+                          ),
+                        ),
+
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                            child: Text(appInformation, textAlign: TextAlign.center,),
                           ),
                         ),
                         SizedBox(height: 30,),

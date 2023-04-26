@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -36,7 +37,7 @@ class BillPrinterHelper {
   static Future<List<int>> getTicket({required BillPrintModel billPrintData}) async {
     List<int> bytes = [];
     CapabilityProfile profile = await CapabilityProfile.load();
-    final generator = Generator(PaperSize.mm80, profile);
+    final generator = Generator(PaperSize.mm80, profile,);
 
     try {
       final ByteData byteImage = await rootBundle.load('assets/images/hpcl_logo.png');
@@ -303,73 +304,10 @@ class BillPrinterHelper {
     bytes += generator.hr(ch: '=', linesAfter: 1);
 
 
-/*    bytes += generator.text('Previous Reading : 00988888',
-        styles: PosStyles(align: PosAlign.center));
-    bytes += generator.text('Current Reading : : 00988888',
-        styles: PosStyles(align: PosAlign.center));
-    bytes += generator.hr(ch: '=', linesAfter: 1);*/
-
-  /*  bytes += generator.row([
-      PosColumn(
-        text: '0ld Reading Dt|',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: 'New Reading Dt|',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-      PosColumn(
-        text: '  Rate  |  Qty |',
-        width: 4,
-        styles: PosStyles(align: PosAlign.center),
-      ),
-    ]);
-
-
-    String oldReadingDateValue =  "12345.0";
-    String oldReadingDateValueSpace =  "";
-    for(int i = 0; i < 13; i++){
-      if(i > oldReadingDateValue.length-1){
-        oldReadingDateValueSpace += " ";
-      }
-    }
-    String totalOldReadingDate = "${oldReadingDateValueSpace+oldReadingDateValue}";
-
-    String newReadingDateValue =  "12345.0";
-    String newReadingDateValueSpace =  "";
-    for(int i = 0; i < 14; i++){
-      if(i > newReadingDateValue.length-1){
-        newReadingDateValueSpace += " ";
-      }
-    }
-    String totalnewReadingDate = "${newReadingDateValueSpace+newReadingDateValue}";
-
-    String rateQty = "4567.1| 5.0";
-
-    bytes += generator.row([
-      PosColumn(
-        text: '|${totalOldReadingDate}',
-        width: 4,
-        styles: PosStyles(align: PosAlign.right,),
-      ),
-      PosColumn(
-        text: '|${totalnewReadingDate}',
-        width: 4,
-        styles: PosStyles(align: PosAlign.right,),
-      ),
-      PosColumn(
-        text: '|${rateQty}|',
-        width: 4,
-        styles: PosStyles(align: PosAlign.right,),
-      ),
-    ]);
-
     bytes += generator.hr(ch: '=', linesAfter: 1);
     bytes += generator.text('Total (Rs.) : ${billPrintData.data!.amountAfterGasDeposit.toString()}',
         styles: PosStyles(align: PosAlign.center));
-    bytes += generator.hr(ch: "=");*/
+    bytes += generator.hr(ch: "=");
 
     bytes += generator.text('Current Invoice Amount           : ${billPrintData.data!.actualReadingPrice.toString()}',
         styles: PosStyles(align: PosAlign.left));
@@ -387,16 +325,10 @@ class BillPrinterHelper {
 
 
     try {
-
       bytes += generator.cut();
-      final image = await QrPainter(
-        data: "${billPrintData.qrCode}",
-        version: QrVersions.auto,
-        gapless: false,
-      ).toImage(130);
-      final a = await image.toByteData(format: ImageByteFormat.png);
-      final img = imgs.decodeImage(a!.buffer.asUint8List());
-      bytes += generator.image(img!);
+      final image =  await getQrCodeBytes(data: "${billPrintData.qrCode}" );
+      final img = imgs.decodeImage(image);
+      bytes += generator.imageRaster(img!);
 
     } catch (e) {
       print(e);
@@ -413,6 +345,53 @@ class BillPrinterHelper {
 
     bytes += generator.cut();
     return bytes;
+  }
+
+
+  static Future<dynamic> getQrCodeBytes({required String data}) async {
+    const bool gapless = true;
+    const int errorCorrectLevel = QrErrorCorrectLevel.M;
+    const double size = 155;
+    final double actualQRCodeSize = _getActualQRCodeSize(
+      text: data,
+      size: size,
+      gapless: gapless,
+      errorCorrectLevel: errorCorrectLevel,
+    );
+    final image = await QrPainter(
+      data: data,
+      version: QrVersions.auto,
+      color: Colors.black,
+      emptyColor: Colors.white,
+      gapless: gapless,
+      errorCorrectionLevel: errorCorrectLevel,
+    ).toImageData(actualQRCodeSize);
+
+    return image?.buffer.asUint8List();
+  }
+
+  static double _getActualQRCodeSize({
+    required String text,
+    required double size,
+    required bool gapless,
+    required int errorCorrectLevel,
+  }) {
+    // These calculations are from `_PaintMetrics._calculateMetrics`
+    final double gap = gapless ? 0 : 0.25;
+    final QrCode qrCode = QrCode.fromData(
+      data: text,
+      errorCorrectLevel: errorCorrectLevel,
+    );
+
+    final double gapTotal = (qrCode.moduleCount - 1) * gap;
+
+    final double actualQRCodeSize;
+    double pixelSize = (size - gapTotal) / qrCode.moduleCount;
+    pixelSize = (pixelSize * 2).roundToDouble() / 2;
+
+    actualQRCodeSize = (pixelSize * qrCode.moduleCount) + gapTotal;
+
+    return actualQRCodeSize;
   }
 
   static Future<dynamic> writeToFile(ByteData data, String path) async {
