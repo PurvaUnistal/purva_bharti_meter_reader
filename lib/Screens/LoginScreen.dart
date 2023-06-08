@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:convert' show json;
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity/connectivity.dart';
@@ -66,7 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _appInformation = "App Version :  ${version} \n Release Date : ${releaseDate}";
     });
-
   }
 
   @override
@@ -99,7 +100,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: 30,),
+                                SizedBox(
+                                  height: 30,
+                                ),
                                 Container(
                                   child: new CircleAvatar(
                                     radius: 60,
@@ -107,7 +110,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     child: Container(
                                         width: 80,
                                         height: 80,
-                                        child: Image(image: AssetImage('assets/images/logo.png',))),
+                                        child: Image(
+                                            image: AssetImage(
+                                          'assets/images/logo.png',
+                                        ))),
                                   ),
                                 ),
                               ],
@@ -118,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                             alignment: Alignment.bottomCenter,
                             child: CustomTextEmailField(
-                              enabled : true,
+                              enabled: true,
                               controller: emailController,
                               validate: true,
                               labelText: "User Name",
@@ -130,10 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Container(
                             color: Colors.white,
                             child: Theme(
-                              data: new ThemeData(
-                                  primaryColor: greyColor,
-                                  hintColor: Colors.green,
-                                  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.orange)),
+                              data: new ThemeData(primaryColor: greyColor, hintColor: Colors.green, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.orange)),
                               child: TextField(
                                 controller: _passwordController,
                                 obscureText: _isObscure,
@@ -159,7 +162,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 5,),
+                        SizedBox(
+                          height: 5,
+                        ),
                         GestureDetector(
                           onTap: () {
                             /* Navigator.push(context,MaterialPageRoute( builder: (context) => LoginScreen()), );*/
@@ -172,18 +177,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: () {
                                       btnClick();
                                     },
-                                    style: ButtonStyle(
-                                      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)))),
+                                    style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)))),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: Container(
                                           height: 50,
-                                          width:MediaQuery.of(context).size.width,
-                                          decoration: BoxDecoration(
-                                              color: Colors.lightBlueAccent,
-                                              borderRadius: BorderRadius.all(Radius.circular(10))),
+                                          width: MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(color: Colors.lightBlueAccent, borderRadius: BorderRadius.all(Radius.circular(10))),
                                           child: Center(
-                                            child: Text("Login Now",style: ReusedTextStyle.login),
+                                            child: Text("Login Now", style: ReusedTextStyle.login),
                                           )),
                                     ),
                                   ),
@@ -193,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         Align(
-                          alignment:Alignment.bottomCenter,
+                          alignment: Alignment.bottomCenter,
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -202,9 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                                    child: Container(
-                                        width: 30, height: 30,
-                                        child: Image.asset('assets/images/unistal.png')),
+                                    child: Container(width: 30, height: 30, child: Image.asset('assets/images/unistal.png')),
                                   ),
                                   Text("Powered By Unistal Systems Pvt.Ltd.")
                                 ],
@@ -215,20 +215,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         Center(
                           child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                            child: Container(
-                                width: 200,
-                                height: 30,
-                                child: Image.asset('assets/images/smartgasnet.png')),
+                            child: Container(width: 200, height: 30, child: Image.asset('assets/images/smartgasnet.png')),
                           ),
                         ),
-
                         Center(
                           child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                            child: Text(appInformation, textAlign: TextAlign.center,),
+                            child: Text(
+                              appInformation,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
-                        SizedBox(height: 30,),
+                        SizedBox(
+                          height: 30,
+                        ),
                       ],
                     ),
                   ),
@@ -254,10 +255,14 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    var jwt = await attemptLogIn(username, password,);
+    var jwt = await attemptLogIn(
+      username,
+      password,
+    );
     try {
-      LoginModel lgd = new LoginModel.fromJson(json.decode(jwt));
-      print("jwt--->" +jwt);
+     LoginModel lgd = new LoginModel.fromJson(json.decode(jwt));
+    //  LoginModel lgd = new LoginModel.fromJson(jsonDecode(jwt));
+      print("jwt--->" + jwt);
       if ((lgd.status.toString().contains("200") && lgd.user!.role!.contains("billing"))) {
         EasyLoading.dismiss();
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -266,34 +271,49 @@ class _LoginScreenState extends State<LoginScreen> {
         prefs.setString(GlobalConstants.id, lgd.user!.id.toString());
         prefs.setString(GlobalConstants.schema, lgd.user!.schema.toString());
         prefs.setString(GlobalConstants.token, lgd.token!);
-        prefs.setString(GlobalConstants.username,lgd.user!.name.toString());
+        prefs.setString(GlobalConstants.username, lgd.user!.name.toString());
         prefs.setString(GlobalConstants.email, lgd.user!.email.toString());
         EasyLoading.showInfo(lgd.messages.toString());
-        Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => MeterRequestScreen()),
-              (Route<dynamic> route) => false,);
-      } else if (lgd.status==400) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MeterRequestScreen()),
+          (Route<dynamic> route) => false,
+        );
+      } else if (lgd.status == 400) {
         EasyLoading.dismiss();
         _toastMsg('Incorrect Username and Password');
-      }
-      else if (lgd.status==401) {
+      } else if (lgd.status == 401) {
         EasyLoading.dismiss();
         _toastMsg('Incorrect Username and Password');
-      } else{
+      } else {
         EasyLoading.dismiss();
         _toastMsg('Incorrect Username and Password');
       }
     } catch (e) {
       GeneralResponse lgd = new GeneralResponse.fromJson(json.decode(jwt));
-      if (lgd.status==401) {
+     /// GeneralResponse lgd = new GeneralResponse.fromJson(jsonDecode(jwt));
+      if (lgd.status == 401) {
         EasyLoading.dismiss();
         _toastMsg('Incorrect Username and Password');
       }
     }
-
   }
 
-  Future<String> attemptLogIn( String email, String password) async {
-    final data = {"email":email, "password":password};
+  getUniqueDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor;
+    } else if (Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.id;
+    }
+    return null;
+  }
+
+  Future<String> attemptLogIn(String email, String password) async {
+    var deviceId = await getUniqueDeviceId();
+    final data = {"email": email, "password": password, "device": deviceId};
     print("DATA-->$data");
     final jsonString = json.encode(data);
     var res = await http.post((Uri.parse(Apis.auth)), body: jsonString);
@@ -342,76 +362,73 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) {
       return;
     }
-
   }
+
   void buildAlertDialog(String message) {
     SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {
-      if (isOffline && !dialogIsVisible) {
-        dialogIsVisible = true;
-        showDialog(barrierDismissible: false,context: ctx!,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(message,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14.0),
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(Icons.portable_wifi_off, color: Colors.redAccent, size: 36.0,),
-                    canProceed
-                        ? Text("Check your internet connection before proceeding.",textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12.0),
-                    )
-                        : Text("Please! proceed by connecting to a internet connection",textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.red),
+          if (isOffline && !dialogIsVisible) {
+            dialogIsVisible = true;
+            showDialog(
+                barrierDismissible: false,
+                context: ctx!,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14.0),
                     ),
-                  ],
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    style:  ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
-                    onPressed: () {
-                      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                    },
-                    child: Text("CLOSE THE APP",style: TextStyle(color: Colors.white)),
-                  ),
-                  TextButton(
-                    style:  ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black)),
-                    onPressed: () {
-                      if (isOffline) {
-                        setState(() {
-                          canProceed = false;
-                        });
-                      } else {
-                        Navigator.pop(ctx!);
-                        //your code
-                      }
-                    },
-                    child: Text("PROCEED",style: TextStyle(color: Colors.white)),
-                  ),
-                ],
-              );
-            });
-      }
-    }));
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(
+                          Icons.portable_wifi_off,
+                          color: Colors.redAccent,
+                          size: 36.0,
+                        ),
+                        canProceed
+                            ? Text(
+                                "Check your internet connection before proceeding.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 12.0),
+                              )
+                            : Text(
+                                "Please! proceed by connecting to a internet connection",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 12.0, color: Colors.red),
+                              ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
+                        onPressed: () {
+                          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                        },
+                        child: Text("CLOSE THE APP", style: TextStyle(color: Colors.white)),
+                      ),
+                      TextButton(
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black)),
+                        onPressed: () {
+                          if (isOffline) {
+                            setState(() {
+                              canProceed = false;
+                            });
+                          } else {
+                            Navigator.pop(ctx!);
+                            //your code
+                          }
+                        },
+                        child: Text("PROCEED", style: TextStyle(color: Colors.white)),
+                      ),
+                    ],
+                  );
+                });
+          }
+        }));
   }
 
-
-
-  _toastMsg(String msg){
-    Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.grey,
-        textColor: Colors.white,
-        fontSize: 14.0
-    );
+  _toastMsg(String msg) {
+    Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.CENTER, timeInSecForIosWeb: 1, backgroundColor: Colors.grey, textColor: Colors.white, fontSize: 14.0);
   }
-
-
 }

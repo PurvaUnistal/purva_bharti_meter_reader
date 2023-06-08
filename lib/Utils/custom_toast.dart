@@ -2,40 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CustomToast {
-
   static showToast(String message) {
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
+    Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, backgroundColor: Colors.green, textColor: Colors.white, fontSize: 16.0);
   }
-
-
 }
 
 class ShowCustomToast {
-
   static showToast(String message) {
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 5,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
+    Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 5, backgroundColor: Colors.red, textColor: Colors.white, fontSize: 16.0);
   }
 
-
+  static scaffoldMsg(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
 }
 
-class ValidateCustomToast{
+class ValidateCustomToast {
   static _showToastMsg(String msgType, String msg) {
     if (msgType == "success") {
       return Fluttertoast.showToast(
@@ -77,10 +59,7 @@ Future<void> _showMyDialog(String myReading, previousReading, msg, Function() on
       return AlertDialog(
         title: Text(myReading),
         actions: <Widget>[
-          TextButton(
-              child: Text('Ok'),
-            onPressed:onPressed
-          ),
+          TextButton(child: Text('Ok'), onPressed: onPressed),
           TextButton(
             child: Text('Cancel'),
             onPressed: () {
@@ -92,5 +71,3 @@ Future<void> _showMyDialog(String myReading, previousReading, msg, Function() on
     },
   );
 }
-
-

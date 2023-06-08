@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           builder: EasyLoading.init(),
          home: SplashPage()
-       //   home: AddTwoNumbers()
       ),
     );
   }
