@@ -25,7 +25,9 @@ class CustomTextEmailField extends StatelessWidget {
     this.verticalPadding = 0,
     this.maxLines ,
     this.keyboardType ,
-    this.textInputAction
+    this.textInputAction,
+    this.autofillHints,
+
   });
 
   final TextEditingController? controller;
@@ -50,15 +52,18 @@ class CustomTextEmailField extends StatelessWidget {
   final int? maxLines;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
   // final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      alignment: Alignment.bottomCenter,
       padding: EdgeInsets.symmetric(
           horizontal: horizontalPadding ?? 15, vertical: verticalPadding ?? 0),
       child: TextFormField(
         readOnly: false,
+          autofillHints:autofillHints,
         inputFormatters: [FilteringTextInputFormatter.deny(' ')],
         initialValue: initialValue,
         maxLines: maxLines,

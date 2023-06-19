@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meter_reader/billHistory/domain/model/bill_history_model.dart';
-import 'package:meter_reader/billPrint/domain/bloc/bill_print_bloc.dart';
-import 'package:meter_reader/billPrint/presentation/pages/bill_printer_page.dart';
+
+import '../../../billPrint/domain/bloc/bill_print_bloc.dart';
+import '../../../billPrint/presentation/pages/bill_printer_page.dart';
+import '../../domain/model/bill_history_model.dart';
 
 class BillHistoryBoxWidget extends StatelessWidget {
 

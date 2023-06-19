@@ -10,9 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meter_reader/billHistory/presentation/pages/bill_history_page.dart';
-import 'package:meter_reader/billPrint/domain/bloc/bill_print_bloc.dart';
-import 'package:meter_reader/billPrint/presentation/pages/bill_printer_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Utils/Constants.dart';
 import '../Utils/CustomEmailTextField.dart';
@@ -22,6 +19,9 @@ import '../Utils/global_constant.dart';
 import '../Utils/meeter_reader_number.dart';
 import '../Utils/photo_controller.dart';
 import '../Utils/reused_text_style.dart';
+import '../features/billHistory/presentation/pages/bill_history_page.dart';
+import '../features/billPrint/domain/bloc/bill_print_bloc.dart';
+import '../features/billPrint/presentation/pages/bill_printer_page.dart';
 import '../models/bp_number_model.dart';
 import '../models/generate_model.dart';
 import '../service/api_integration.dart';
@@ -120,16 +120,16 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
   subMethod() {
     setState(() {
       double sum = double.parse(myController1.text +
-                  myController2.text +
-                  myController3.text +
-                  myController4.text +
-                  myController5.text +
-                  myController6.text +
-                  myController7.text +
-                  myController8.text +
-                  myController9.text +
-                  myController10.text) /
-              1000 -
+          myController2.text +
+          myController3.text +
+          myController4.text +
+          myController5.text +
+          myController6.text +
+          myController7.text +
+          myController8.text +
+          myController9.text +
+          myController10.text) /
+          1000 -
           double.parse(previousReadingController.text);
       actualResult = sum.toDouble();
     });
@@ -199,7 +199,7 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
       CustomToast.showToast("Select Customer Name ");
       return;
     }
-    if (customerAddressController == null) {
+    if (customerAddressController.text.trim().toString() == null) {
       CustomToast.showToast("Select Customer Address ");
       return;
     }
@@ -335,7 +335,6 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ctx = context;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.lightBlueAccent, statusBarIconBrightness: Brightness.light));
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -420,57 +419,47 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                               ),
                             ),
                           )),
-                      Container(
-                          alignment: Alignment.bottomCenter,
-                          child: CustomTextEmailField(
-                            enabled: false,
-                            keyboardType: TextInputType.name,
-                            controller: customerNameController,
-                            validate: false,
-                            labelText: "Customer Name",
-                            filledColor: Colors.white,
-                          )),
-                      Container(
-                          alignment: Alignment.bottomCenter,
-                          child: CustomTextEmailField(
-                            enabled: false,
-                            keyboardType: TextInputType.streetAddress,
-                            maxLines: 4,
-                            controller: customerAddressController,
-                            validate: false,
-                            labelText: "Customer Address",
-                            filledColor: Colors.white,
-                          )),
-                      Container(
-                          alignment: Alignment.bottomCenter,
-                          child: CustomTextEmailField(
-                            enabled: false,
-                            keyboardType: TextInputType.number,
-                            controller: bpNumberFieldController,
-                            validate: false,
-                            labelText: "BP Number",
-                            filledColor: Colors.white,
-                          )),
-                      Container(
-                          alignment: Alignment.bottomCenter,
-                          child: CustomTextEmailField(
-                            enabled: false,
-                            keyboardType: TextInputType.number,
-                            controller: meterNumberController,
-                            validate: false,
-                            labelText: "Meter Number",
-                            filledColor: Colors.white,
-                          )),
-                      Container(
-                          alignment: Alignment.bottomCenter,
-                          child: CustomTextEmailField(
-                            enabled: false,
-                            keyboardType: TextInputType.number,
-                            controller: previousReadingController,
-                            validate: false,
-                            labelText: "Previous Reading",
-                            filledColor: Colors.white,
-                          )),
+                      CustomTextEmailField(
+                        enabled: false,
+                        keyboardType: TextInputType.name,
+                        controller: customerNameController,
+                        validate: false,
+                        labelText: "Customer Name",
+                        filledColor: Colors.white,
+                      ),
+                      CustomTextEmailField(
+                        enabled: false,
+                        keyboardType: TextInputType.streetAddress,
+                        maxLines: 4,
+                        controller: customerAddressController,
+                        validate: false,
+                        labelText: "Customer Address",
+                        filledColor: Colors.white,
+                      ),
+                      CustomTextEmailField(
+                        enabled: false,
+                        keyboardType: TextInputType.number,
+                        controller: bpNumberFieldController,
+                        validate: false,
+                        labelText: "BP Number",
+                        filledColor: Colors.white,
+                      ),
+                      CustomTextEmailField(
+                        enabled: false,
+                        keyboardType: TextInputType.number,
+                        controller: meterNumberController,
+                        validate: false,
+                        labelText: "Meter Number",
+                        filledColor: Colors.white,
+                      ),
+                      CustomTextEmailField(
+                        enabled: false,
+                        keyboardType: TextInputType.number,
+                        controller: previousReadingController,
+                        validate: false,
+                        labelText: "Previous Reading",
+                        filledColor: Colors.white,
+                      ),
                       Container(alignment: Alignment.centerLeft, child: Text("Meter Reading:", style: ReusedTextStyle.currentMeeterReader)),
                       SizedBox(
                         height: 10.0,
@@ -636,17 +625,17 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                       Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                         meterImgController.imagePath != null
                             ? Image.file(
-                                meterImgController.imagePath!,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              )
+                          meterImgController.imagePath!,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        )
                             : Image.asset(
-                                'assets/images/placeholder.png',
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
+                          'assets/images/placeholder.png',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
                         MaterialButton(
                             color: Colors.lightBlueAccent,
                             child: Text(
@@ -674,105 +663,125 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                               myController9.text.toString().trim() +
                               myController10.text.toString().trim();
                           double myReading = double.parse(myReadingValue) / 1000;
+
+                          String oldMeterCurrentReading = searchList[0].oldMeterCurrentReading.toString();
+                          String oldMeterLastReading = searchList[0].oldMeterLastReading.toString();
+                          String newMeterOldReading = searchList[0].newMeterOldReading.toString();
+
+                          /// replace_status == 1
+                          double oMCLR  = (double.parse(oldMeterCurrentReading) - double.parse(oldMeterLastReading));
+                          print(oMCLR);
+                          double finalValue = (double.parse(myReadingValue) - double.parse(newMeterOldReading));
+                          print(finalValue);
+                          double finalReadingValue = oMCLR + finalValue;
+                          print(finalReadingValue);
+
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                     content: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text("BP Number : " + bpNumberFieldController.text.toString()),
-                                    Text("Customer Name : " + customerNameController.text.toString()),
-                                    Text("Customer Address : " + customerAddressController.text.toString()),
-                                    Text("Meter Number : " + meterNumberController.text.toString()),
-                                    Text("Previous Reading  : " + previousReadingController.text.toString()),
-                                    Text("New Reading : " + myReading.toStringAsFixed(3)),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Container(
-                                      width: double.infinity,
-                                      child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              TextButton(
-                                                child: Text(
-                                                  "Submit",
-                                                  style: TextStyle(color: Colors.white),
-                                                ),
-                                                style: TextButton.styleFrom(backgroundColor: Colors.lightBlueAccent),
-                                                onPressed: () {
-                                                  subMethod();
-                                                  if (actualResult! >= 0) {
-                                                    if (actualResult! > 5 && actualResult! < 25) {
-                                                      print("Greater then 25");
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext context) {
-                                                            return CustomDialogBox(
-                                                                msg: "Reading is Ok",
-                                                                myReading: actualResult.toString(),
-                                                                onPressed: () {
-                                                                  onClick();
-                                                                });
-                                                          });
-                                                    } else if (actualResult! < 5) {
-                                                      print("less then 5");
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext context) {
-                                                            return CustomDialogBox(
-                                                                msg: " Less then 5",
-                                                                myReading: actualResult.toString(),
-                                                                onPressed: () {
-                                                                  onClick();
-                                                                });
-                                                          });
-                                                    } else {
-                                                      print("25--->" + " Greater then 25");
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext context) {
-                                                            return CustomDialogBox(
-                                                                msg: " Greater then 25",
-                                                                myReading: actualResult.toString(),
-                                                                onPressed: () {
-                                                                  onClick();
-                                                                });
-                                                          });
-                                                    }
-                                                  } else {
-                                                    print("Negative value is not Valid");
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext context) {
-                                                          return CustomDialogBox(
-                                                              msg: "Negative value is not Valid",
-                                                              myReading: actualResult.toString(),
-                                                              onPressed: () {
-                                                                Navigator.of(context).pop();
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Align(
+                                    alignment:Alignment.center,
+                                            child: Text("Replace Status "+"("+searchList[0].replaceStatus.toString() +")")),
+                                        Text("=========================="),
+                                        Text("BP Number : " + bpNumberFieldController.text.toString()),
+                                        Text("Customer Name : " + customerNameController.text.toString()),
+                                        Text("Customer Address : " + customerAddressController.text.toString()),
+                                        Text("Meter Number : " + meterNumberController.text.toString()),
+                                        Text("Previous Reading  : " + previousReadingController.text.toString()),
+                                        searchList[0].replaceStatus.toString() == "1"? Text("Old Meter Last Reading : " + searchList[0].oldMeterLastReading.toString()) :Container(),
+                                        searchList[0].replaceStatus.toString() == "1"? Text("Old Meter Current Reading : " + searchList[0].oldMeterCurrentReading.toString()) :Container(),
+                                        searchList[0].replaceStatus.toString() == "1"? Text("New Meter Old Reading : " + searchList[0].newMeterOldReading.toString()) :Container(),
+                                        searchList[0].replaceStatus.toString() == "1"? Text("New Reading : " + finalReadingValue.toStringAsFixed(3)) :Text("New Reading : " + myReading.toStringAsFixed(3)),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Container(
+                                          width: double.infinity,
+                                          child: Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                horizontal: 15.0,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  TextButton(
+                                                    child: Text(
+                                                      "Submit",
+                                                      style: TextStyle(color: Colors.white),
+                                                    ),
+                                                    style: TextButton.styleFrom(backgroundColor: Colors.lightBlueAccent),
+                                                    onPressed: () {
+                                                      subMethod();
+                                                      if (actualResult! >= 0) {
+                                                        if (actualResult! > 5 && actualResult! < 25) {
+                                                          print("Greater then 25");
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (BuildContext context) {
+                                                                return CustomDialogBox(
+                                                                    msg: "Reading is Ok",
+                                                                    myReading: actualResult.toString(),
+                                                                    onPressed: () {
+                                                                      onClick();
+                                                                    });
                                                               });
-                                                        });
-                                                  }
-                                                },
-                                              ),
-                                              TextButton(
-                                                child: Text("Edit", style: TextStyle(color: Colors.white)),
-                                                style: TextButton.styleFrom(backgroundColor: Colors.lightBlueAccent),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ],
-                                          )),
-                                    )
-                                  ],
-                                ));
+                                                        } else if (actualResult! < 5) {
+                                                          print("less then 5");
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (BuildContext context) {
+                                                                return CustomDialogBox(
+                                                                    msg: " Less then 5",
+                                                                    myReading: actualResult.toString(),
+                                                                    onPressed: () {
+                                                                      onClick();
+                                                                    });
+                                                              });
+                                                        } else {
+                                                          print("25--->" + " Greater then 25");
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (BuildContext context) {
+                                                                return CustomDialogBox(
+                                                                    msg: " Greater then 25",
+                                                                    myReading: actualResult.toString(),
+                                                                    onPressed: () {
+                                                                      onClick();
+                                                                    });
+                                                              });
+                                                        }
+                                                      } else {
+                                                        print("Negative value is not Valid");
+                                                        showDialog(
+                                                            context: context,
+                                                            builder: (BuildContext context) {
+                                                              return CustomDialogBox(
+                                                                  msg: "Negative value is not Valid",
+                                                                  myReading: actualResult.toString(),
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop();
+                                                                  });
+                                                            });
+                                                      }
+                                                    },
+                                                  ),
+                                                  TextButton(
+                                                    child: Text("Edit", style: TextStyle(color: Colors.white)),
+                                                    style: TextButton.styleFrom(backgroundColor: Colors.lightBlueAccent),
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                  ),
+                                                ],
+                                              )),
+                                        )
+                                      ],
+                                    ));
                               });
                         },
                         child: Text("Preview",
@@ -790,27 +799,27 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
             ),
             (progressBar)
                 ? Center(
-                    child: Container(
-                      width: 200,
-                      height: 100,
-                      alignment: Alignment.center,
-                      child: Card(
-                        elevation: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            children: [
-                              CircularProgressIndicator(),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text("Waiting...")
-                            ],
-                          ),
+              child: Container(
+                width: 200,
+                height: 100,
+                alignment: Alignment.center,
+                child: Card(
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 8,
                         ),
-                      ),
+                        Text("Waiting...")
+                      ],
                     ),
-                  )
+                  ),
+                ),
+              ),
+            )
                 : Container(),
           ],
         ),
@@ -819,9 +828,9 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
   }
 
   Future<void> _openImageSource(
-    BuildContext mContext,
-    PhotoController controller,
-  ) async {
+      BuildContext mContext,
+      PhotoController controller,
+      ) async {
     return showDialog<void>(
       context: mContext,
       barrierDismissible: false,
@@ -866,9 +875,7 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
       final pickedFile = await picker.getImage(source: imageSource, maxHeight: 400, maxWidth: 300, imageQuality: 100);
       setState(() {
         if (pickedFile != null) {
-          if (photoController != null) {
-            photoController.imagePath = File(pickedFile.path);
-          }
+          photoController.imagePath = File(pickedFile.path);
           //return _image;
         } else {
           print('No image selected.');
@@ -920,65 +927,65 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
 
   void buildAlertDialog(String message) {
     SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {
-          if (isOffline && !dialogIsVisible) {
-            dialogIsVisible = true;
-            showDialog(
-                barrierDismissible: false,
-                context: ctx!,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text(
-                      message,
+      if (isOffline && !dialogIsVisible) {
+        dialogIsVisible = true;
+        showDialog(
+            barrierDismissible: false,
+            context: ctx!,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14.0),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Icon(
+                      Icons.portable_wifi_off,
+                      color: Colors.redAccent,
+                      size: 36.0,
+                    ),
+                    canProceed
+                        ? Text(
+                      "Check your internet connection before proceeding.",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14.0),
+                      style: TextStyle(fontSize: 12.0),
+                    )
+                        : Text(
+                      "Please! proceed by connecting to a internet connection",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12.0, color: Colors.red),
                     ),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Icon(
-                          Icons.portable_wifi_off,
-                          color: Colors.redAccent,
-                          size: 36.0,
-                        ),
-                        canProceed
-                            ? Text(
-                                "Check your internet connection before proceeding.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 12.0),
-                              )
-                            : Text(
-                                "Please! proceed by connecting to a internet connection",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 12.0, color: Colors.red),
-                              ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
-                        onPressed: () {
-                          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                        },
-                        child: Text("CLOSE THE APP", style: TextStyle(color: Colors.white)),
-                      ),
-                      TextButton(
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black)),
-                        onPressed: () {
-                          if (isOffline) {
-                            setState(() {
-                              canProceed = false;
-                            });
-                          } else {
-                            Navigator.pop(ctx!);
-                          }
-                        },
-                        child: Text("PROCEED", style: TextStyle(color: Colors.white)),
-                      ),
-                    ],
-                  );
-                });
-          }
-        }));
+                  ],
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
+                    onPressed: () {
+                      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                    },
+                    child: Text("CLOSE THE APP", style: TextStyle(color: Colors.white)),
+                  ),
+                  TextButton(
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black)),
+                    onPressed: () {
+                      if (isOffline) {
+                        setState(() {
+                          canProceed = false;
+                        });
+                      } else {
+                        Navigator.pop(ctx!);
+                      }
+                    },
+                    child: Text("PROCEED", style: TextStyle(color: Colors.white)),
+                  ),
+                ],
+              );
+            });
+      }
+    }));
   }
 
   locationConnect() async {
@@ -1055,65 +1062,65 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-              content: Stack(
-                clipBehavior: Clip.none,
-                children: <Widget>[
-                  Positioned(
-                    right: -40.0,
-                    top: -40.0,
-                    child: InkResponse(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: CircleAvatar(
-                        child: Icon(Icons.close),
-                        backgroundColor: Colors.red,
+          content: Stack(
+            clipBehavior: Clip.none,
+            children: <Widget>[
+              Positioned(
+                right: -40.0,
+                top: -40.0,
+                child: InkResponse(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: CircleAvatar(
+                    child: Icon(Icons.close),
+                    backgroundColor: Colors.red,
+                  ),
+                ),
+              ),
+              Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Text(
+                            "Meter Reader",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  Form(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                "Meter Reader",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          "Do you want logout ?",
+                          style: TextStyle(color: Colors.black),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              "Do you want logout ?",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextButton(
-                            style: TextButton.styleFrom(backgroundColor: Colors.blue),
-                            child: Text("OK", style: TextStyle(color: Colors.white)),
-                            onPressed: () async {
-                              Navigator.of(context, rootNavigator: false).pop();
-                              SharedPreferences preferences = await SharedPreferences.getInstance();
-                              await preferences.clear();
-                              EasyLoading.showInfo("Logout Successfully");
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-                            },
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextButton(
+                        style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                        child: Text("OK", style: TextStyle(color: Colors.white)),
+                        onPressed: () async {
+                          Navigator.of(context, rootNavigator: false).pop();
+                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                          await preferences.clear();
+                          EasyLoading.showInfo("Logout Successfully");
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ));
+            ],
+          ),
+        ));
   }
 }

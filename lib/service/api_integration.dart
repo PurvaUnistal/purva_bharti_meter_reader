@@ -7,8 +7,10 @@ import '../Utils/custom_toast.dart';
 import '../Utils/global_constant.dart';
 import '../models/bp_number_model.dart';
 import 'package:http/http.dart' as http;
+import '../models/change_password_model.dart';
 import '../models/generate_model.dart';
 import 'Apis.dart';
+import 'api_helper.dart';
 
 class ApiIntegration {
 
@@ -96,6 +98,22 @@ class ApiIntegration {
       print('catch error--> : $e');
       ShowCustomToast.scaffoldMsg(context, e.toString());
       return null;
+    }
+    return null;
+  }
+
+  Future<ChangePasswordModel?> changePasswordApi(ChangePasswordResponse changePasswordResponse)async{
+    String url = Apis.resetPassword;
+    var res = await ApiHelper.postData(url: url, body: changePasswordResponse.toJson());
+    try{
+      if(res != null){
+        return ChangePasswordModel.fromJson(res);
+      } else{
+        print("Null Data");
+      }
+    }catch(e){
+      print(e.toString());
+      CustomToast.showToast(e.toString());
     }
     return null;
   }

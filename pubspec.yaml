@@ -37,6 +37,7 @@ dependencies:
   html: ^0.15.0
   package_info_plus: ^3.0.3
   device_info_plus: ^8.2.2
+  password_validated_field: ^0.0.3
 
 dev_dependencies:
   flutter_test:

@@ -1,13 +1,9 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:meter_reader/billPrint/domain/model/bill_printer_model.dart';
-import 'package:meter_reader/billPrint/helper/bill_printer_helper.dart';
-
+import '../../helper/bill_printer_helper.dart';
+import '../model/bill_printer_model.dart';
 part 'bill_print_event.dart';
 part 'bill_print_state.dart';
 

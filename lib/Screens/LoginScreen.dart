@@ -20,6 +20,7 @@ import '../models/GeneralResponse.dart';
 import '../models/login_model.dart';
 import '../service/Apis.dart';
 import 'billingRequest.dart';
+import 'change_password_page.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -125,6 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             alignment: Alignment.bottomCenter,
                             child: CustomTextEmailField(
                               enabled: true,
+                              autofillHints: [AutofillHints.email],
                               controller: emailController,
                               validate: true,
                               labelText: "User Name",
@@ -138,6 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Theme(
                               data: new ThemeData(primaryColor: greyColor, hintColor: Colors.green, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.orange)),
                               child: TextField(
+                                autofillHints: [AutofillHints.password],
                                 controller: _passwordController,
                                 obscureText: _isObscure,
                                 inputFormatters: [
@@ -175,6 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: <Widget>[
                                   TextButton(
                                     onPressed: () {
+                                      TextInput.finishAutofillContext();
                                       btnClick();
                                     },
                                     style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)))),
@@ -273,12 +277,21 @@ class _LoginScreenState extends State<LoginScreen> {
         prefs.setString(GlobalConstants.token, lgd.token!);
         prefs.setString(GlobalConstants.username, lgd.user!.name.toString());
         prefs.setString(GlobalConstants.email, lgd.user!.email.toString());
+        prefs.setString(GlobalConstants.changePassword, lgd.user!.pwdChanged.toString());
         EasyLoading.showInfo(lgd.messages.toString());
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => MeterRequestScreen()),
-          (Route<dynamic> route) => false,
-        );
+        if(lgd.user!.pwdChanged == "0"){
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+                (Route<dynamic> route) => false,
+          );
+        }else{
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MeterRequestScreen()),
+                (Route<dynamic> route) => false,
+          );
+        }
       } else if (lgd.status == 400) {
         EasyLoading.dismiss();
         _toastMsg('Incorrect Username and Password');

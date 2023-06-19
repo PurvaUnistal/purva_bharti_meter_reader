@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'LoginScreen.dart';
 import 'billingRequest.dart';
 import '../Utils/global_constant.dart';
+import 'change_password_page.dart';
 
 
 class SplashPage extends StatefulWidget {
@@ -12,12 +13,11 @@ class SplashPage extends StatefulWidget {
   _PageState createState() => _PageState();
 }
 class _PageState extends State<SplashPage> {
-  SharedPreferences? pref;
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(
-        statusBarColor: Colors.lightBlueAccent,
+        statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light));
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -54,15 +54,25 @@ class _PageState extends State<SplashPage> {
   Future<Timer> loadData() async {
     return Timer(Duration(seconds: 3), onDoneLoading);
   }
-
+  bool _isLogin = false;
     onDoneLoading() async {
-    pref = await SharedPreferences.getInstance();
-    if (pref?.getBool(GlobalConstants.isUserLogIn) != null) {
-      Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MeterRequestScreen()));
-    } else {
-         Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
-    }
+      SharedPreferences   prefs = await SharedPreferences.getInstance();
+      _isLogin =  prefs.getBool(GlobalConstants.isUserLogIn) ?? false;
+      String? changePassword = prefs.getString(GlobalConstants.changePassword);
+      if(changePassword == "0"){
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+              (Route<dynamic> route) => false,
+        );
+      }else{
+        if (_isLogin) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MeterRequestScreen()));
+        } else {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        }
+      }
   }
 }

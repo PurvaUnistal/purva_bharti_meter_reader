@@ -1,14 +1,13 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meter_reader/Utils/reused_text_style.dart';
-import 'package:meter_reader/billPrint/domain/bloc/bill_print_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:image/image.dart' as imgs;
+
+import '../../domain/bloc/bill_print_bloc.dart';
 
 class BillPrinterWidget extends StatefulWidget {
   const BillPrinterWidget({Key? key}) : super(key: key);

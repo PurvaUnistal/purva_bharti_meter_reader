@@ -32,6 +32,7 @@ class GlobalConstants {
   static String btnSubmit = "BtnSubmit";
   static String bpNumber = "bpNumber";
   static String email = "email";
+  static String changePassword = "Change Password";
   static String dmaId = "dmaId";
   static String alert="Are you sure, to Generate Bill?";
   static String message="Are you sure, to Generate Bill?";

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:meter_reader/billHistory/domain/bloc/bill_history_bloc.dart';
-import 'package:meter_reader/billHistory/presentation/widget/bill_history_box_widget.dart';
-
-import '../../../Utils/CustomEmailTextField.dart';
+import '../../../../Utils/CustomEmailTextField.dart';
+import '../../domain/bloc/bill_history_bloc.dart';
+import '../widget/bill_history_box_widget.dart';
 
 class BillHistoryPage extends StatefulWidget {
   const BillHistoryPage({Key? key}) : super(key: key);

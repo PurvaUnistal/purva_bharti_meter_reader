@@ -53,6 +53,8 @@ class User {
     @required this.modules,
     @required this.schema,
     @required this.role,
+    @required this.userStatus,
+    @required this.pwdChanged,
   });
 
   String? id;
@@ -61,6 +63,8 @@ class User {
   String? modules;
   String? schema;
   String? role;
+  String? userStatus;
+  String? pwdChanged;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["id"],
@@ -69,6 +73,8 @@ class User {
     modules: json["modules"],
     schema: json["schema"],
     role: json["role"],
+    userStatus : json['user_status'],
+    pwdChanged : json['pwd_changed'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -78,5 +84,7 @@ class User {
     "modules": modules,
     "schema": schema,
     "role": role,
+    "pwd_changed": pwdChanged,
+    "user_status": userStatus,
   };
 }
