@@ -1,16 +1,7 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Utils/common_widget/common_session_dialog_box.dart';
-import '../Utils/custom_toast.dart';
-import '../Utils/global_constant.dart';
-import '../models/bp_number_model.dart';
-import 'package:http/http.dart' as http;
-import '../models/change_password_model.dart';
 import '../models/generate_model.dart';
-import 'Apis.dart';
 import 'api_helper.dart';
+import 'package:http/http.dart' as http;
+import '../../../../ExportFile/export_file.dart';
 
 class ApiIntegration {
 
@@ -22,7 +13,7 @@ class ApiIntegration {
     var billsMeterReaderUrl = Apis.getPendingBillsMeterReader + '?' + queryString;
     print("getPendingBillsMeterReader-->" + billsMeterReaderUrl);
     try {
-      var response = await http.get(Uri.parse(billsMeterReaderUrl),headers: {'authorization': '$token'}).timeout(Duration(seconds: 10));
+      final response = await http.get(Uri.parse(billsMeterReaderUrl),headers: {'authorization': '$token'}).timeout(Duration(seconds: 10));
       print("getPendingBillsMeterReader--->" + response.body);
       print("statusCode-->" + response.statusCode.toString());
 

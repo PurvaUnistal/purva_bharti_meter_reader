@@ -1,17 +1,6 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:image/image.dart' as imgs;
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../Utils/common_widget/common_session_dialog_box.dart';
-import '../../../Utils/global_constant.dart';
-import '../../../service/Apis.dart';
-import '../domain/model/bill_printer_model.dart';
+import '../../../../ExportFile/export_file.dart';
 
 class BillPrinterHelper {
   static Future<dynamic> fetchBillData({required BuildContext context, required dynamic billId, required String schema}) async {

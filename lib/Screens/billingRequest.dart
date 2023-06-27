@@ -1,31 +1,7 @@
-import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
-
-import 'package:connectivity/connectivity.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Utils/Constants.dart';
-import '../Utils/CustomEmailTextField.dart';
-import '../Utils/custom_dialog_box.dart';
-import '../Utils/custom_toast.dart';
-import '../Utils/global_constant.dart';
-import '../Utils/meeter_reader_number.dart';
-import '../Utils/photo_controller.dart';
-import '../Utils/reused_text_style.dart';
-import '../features/billHistory/presentation/pages/bill_history_page.dart';
-import '../features/billPrint/domain/bloc/bill_print_bloc.dart';
-import '../features/billPrint/presentation/pages/bill_printer_page.dart';
-import '../models/bp_number_model.dart';
 import '../models/generate_model.dart';
-import '../service/api_integration.dart';
-import 'LoginScreen.dart';
+import '../ExportFile/export_file.dart';
 
 class MeterRequestScreen extends StatefulWidget {
   const MeterRequestScreen({Key? key}) : super(key: key);
