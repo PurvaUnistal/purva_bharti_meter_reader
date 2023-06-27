@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../Screens/LoginScreen.dart';
-import '../global_constant.dart';
+import '../../../../ExportFile/export_file.dart';
 
 class LogOutMethod {
 

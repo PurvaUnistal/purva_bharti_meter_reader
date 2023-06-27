@@ -1,14 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:password_validated_field/password_validated_field.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Utils/common_widget/RoundedButton.dart';
-import '../Utils/common_widget/common_dialog_box.dart';
-import '../Utils/common_widget/logout_method.dart';
-import '../Utils/custom_toast.dart';
-import '../models/change_password_model.dart';
-import '../service/api_integration.dart';
-import '../utils/global_constant.dart';
+import '../ExportFile/export_file.dart';
 
 
 class ChangePasswordPage extends StatefulWidget {
@@ -27,6 +17,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   void initState() {
+    newPasswordController.addListener(()=>  removeSpace(newPasswordController));
+    conformPasswordController.addListener(()=>  removeSpace(conformPasswordController));
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
@@ -35,6 +27,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     super.initState();
   }
   String userId = "";
+  void removeSpace(TextEditingController controller){
+    if(controller.text.trim() == ""){
+      setState(()=> controller.text = "");
+    }
+    print("controller==>"+controller.text);
+  }
   getSharedPref() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
    setState(() {
@@ -166,6 +164,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   Widget _confirmPasswordWidget() {
     return AppTextFormField(
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.done,
       autofillHints: [AutofillHints.newPassword],
       controller: conformPasswordController,
       prefixIcon: Icons.lock_outline_rounded,
@@ -181,36 +181,39 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     });
   }
 Widget newPasswordValidation(){
-    return PasswordValidatedFields(
-      textEditingController: newPasswordController,
-      obscureText: isVisibility,
-      inputDecoration: InputDecoration(
-          prefixIcon:Icon( Icons.lock_outline_rounded),
-          suffixIcon: IconButton(
-            icon: Icon(isVisibility?Icons.visibility_off : Icons.visibility),
-            onPressed:showHide ,
-          ),
-          hintText: "New Password",
-          labelText:"New Password",
-          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          )
-      ),
-      inActiveRequirementColor: Colors.red,
-      activeRequirementColor: Colors.green,
-      inActiveIcon: Icons.cancel,
+  return PasswordValidatedFields(
+    keyboardType: TextInputType.text,
+    textInputAction: TextInputAction.done,
+    autofillHints: [AutofillHints.newPassword],
+    textEditingController: newPasswordController,
+    obscureText: isVisibility,
+    inputDecoration: InputDecoration(
+        prefixIcon:Icon( Icons.lock_outline_rounded),
+        suffixIcon: IconButton(
+          icon: Icon(isVisibility?Icons.visibility_off : Icons.visibility),
+          onPressed:showHide ,
+        ),
+        hintText: "New Password",
+        labelText:"New Password",
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+        )
+    ),
+    inActiveRequirementColor: Colors.red,
+    activeRequirementColor: Colors.green,
+    inActiveIcon: Icons.cancel,
 
-      activeIcon: Icons.done_all,
-    );
+    activeIcon: Icons.done_all,
+  );
 }
 
   Widget horgentental(){

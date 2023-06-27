@@ -1,26 +1,7 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:convert' show json;
-import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
-import 'package:connectivity/connectivity.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Utils/Constants.dart';
-import '../Utils/CustomEmailTextField.dart';
-import '../Utils/global_constant.dart';
-import '../Utils/reused_text_style.dart';
-import '../models/GeneralResponse.dart';
-import '../models/login_model.dart';
-import '../service/Apis.dart';
-import 'billingRequest.dart';
-import 'change_password_page.dart';
+import 'package:meter_reader/models/GeneralResponse.dart';
+import 'package:http/http.dart' as http;
+import '../ExportFile/export_file.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -67,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String version = packageInfo.version;
     String releaseDate = "2023-04-07";
     setState(() {
-      _appInformation = "App Version :  ${version} \n Release Date : ${releaseDate}";
+      _appInformation = "App Version :  $version \n Release Date : $releaseDate";
     });
   }
 

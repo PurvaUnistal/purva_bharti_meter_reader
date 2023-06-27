@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:password_validated_field/password_validated_field.dart';
+import '../../../../ExportFile/export_file.dart';
+
 
 class RoundedButton extends StatelessWidget {
   RoundedButton({ this.colour, this.title, this.onPressed});
   final Color? colour;
   final String? title;
-  final VoidCallback? onPressed;
+  final void Function()? onPressed;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -19,7 +19,10 @@ class RoundedButton extends StatelessWidget {
           //Go to login screen.
           minWidth: 200.0,
           height: 42.0,
-          child: Text(title!, style: const TextStyle(color: Colors.white),),
+          child: Text(
+            title!,
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
       ),
     );
@@ -29,6 +32,8 @@ class RoundedButton extends StatelessWidget {
 class AppTextFormField extends StatelessWidget {
   final VoidCallback? passwordOnPressed;
   final ValueChanged<String>? onChanged;
+  final TextInputType? keyboardType;
+  final  TextInputAction? textInputAction;
   final TextEditingController? controller;
   final String? hintText;
   final String? labelText;
@@ -37,6 +42,8 @@ class AppTextFormField extends StatelessWidget {
   const AppTextFormField({Key? key,
     this.passwordOnPressed,
     this.onChanged,
+    this.keyboardType,
+    this.textInputAction,
     this.controller,
     this.hintText,
     this.labelText,
@@ -47,13 +54,16 @@ class AppTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return Container(
-        padding: const EdgeInsets.all(10.0),
-        child: TextFormField(
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      child: TextFormField(
+        keyboardType: keyboardType,
+        textInputAction: textInputAction,
         onChanged:onChanged,
         controller: controller,
         obscureText: true,
-          autofillHints: autofillHints,
+        textCapitalization: TextCapitalization.words,
+        autofillHints: autofillHints,
         decoration:  InputDecoration(
             hintText: hintText,
             label: Text(labelText!),
@@ -72,8 +82,8 @@ class AppTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(32.0)),
             )
         ),
-    ),
-      );
+      ),
+    );
   }
 }
 
