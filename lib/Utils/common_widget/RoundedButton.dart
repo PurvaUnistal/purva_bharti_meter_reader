@@ -36,7 +36,6 @@ class AppTextFormField extends StatelessWidget {
   final  TextInputAction? textInputAction;
   final TextEditingController? controller;
   final String? hintText;
-  final int? maxLength;
   final String? labelText;
   final IconData? prefixIcon;
   final Iterable<String>? autofillHints;
@@ -46,7 +45,6 @@ class AppTextFormField extends StatelessWidget {
     this.keyboardType,
     this.textInputAction,
     this.controller,
-    this.maxLength,
     this.hintText,
     this.labelText,
     this.prefixIcon,
@@ -59,7 +57,6 @@ class AppTextFormField extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10.0),
       child: TextFormField(
-        maxLength: maxLength,
         keyboardType: keyboardType,
         textInputAction: textInputAction,
         onChanged:onChanged,

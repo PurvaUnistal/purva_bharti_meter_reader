@@ -56,8 +56,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       CustomToast.showToast("The Password must be at least one Uppercase letter.");
       return false;
     }
-    else if(newPasswordController.text.length < 5){
-      CustomToast.showToast("Password must be at least 6 characters long");
+    else if(newPasswordController.text.length < 8){
+      CustomToast.showToast("Password must be at least 8 characters long");
       return false;
     }else  if(!charRegex.hasMatch(newPasswordController.text)){
       CustomToast.showToast("The Password must be at least one special character.");
@@ -164,7 +164,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   Widget _confirmPasswordWidget() {
     return AppTextFormField(
-      maxLength: 20,
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.done,
       autofillHints: [AutofillHints.newPassword],
