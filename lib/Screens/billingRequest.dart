@@ -627,7 +627,7 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                       ),
                       MaterialButton(
                         color: Colors.lightBlueAccent,
-                        onPressed: () {
+                        /* onPressed: () {
                           String myReadingValue = myController1.text.toString().trim() +
                               myController2.text.toString().trim() +
                               myController3.text.toString().trim() +
@@ -638,7 +638,7 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                               myController8.text.toString().trim() +
                               myController9.text.toString().trim() +
                               myController10.text.toString().trim();
-                          double myReading = double.parse(myReadingValue) / 1000;
+                   //       double myReading = double.parse('$myReadingValue') / 1000;
 
                           String oldMeterCurrentReading = searchList[0].oldMeterCurrentReading.toString();
                           String oldMeterLastReading = searchList[0].oldMeterLastReading.toString();
@@ -651,7 +651,6 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                           print(finalValue);
                           double finalReadingValue = oMCLR + finalValue;
                           print(finalReadingValue);
-
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -672,7 +671,7 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                                         searchList[0].replaceStatus.toString() == "1"? Text("Old Meter Last Reading : " + searchList[0].oldMeterLastReading.toString()) :Container(),
                                         searchList[0].replaceStatus.toString() == "1"? Text("Old Meter Current Reading : " + searchList[0].oldMeterCurrentReading.toString()) :Container(),
                                         searchList[0].replaceStatus.toString() == "1"? Text("New Meter Old Reading : " + searchList[0].newMeterOldReading.toString()) :Container(),
-                                        searchList[0].replaceStatus.toString() == "1"? Text("New Reading : " + finalReadingValue.toStringAsFixed(3)) :Text("New Reading : " + myReading.toStringAsFixed(3)),
+                                 //       searchList[0].replaceStatus.toString() == "1"? Text("New Reading : " + finalReadingValue.toStringAsFixed(3)) :Text("New Reading : " + myReading.toStringAsFixed(3)),
                                         SizedBox(
                                           height: 8,
                                         ),
@@ -759,7 +758,24 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                                       ],
                                     ));
                               });
+                        },*/
+
+                        onPressed: (){
+                          if(searchList.isEmpty){
+                            CustomToast.showToast("Please Search Bp Number/Meter Reader");
+                          }
+                          else{
+                            processDialog();
+                          }
                         },
+
+                        /* onPressed: (){
+                          showDialog(context: context, builder: (BuildContext context){
+                            return AlertDialog(
+                              title: Text("gthyujiopjhgfdxcvghjuiuytgfvbnhjuiyhgb"),
+                            );
+                          });
+                        },*/
                         child: Text("Preview",
                             style: TextStyle(
                               color: Colors.white,
@@ -801,6 +817,139 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> processDialog() async {
+    var myReadingValue = myController1.text.toString().trim() +
+        myController2.text.toString().trim() +
+        myController3.text.toString().trim() +
+        myController4.text.toString().trim() +
+        myController5.text.toString().trim() +
+        myController6.text.toString().trim() +
+        myController7.text.toString().trim() +
+        myController8.text.toString().trim() +
+        myController9.text.toString().trim() +
+        myController10.text.toString().trim();
+    var myReading = myReadingValue == ''? 0.0 : double.parse(myReadingValue) / 1000;
+
+    String oldMeterCurrentReading = searchList[0].oldMeterCurrentReading.toString();
+    String oldMeterLastReading = searchList[0].oldMeterLastReading.toString();
+    String newMeterOldReading = searchList[0].newMeterOldReading.toString();
+
+    /// replace_status == 1
+   /* double oMCLR  = (double.parse(oldMeterCurrentReading.replaceAll(RegExp(r'[^0-9.]'),'')) - double.parse(oldMeterLastReading.replaceAll(RegExp(r'[^0-9.]'),'')));
+    double finalValue = (double.parse(myReadingValue.replaceAll(RegExp(r'[^0-9.]'),'')) - double.parse(newMeterOldReading.replaceAll(RegExp(r'[^0-9.]'),'')));
+    double finalReadingValue = oMCLR + finalValue;*/
+
+      return  showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Align(
+                        alignment:Alignment.center,
+                        child: Text("Replace Status "+"("+searchList[0].replaceStatus.toString() +")")),
+                    Text("=========================="),
+                    Text("BP Number : " + bpNumberFieldController.text.toString()),
+                    Text("Customer Name : " + customerNameController.text.toString()),
+                    Text("Customer Address : " + customerAddressController.text.toString()),
+                    Text("Meter Number : " + meterNumberController.text.toString()),
+                    Text("Previous Reading  : " + previousReadingController.text.toString()),
+                    searchList[0].replaceStatus.toString() == "1"? Text("Old Meter Last Reading : " + searchList[0].oldMeterLastReading.toString()) :Container(),
+                    searchList[0].replaceStatus.toString() == "1"? Text("Old Meter Current Reading : " + searchList[0].oldMeterCurrentReading.toString()) :Container(),
+                    searchList[0].replaceStatus.toString() == "1"? Text("New Meter Old Reading : " + searchList[0].newMeterOldReading.toString()) :Container(),
+                    Text("New Reading : "+myReading.toStringAsFixed(3)),
+                  //  searchList[0].replaceStatus.toString() == "1"? Text("New Reading : "+finalReadingValue.toStringAsFixed(3) ) :Text("New Reading : "+myReading.toStringAsFixed(3)),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              TextButton(
+                                child: Text(
+                                  "Submit",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                style: TextButton.styleFrom(backgroundColor: Colors.lightBlueAccent),
+                                onPressed: () {
+                                  subMethod();
+                                  if (actualResult! >= 0) {
+                                    if (actualResult! > 5 && actualResult! < 25) {
+                                      print("Greater then 25");
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return CustomDialogBox(
+                                                msg: "Reading is Ok",
+                                                myReading: actualResult.toString(),
+                                                onPressed: () {
+                                                  onClick();
+                                                });
+                                          });
+                                    } else if (actualResult! < 5) {
+                                      print("less then 5");
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return CustomDialogBox(
+                                                msg: " Less then 5",
+                                                myReading: actualResult.toString(),
+                                                onPressed: () {
+                                                  onClick();
+                                                });
+                                          });
+                                    } else {
+                                      print("25--->" + " Greater then 25");
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return CustomDialogBox(
+                                                msg: " Greater then 25",
+                                                myReading: actualResult.toString(),
+                                                onPressed: () {
+                                                  onClick();
+                                                });
+                                          });
+                                    }
+                                  } else {
+                                    print("Negative value is not Valid");
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return CustomDialogBox(
+                                              msg: "Negative value is not Valid",
+                                              myReading: actualResult.toString(),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              });
+                                        });
+                                  }
+                                },
+                              ),
+                              TextButton(
+                                child: Text("Edit", style: TextStyle(color: Colors.white)),
+                                style: TextButton.styleFrom(backgroundColor: Colors.lightBlueAccent),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          )),
+                    )
+                  ],
+                ));
+          });
+
   }
 
   Future<void> _openImageSource(

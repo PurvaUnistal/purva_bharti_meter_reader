@@ -52,13 +52,13 @@ class _PageState extends State<SplashPage> {
       SharedPreferences   prefs = await SharedPreferences.getInstance();
       _isLogin =  prefs.getBool(GlobalConstants.isUserLogIn) ?? false;
       String? changePassword = prefs.getString(GlobalConstants.changePassword);
-      if(changePassword == "0"){
+     /* if(changePassword == "0"){
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => ChangePasswordPage()),
               (Route<dynamic> route) => false,
         );
-      }else{
+      }else{*/
         if (_isLogin) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => MeterRequestScreen()));
@@ -66,6 +66,6 @@ class _PageState extends State<SplashPage> {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => LoginScreen()));
         }
-      }
+   //   }
   }
 }

@@ -260,19 +260,19 @@ class _LoginScreenState extends State<LoginScreen> {
         prefs.setString(GlobalConstants.email, lgd.user!.email.toString());
         prefs.setString(GlobalConstants.changePassword, lgd.user!.pwdChanged.toString());
         EasyLoading.showInfo(lgd.messages.toString());
-        if(lgd.user!.pwdChanged == "0"){
+       /* if(lgd.user!.pwdChanged == "0"){
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => ChangePasswordPage()),
                 (Route<dynamic> route) => false,
           );
-        }else{
+        }else{*/
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => MeterRequestScreen()),
                 (Route<dynamic> route) => false,
           );
-        }
+     //   }
       } else if (lgd.status == 400) {
         EasyLoading.dismiss();
         _toastMsg('Incorrect Username and Password');
