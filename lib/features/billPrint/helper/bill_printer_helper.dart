@@ -40,12 +40,7 @@ class BillPrinterHelper {
       print(e);
     }
 
-    /*bytes += generator.text("  ${billPrintData.data!.lable.toString().toUpperCase()}",
-        styles: PosStyles(
-          align: PosAlign.center,
-          height: PosTextSize.size1,
-        ),
-        linesAfter: 1);*/
+
 
     // TODO:  First block
     bytes += generator.text("${billPrintData.data!.district.toString()}, ${billPrintData.data!.state.toString()}", styles: PosStyles(align: PosAlign.center));
@@ -67,14 +62,6 @@ class BillPrinterHelper {
         ' ${billPrintData.data!.pinCode.toString()}',
         styles: PosStyles(align: PosAlign.center));
 
-    /* bytes += generator.row([
-      PosColumn(text: 'Mobile Number', width: 6, styles: PosStyles(align: PosAlign.left, bold: true)),
-      PosColumn(text: '${billPrintData.data!.mobileNumber.toString()}', width: 6, styles: PosStyles(align: PosAlign.right)),
-    ]);
-    bytes += generator.row([
-      PosColumn(text: 'Meter Number', width: 6, styles: PosStyles(align: PosAlign.left, bold: true)),
-      PosColumn(text: '${billPrintData.data!.meterNumber.toString()}', width: 6, styles: PosStyles(align: PosAlign.right)),
-    ]);*/
     bytes += generator.text('Mobile Number         : ${billPrintData.data!.mobileNumber.toString()}', styles: PosStyles(align: PosAlign.left));
     bytes += generator.text('Meter Number          : ${billPrintData.data!.meterNumber.toString()}', styles: PosStyles(align: PosAlign.left));
     bytes += generator.text('Bill Date             : ${billPrintData.data!.billGeneratedDate.toString()}', styles: PosStyles(align: PosAlign.left));

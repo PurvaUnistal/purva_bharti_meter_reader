@@ -1,4 +1,4 @@
-package com.unistal.meter_reader
+package com.unistal.pbg.meter_reader
 
 import io.flutter.embedding.android.FlutterActivity
 

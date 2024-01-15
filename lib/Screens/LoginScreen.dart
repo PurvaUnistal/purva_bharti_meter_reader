@@ -13,7 +13,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool validate = false;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-  BuildContext? ctx;
   bool canProceed = true;
   bool isOffline = false;
   bool dialogIsVisible = false;
@@ -31,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     getAppVersionAndRelease();
     initConnectivity();
-    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
   }
 
@@ -45,181 +45,187 @@ class _LoginScreenState extends State<LoginScreen> {
   void getAppVersionAndRelease() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String appName = packageInfo.appName;
-    String version = packageInfo.version;
-    String releaseDate = "2023-04-07";
+    // String version = packageInfo.version;
+    String version = "1";
+    String releaseDate = "2024-01-15";
     setState(() {
-      _appInformation = "App Version :  $version \n Release Date : $releaseDate";
+      _appInformation =
+          "App Version :  $version \n Release Date : $releaseDate";
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    ctx = context;
     return new Scaffold(
       backgroundColor: Colors.white,
       key: scaffoldKey,
       body: Center(
         child: SingleChildScrollView(
-          child: Visibility(
-            visible: check,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 30.0, bottom: 30),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 7.0,
-                  shadowColor: Colors.teal,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30.0, bottom: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Center(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Container(
-                                  child: new CircleAvatar(
-                                    radius: 60,
-                                    backgroundColor: Colors.lightBlueAccent,
-                                    child: Container(
-                                        width: 80,
-                                        height: 80,
-                                        child: Image(
-                                            image: AssetImage(
-                                          'assets/images/logo.png',
-                                        ))),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 60),
-                        Container(
-                            alignment: Alignment.bottomCenter,
-                            child: CustomTextEmailField(
-                              enabled: true,
-                              autofillHints: [AutofillHints.email],
-                              controller: emailController,
-                              validate: true,
-                              labelText: "User Name",
-                              filledColor: Colors.white,
-                            )),
-                        SizedBox(height: 5),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Container(
-                            color: Colors.white,
-                            child: Theme(
-                              data: new ThemeData(primaryColor: greyColor, hintColor: Colors.green, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.orange)),
-                              child: TextField(
-                                autofillHints: [AutofillHints.password],
-                                controller: _passwordController,
-                                obscureText: _isObscure,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9@-]")),
-                                ],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                                    labelStyle: listItemSubTitleStyle.copyWith(fontSize: 16, color: Colors.black87),
-                                    border: new OutlineInputBorder(
-                                      borderSide: new BorderSide(color: Colors.white),
-                                      borderRadius: const BorderRadius.all(const Radius.circular(10.0)),
-                                    ),
-                                    labelText: 'Password',
-                                    suffixIcon: IconButton(
-                                        icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
-                                        onPressed: () {
-                                          setState(() {
-                                            _isObscure = !_isObscure;
-                                          });
-                                        })),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            /* Navigator.push(context,MaterialPageRoute( builder: (context) => LoginScreen()), );*/
-                          },
-                          child: Center(
-                            child: Container(
-                              child: Column(
-                                children: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      TextInput.finishAutofillContext();
-                                      btnClick();
-                                    },
-                                    style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Container(
-                                          height: 50,
-                                          width: MediaQuery.of(context).size.width,
-                                          decoration: BoxDecoration(color: Colors.lightBlueAccent, borderRadius: BorderRadius.all(Radius.circular(10))),
-                                          child: Center(
-                                            child: Text("Login Now", style: ReusedTextStyle.login),
-                                          )),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                                    child: Container(width: 30, height: 30, child: Image.asset('assets/images/unistal.png')),
-                                  ),
-                                  Text("Powered By Unistal Systems Pvt.Ltd.")
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                            child: Container(width: 200, height: 30, child: Image.asset('assets/images/smartgasnet.png')),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                            child: Text(
-                              appInformation,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
                         SizedBox(
                           height: 30,
+                        ),
+                        Image(
+                          image: AssetImage('assets/images/logo.png'),
+                          width: 150,
+                          height: 150,
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
+                SizedBox(height: 60),
+                Container(
+                    alignment: Alignment.bottomCenter,
+                    child: CustomTextEmailField(
+                      enabled: true,
+                      autofillHints: [AutofillHints.email],
+                      controller: emailController,
+                      validate: true,
+                      labelText: "User Name",
+                      filledColor: Colors.white,
+                    )),
+                SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Container(
+                    color: Colors.white,
+                    child: Theme(
+                      data: new ThemeData(
+                          primaryColor: greyColor,
+                          hintColor: Colors.green,
+                          colorScheme: ColorScheme.fromSwatch()
+                              .copyWith(secondary: Colors.orange)),
+                      child: TextField(
+                        autofillHints: [AutofillHints.password],
+                        controller: _passwordController,
+                        obscureText: _isObscure,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp("[a-zA-Z0-9@-]")),
+                        ],
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                            labelStyle: listItemSubTitleStyle.copyWith(
+                                fontSize: 16, color: Colors.black87),
+                            border: new OutlineInputBorder(
+                              borderSide: new BorderSide(color: Colors.white),
+                              borderRadius: const BorderRadius.all(
+                                  const Radius.circular(10.0)),
+                            ),
+                            labelText: 'Password',
+                            suffixIcon: IconButton(
+                                icon: Icon(
+                                    _isObscure
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Colors.green.shade800),
+                                onPressed: () {
+                                  setState(() {
+                                    _isObscure = !_isObscure;
+                                  });
+                                })),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    /* Navigator.push(context,MaterialPageRoute( builder: (context) => LoginScreen()), );*/
+                  },
+                  child: Center(
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              TextInput.finishAutofillContext();
+                              btnClick();
+                            },
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0)))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                  height: 50,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                      color: Colors.green.shade800,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
+                                  child: Center(
+                                    child: Text("Login Now",
+                                        style: ReusedTextStyle.login),
+                                  )),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 5),
+                            child: Container(
+                                width: 30,
+                                height: 30,
+                                child:
+                                    Image.asset('assets/images/unistal.png')),
+                          ),
+                          Text("Powered By Unistal Systems Pvt.Ltd.")
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                    child: Container(
+                        width: 200,
+                        height: 30,
+                        child: Image.asset('assets/images/smartgasnet.png')),
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                    child: Text(
+                      appInformation,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+              ],
             ),
           ),
         ),
@@ -245,10 +251,11 @@ class _LoginScreenState extends State<LoginScreen> {
       password,
     );
     try {
-     LoginModel lgd = new LoginModel.fromJson(json.decode(jwt));
-    //  LoginModel lgd = new LoginModel.fromJson(jsonDecode(jwt));
+      LoginModel lgd = new LoginModel.fromJson(json.decode(jwt));
+      //  LoginModel lgd = new LoginModel.fromJson(jsonDecode(jwt));
       print("jwt--->" + jwt);
-      if ((lgd.status.toString().contains("200") && lgd.user!.role!.contains("billing"))) {
+      if ((lgd.status.toString().contains("200") &&
+          lgd.user!.role!.contains("billing"))) {
         EasyLoading.dismiss();
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setBool(GlobalConstants.isUserLogIn, true);
@@ -258,21 +265,22 @@ class _LoginScreenState extends State<LoginScreen> {
         prefs.setString(GlobalConstants.token, lgd.token!);
         prefs.setString(GlobalConstants.username, lgd.user!.name.toString());
         prefs.setString(GlobalConstants.email, lgd.user!.email.toString());
-        prefs.setString(GlobalConstants.changePassword, lgd.user!.pwdChanged.toString());
+        prefs.setString(
+            GlobalConstants.changePassword, lgd.user!.pwdChanged.toString());
         EasyLoading.showInfo(lgd.messages.toString());
-       /* if(lgd.user!.pwdChanged == "0"){
+        /* if(lgd.user!.pwdChanged == "0"){
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => ChangePasswordPage()),
                 (Route<dynamic> route) => false,
           );
         }else{*/
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => MeterRequestScreen()),
-                (Route<dynamic> route) => false,
-          );
-     //   }
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MeterRequestScreen()),
+          (Route<dynamic> route) => false,
+        );
+        //   }
       } else if (lgd.status == 400) {
         EasyLoading.dismiss();
         _toastMsg('Incorrect Username and Password');
@@ -285,7 +293,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       GeneralResponse lgd = new GeneralResponse.fromJson(json.decode(jwt));
-     /// GeneralResponse lgd = new GeneralResponse.fromJson(jsonDecode(jwt));
+
+      /// GeneralResponse lgd = new GeneralResponse.fromJson(jsonDecode(jwt));
       if (lgd.status == 401) {
         EasyLoading.dismiss();
         _toastMsg('Incorrect Username and Password');
@@ -364,7 +373,7 @@ class _LoginScreenState extends State<LoginScreen> {
             dialogIsVisible = true;
             showDialog(
                 barrierDismissible: false,
-                context: ctx!,
+                context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text(
@@ -389,31 +398,39 @@ class _LoginScreenState extends State<LoginScreen> {
                             : Text(
                                 "Please! proceed by connecting to a internet connection",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 12.0, color: Colors.red),
+                                style: TextStyle(
+                                    fontSize: 12.0, color: Colors.red),
                               ),
                       ],
                     ),
                     actions: <Widget>[
                       TextButton(
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.red)),
                         onPressed: () {
-                          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                          SystemChannels.platform
+                              .invokeMethod('SystemNavigator.pop');
                         },
-                        child: Text("CLOSE THE APP", style: TextStyle(color: Colors.white)),
+                        child: Text("CLOSE THE APP",
+                            style: TextStyle(color: Colors.white)),
                       ),
                       TextButton(
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black)),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.black)),
                         onPressed: () {
                           if (isOffline) {
                             setState(() {
                               canProceed = false;
                             });
                           } else {
-                            Navigator.pop(ctx!);
+                            Navigator.pop(context);
                             //your code
                           }
                         },
-                        child: Text("PROCEED", style: TextStyle(color: Colors.white)),
+                        child: Text("PROCEED",
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ],
                   );
@@ -423,6 +440,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _toastMsg(String msg) {
-    Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.CENTER, timeInSecForIosWeb: 1, backgroundColor: Colors.grey, textColor: Colors.white, fontSize: 14.0);
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 14.0);
   }
 }

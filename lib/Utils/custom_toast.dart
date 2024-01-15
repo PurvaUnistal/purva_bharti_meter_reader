@@ -2,17 +2,32 @@ import '../../../../ExportFile/export_file.dart';
 
 class CustomToast {
   static showToast(String message) {
-    Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, backgroundColor: Colors.green, textColor: Colors.white, fontSize: 16.0);
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }
 
 class ShowCustomToast {
   static showToast(String message) {
-    Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 5, backgroundColor: Colors.red, textColor: Colors.white, fontSize: 16.0);
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 8,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
-  static scaffoldMsg(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  static scaffoldMsg(BuildContext context, String? message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message!)));
   }
 }
 
@@ -49,7 +64,8 @@ class ValidateCustomToast {
   }
 }
 
-Future<void> _showMyDialog(String myReading, previousReading, msg, Function() onPressed) async {
+Future<void> _showMyDialog(
+    String myReading, previousReading, msg, Function() onPressed) async {
   var context;
   return showDialog<void>(
     context: context,

@@ -7,7 +7,10 @@ class MeterNumber extends StatelessWidget {
   final TextInputAction? textInputAction;
   final Color? color;
   final ValueChanged? onChanged;
-  const MeterNumber(this.controller,this.autoFocus,this.enabled,this.textInputAction,this.onChanged,this.color,{Key? key}) : super(key: key);
+  const MeterNumber(this.controller, this.autoFocus, this.enabled,
+      this.textInputAction, this.onChanged, this.color,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +18,20 @@ class MeterNumber extends StatelessWidget {
       alignment: Alignment.center,
       height: 60,
       width: 30,
-
       child: TextField(
-        autofocus: autoFocus! == null ? false : autoFocus!,
+        autofocus: autoFocus == null ? false : autoFocus!,
         enabled: null == enabled ? false : enabled!,
-        readOnly: enabled == null ? false : enabled == true ? false : true ,
+        readOnly: enabled == null
+            ? false
+            : enabled == true
+                ? false
+                : true,
         controller: controller,
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
         ],
-          textInputAction: textInputAction,
-          onChanged: onChanged,
+        textInputAction: textInputAction,
+        onChanged: onChanged,
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
         maxLength: 1,
@@ -33,18 +39,21 @@ class MeterNumber extends StatelessWidget {
             isDense: true,
             contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
             enabledBorder: OutlineInputBorder(
-                borderSide:BorderSide(color: color?? Colors.white,)),
+                borderSide: BorderSide(
+              color: color ?? Colors.white,
+            )),
             focusedBorder: OutlineInputBorder(
-                borderSide:BorderSide(color: color?? Colors.white,)),
+                borderSide: BorderSide(
+              color: color ?? Colors.white,
+            )),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
-                borderSide: BorderSide(color: color?? Colors.white,)
-            ),
+                borderSide: BorderSide(
+                  color: color ?? Colors.white,
+                )),
             counterText: '',
             hintStyle: TextStyle(color: Colors.black, fontSize: 8.0)),
-
       ),
     );
   }
 }
-
