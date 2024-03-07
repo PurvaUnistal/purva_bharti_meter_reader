@@ -23,11 +23,11 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(130.0),
           child: Container(
-            color:  Colors.lightBlueAccent,
+            color:  Colors.green.shade800,
             child: Column(
               children: [
                 AppBar(title: Text("Bill History"),
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Colors.green.shade800,
                   elevation: 0,),
                 Container(
                     alignment: Alignment.bottomCenter,
@@ -50,7 +50,7 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
         body: BlocBuilder<BillHistoryBloc, BillHistoryState>(
           builder: (context, state) {
             if(state is BillHistoryPageLoadState){
-              return Center(child: SpinKitCubeGrid(color: Colors.lightBlueAccent, size: 50),);
+              return Center(child: SpinKitCubeGrid(color: Colors.green.shade800, size: 50),);
             } else if(state is BillHistoryEmptyState){
                return Center(child:  Text("No Data Found", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w800),),);
             } else if(state is FetchBillHistoryDataState){

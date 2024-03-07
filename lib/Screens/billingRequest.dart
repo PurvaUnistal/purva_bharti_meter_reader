@@ -426,8 +426,10 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                               textInputAction: TextInputAction.search,
                               controller: bpNumberSearchController,
                               enableInteractiveSelection: true,
+                              cursorColor: greyColor,
                               decoration: InputDecoration(
                                 labelText: "BP Number/Meter Number",
+                                labelStyle: TextStyle(color: greyColor),
                                 fillColor: Colors.white,
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 15),
@@ -436,8 +438,13 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                                       ? SizedBox(
                                           width: 12,
                                           height: 12,
-                                          child: CircularProgressIndicator())
-                                      : Icon(Icons.sync),
+                                          child: CircularProgressIndicator(
+                                            color: greyColor,
+                                          ))
+                                      : Icon(
+                                          Icons.sync,
+                                          color: greyColor,
+                                        ),
                                   onPressed: () {
                                     billMeterReader();
                                   },

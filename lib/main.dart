@@ -12,10 +12,12 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (BuildContext context) => BillPrintBloc()),
           BlocProvider(create: (BuildContext context) => BillHistoryBloc()),
         ],
-        child: MaterialApp(
-
-            debugShowCheckedModeBanner: false,
-            builder: EasyLoading.init(),
-            home: SplashPage()));
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.green[800]),
+          child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              builder: EasyLoading.init(),
+              home: SplashPage()),
+        ));
   }
 }

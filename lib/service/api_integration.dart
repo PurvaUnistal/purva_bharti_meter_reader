@@ -21,7 +21,7 @@ class ApiIntegration {
 
       if (response.statusCode == 200) {
         BpNumberModel resp =
-            BpNumberModel.fromJson(jsonDecode(response.body.toString()));
+        BpNumberModel.fromJson(jsonDecode(response.body.toString()));
         return resp.data;
       } else if (response.statusCode == 403) {
         SessionDialogUtils.logOut(context);
@@ -53,59 +53,60 @@ class ApiIntegration {
       GenerateRequestModel generateRequestModel, BuildContext context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String token = pref.getString(GlobalConstants.token) ?? "";
-    try {
-      var request = http.MultipartRequest("Post", Uri.parse(Apis.generate));
-      Map<String, String> requestBody = <String, String>{
-        "schema": generateRequestModel.schema.toString(),
-        "bpNumber": generateRequestModel.bpNumber.toString(),
-        "meter_reading": generateRequestModel.meter_reading.toString(),
-        "meter_serial": generateRequestModel.meter_serial.toString(),
-        "generate_by_customer":
-            generateRequestModel.generate_by_customer.toString(),
-        "latitude": generateRequestModel.latitude.toString(),
-        "longitude": generateRequestModel.longitude.toString(),
-        "old_reading": generateRequestModel.old_reading.toString(),
-        "user_id": generateRequestModel.user_id.toString(),
-        // "meter_image_file": generateRequestModel.meter_image_file,
-      };
-      request.headers["authorization"] = token;
-      request.fields.addAll(requestBody);
-      if (!(generateRequestModel.meter_image_file == null ||
-          generateRequestModel.meter_image_file == " ")) {
-        var meterImage = await http.MultipartFile.fromPath("meter_image_file",
-            generateRequestModel.meter_image_file.toString());
-        request.files.add(meterImage);
-      }
-      print("Request" + requestBody.toString());
-      var response = await request.send().timeout(Duration(seconds: 10));
-      var responseData = await response.stream.toBytes();
-      var responseString = String.fromCharCodes(responseData);
-      print("Apis Generate Url" + Apis.generate);
-      print("Response-->" +
-          response.toString() +
-          "responseString :" +
-          responseString);
-      if (response.statusCode == 200) {
-        return GenerateModel.fromJson(json.decode(responseString));
-      } else if (response.statusCode == 404) {
-        return GenerateModel.fromJson(json.decode(responseString));
-      } else if (response.statusCode == 400) {
-        return GenerateModel.fromJson(json.decode(responseString));
-      } else if (response.statusCode == 403) {
-        SessionDialogUtils.logOut(context);
-      } else {
-        return null;
-      }
-    } on TimeoutException catch (e, s) {
+    //   try {
+    var request = http.MultipartRequest("Post", Uri.parse(Apis.generate));
+    Map<String, String> requestBody = <String, String>{
+      "schema": generateRequestModel.schema.toString(),
+      "bpNumber": generateRequestModel.bpNumber.toString(),
+      "meter_reading": generateRequestModel.meter_reading.toString(),
+      "meter_serial": generateRequestModel.meter_serial.toString(),
+      "generate_by_customer":
+      generateRequestModel.generate_by_customer.toString(),
+      "latitude": generateRequestModel.latitude.toString(),
+      "longitude": generateRequestModel.longitude.toString(),
+      "old_reading": generateRequestModel.old_reading.toString(),
+      "user_id": generateRequestModel.user_id.toString(),
+      // "meter_image_file": generateRequestModel.meter_image_file,
+    };
+    request.headers["authorization"] = token;
+    request.fields.addAll(requestBody);
+    if (!(generateRequestModel.meter_image_file == null ||
+        generateRequestModel.meter_image_file == " ")) {
+      var meterImage = await http.MultipartFile.fromPath("meter_image_file",
+          generateRequestModel.meter_image_file.toString());
+      request.files.add(meterImage);
+    }
+    print("Request" + requestBody.toString());
+    var response = await request.send().timeout(Duration(seconds: 10));
+    var responseData = await response.stream.toBytes();
+    var responseString = String.fromCharCodes(responseData);
+    print("Apis Generate Url" + Apis.generate);
+    print("Response-->" +
+        response.toString() +
+        "responseString :" +
+        responseString);
+    if (response.statusCode == 200) {
+      return GenerateModel.fromJson(json.decode(responseString));
+    } else if (response.statusCode == 404) {
+      return GenerateModel.fromJson(json.decode(responseString));
+    } else if (response.statusCode == 400) {
+      return GenerateModel.fromJson(json.decode(responseString));
+    } else if (response.statusCode == 403) {
+      SessionDialogUtils.logOut(context);
+    } else {
+      return null;
+    }
+  }
+  /*  on TimeoutException catch (e, s) {
       print("TimeoutException-->${e.message.toString()}");
-      ShowCustomToast.scaffoldMsg(context, 'Your Server Side Is Slow');
-    } catch (e) {
+      ShowCustomToast.scaffoldMsg(context, 'Your Server Side Is Slow');*/
+  /* } catch (e) {
       print('catch error--> : $e');
       ShowCustomToast.scaffoldMsg(context, e.toString());
       return null;
-    }
-    return null;
-  }
+    }*/
+  // return null;
+  // }
 
   Future<ChangePasswordModel?> changePasswordApi(
       ChangePasswordResponse changePasswordResponse) async {

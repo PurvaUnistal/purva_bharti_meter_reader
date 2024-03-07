@@ -12,7 +12,7 @@ class _BillPrinterPageState extends State<BillPrinterPage> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: AppBar(title: Text("Bill Print"),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.green.shade800,
         actions: [
           PopupMenuButton<String>(
             onSelected: handleClick,
