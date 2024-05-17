@@ -5,7 +5,6 @@ export 'dart:io';
 export 'package:device_info_plus/device_info_plus.dart';
 export 'package:fluttertoast/fluttertoast.dart';
 export 'package:connectivity/connectivity.dart';
-export 'package:flutter/material.dart';
 export 'package:flutter/services.dart';
 export 'package:flutter_easyloading/flutter_easyloading.dart';
 export 'package:package_info_plus/package_info_plus.dart';
