@@ -38,6 +38,10 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
   final customerAddressController = new TextEditingController();
   final previousReadingController = new TextEditingController();
   final previousOutStandingController = new TextEditingController();
+  final houseNumberController = new TextEditingController();
+  final localityController = new TextEditingController();
+  final townController = new TextEditingController();
+  final pinCodeController = new TextEditingController();
   final myController1 = new TextEditingController();
   final myController2 = new TextEditingController();
   final myController3 = new TextEditingController();
