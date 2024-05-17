@@ -28,13 +28,12 @@ dependencies:
   permission_handler: ^10.2.0
   bluetooth_thermal_printer: ^0.0.6
   equatable: ^2.0.5
-  flutter_bloc: ^8.1.1
+  flutter_bloc: ^8.1.5
   provider: ^6.0.5
   flutter_spinkit: ^5.1.0
   qr_flutter: ^4.0.0
   path_provider: ^2.0.14
   buffer: ^1.2.0
-  html: ^0.15.0
   package_info_plus: ^3.0.3
   device_info_plus: ^8.2.2
   password_validated_field: ^0.0.3
