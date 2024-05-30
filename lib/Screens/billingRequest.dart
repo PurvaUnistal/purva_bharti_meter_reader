@@ -36,12 +36,12 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
   final meterNumberController = new TextEditingController();
   final customerNameController = new TextEditingController();
   final customerAddressController = new TextEditingController();
-  final previousReadingController = new TextEditingController();
-  final previousOutStandingController = new TextEditingController();
   final houseNumberController = new TextEditingController();
-  final localityController = new TextEditingController();
+  final streetController = new TextEditingController();
   final townController = new TextEditingController();
   final pinCodeController = new TextEditingController();
+  final previousReadingController = new TextEditingController();
+  final previousOutStandingController = new TextEditingController();
   final myController1 = new TextEditingController();
   final myController2 = new TextEditingController();
   final myController3 = new TextEditingController();
@@ -172,14 +172,18 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
           customerNameController.text = searchList[0].firstName.toString() +
               " " +
               searchList[0].lastName.toString();
-          customerAddressController.text =
+          /*customerAddressController.text =
               searchList[0].houseNumber.toString() +
                   "\n" +
                   searchList[0].locality.toString() +
                   "\n" +
                   searchList[0].town.toString() +
                   "\n" +
-                  searchList[0].pinCode.toString();
+                  searchList[0].pinCode.toString();*/
+          houseNumberController.text = searchList[0].houseNumber.toString();
+          streetController.text = searchList[0].locality.toString();
+          townController.text = searchList[0].town.toString();
+          pinCodeController.text = searchList[0].pinCode.toString();
           previousReadingController.text = searchList[0].replaceStatus == 1
               ? searchList[0].newMeterOldReading.toString()
               : searchList[0].oldReading.toString();
@@ -218,7 +222,7 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
         myController8.text.toString().trim() +
         myController9.text.toString().trim() +
         myController10.text.toString().trim();
-    double myReading = double.parse(myReadingValue) / 1000;
+      double myReading = double.parse(myReadingValue) / 1000;
     if (bpNumberFieldController.text.trim().toString() == " ") {
       CustomToast.showToast("Select BP Number");
       return;
@@ -227,10 +231,10 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
       CustomToast.showToast("Select Customer Name ");
       return;
     }
-    if (customerAddressController.text.trim().toString() == " ") {
+   /* if (customerAddressController.text.trim().toString() == " ") {
       CustomToast.showToast("Select Customer Address ");
       return;
-    }
+    }*/
     if (bpNumberFieldController.text.trim().toString() == " ") {
       CustomToast.showToast("Select BP Number");
       return;
@@ -325,6 +329,10 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
     meterNumberController.clear();
     customerNameController.clear();
     customerAddressController.clear();
+    houseNumberController.clear();
+    streetController.clear();
+    townController.clear();
+    pinCodeController.clear();
     previousReadingController.clear();
     previousOutStandingController.clear();
     myController1.clear();
@@ -491,10 +499,33 @@ class MeterReadingNumberState extends State<MeterRequestScreen> {
                       CustomTextEmailField(
                         enabled: false,
                         keyboardType: TextInputType.streetAddress,
-                        maxLines: 4,
-                        controller: customerAddressController,
+                        controller: houseNumberController,
                         validate: false,
-                        labelText: "Customer Address",
+                        labelText: "House Number",
+                        filledColor: Colors.white,
+                      ),
+                      CustomTextEmailField(
+                        enabled: false,
+                        keyboardType: TextInputType.streetAddress,
+                        controller: streetController,
+                        validate: false,
+                        labelText: "Street Name",
+                        filledColor: Colors.white,
+                      ),
+                      CustomTextEmailField(
+                        enabled: false,
+                        keyboardType: TextInputType.streetAddress,
+                        controller: townController,
+                        validate: false,
+                        labelText: "Town",
+                        filledColor: Colors.white,
+                      ),
+                      CustomTextEmailField(
+                        enabled: false,
+                        keyboardType: TextInputType.streetAddress,
+                        controller: pinCodeController,
+                        validate: false,
+                        labelText: "Pin Code",
                         filledColor: Colors.white,
                       ),
                       CustomTextEmailField(

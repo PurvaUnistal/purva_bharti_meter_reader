@@ -49,7 +49,7 @@ class _PageState extends State<SplashPage> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text("Version : 1"),
-                    Text("Date : 07-03-2024"),
+                    Text("Date : 30-05-2024"),
                   ],
                 )
               ],
