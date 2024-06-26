@@ -9,17 +9,17 @@ class BillHistoryInitial extends BillHistoryState {
   List<Object> get props => [];
 }
 
-class BillHistoryPageLoadState extends BillHistoryInitial {
+class BillHistoryPageLoadState extends BillHistoryState {
   @override
   List<Object> get props => [];
 }
 
-class BillHistoryEmptyState extends BillHistoryInitial {
+class BillHistoryEmptyState extends BillHistoryPageLoadState {
   @override
   List<Object> get props => [];
 }
 
-class FetchBillHistoryDataState extends BillHistoryInitial {
+class FetchBillHistoryDataState extends BillHistoryPageLoadState {
   final List<BillHistoryModel> billHistoryList;
   final String schema;
   final String userId;

@@ -1,23 +1,30 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:esc_pos_utils/esc_pos_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image/image.dart' as imgs;
-import '../../../../ExportFile/export_file.dart';
+import 'package:meter_reader/Utils/Utils.dart';
+import 'package:meter_reader/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
+import 'package:meter_reader/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:meter_reader/features/billPrint/domain/model/bill_printer_model.dart';
+import 'package:meter_reader/service/Apis.dart';
+import 'package:meter_reader/service/api_helper.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class BillPrinterHelper {
   static Future<dynamic> fetchBillData({required BuildContext context, required dynamic billId, required String schema}) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String token = pref.getString(GlobalConstants.token) ?? "";
+
+    String token = await SharedPref.getString(key: PrefsValue.token);
     try {
       String url = Apis.billPrintData + "$billId&schema=$schema";
       log(url);
-      var res = await get(
-        Uri.parse(url),headers: {'authorization': '$token'});
-      log(res.body);
-      if (res.statusCode == 200) {
-        return json.decode(res.body);
-      } else if(res.statusCode == 403){
-        SessionDialogUtils.logOut(context);
-      } else {
-        return "error";
+      var res = await ApiHelper.getData(urlEndPoint:url ,context: context);
+      if(res != null && res["error"] == false){
+        return res;
+      } else if (res != null && res["error"] == true) {
+        Utils.errorSnackBar(msg: res["data"], context: context);
+        return null;
       }
     } catch (e) {
       return "error";
@@ -27,11 +34,7 @@ class BillPrinterHelper {
   static Future<List<int>> getTicket({required BillPrintModel billPrintData}) async {
     List<int> bytes = [];
     CapabilityProfile profile = await CapabilityProfile.load();
-    final generator = Generator(
-      PaperSize.mm80,
-      profile,
-    );
-
+    final generator = Generator(PaperSize.mm80, profile,);
     try {
       final ByteData byteImage = await rootBundle.load('assets/images/hpcl_logo.png');
       final assetsIMage = imgs.decodeImage(byteImage.buffer.asUint8List());

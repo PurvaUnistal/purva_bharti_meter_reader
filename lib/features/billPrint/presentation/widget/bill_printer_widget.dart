@@ -1,4 +1,9 @@
-import '../../../../ExportFile/export_file.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:meter_reader/Utils/Utils.dart';
+import 'package:meter_reader/Utils/common_widgets/styles_widget.dart';
+import 'package:meter_reader/features/billPrint/domain/bloc/bill_print_bloc.dart';
 
 class BillPrinterWidget extends StatefulWidget {
   const BillPrinterWidget({Key? key}) : super(key: key);
@@ -137,28 +142,18 @@ class _BillPrinterWidgetState extends State<BillPrinterWidget> {
                       onPressed: () {
                         if (dataState.availableBluetoothDevices.isNotEmpty) {
                           if (dataState.connected == false) {
-                            Fluttertoast.showToast(
-                                msg: "Please select printer",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.grey,
-                                textColor: Colors.white,
-                                fontSize: 14.0);
+                            Utils.errorSnackBar(
+                              msg: "Please select printer",context: context
+                            );
                           } else {
                             BlocProvider.of<BillPrintBloc>(context)
                                 .add(BillSetPrintEvent(context: context));
                           }
                         } else {
-                          Fluttertoast.showToast(
-                              msg:
-                                  "Printer Bluetooth no found \n Please check bluetooth printer connection",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.grey,
-                              textColor: Colors.white,
-                              fontSize: 14.0);
+                          Utils.errorSnackBar(
+                              msg: "Printer Bluetooth no found \n Please check bluetooth printer connection",
+                              context: context
+                          );
                         }
                       },
                       style: ButtonStyle(
@@ -178,7 +173,7 @@ class _BillPrinterWidgetState extends State<BillPrinterWidget> {
                                     BorderRadius.all(Radius.circular(10))),
                             child: Center(
                               child: Text("Print Now",
-                                  style: ReusedTextStyle.login),
+                                  style: Styles.login),
                             )),
                       ),
                     ),
