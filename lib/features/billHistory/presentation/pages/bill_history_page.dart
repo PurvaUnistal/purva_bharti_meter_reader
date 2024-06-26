@@ -1,4 +1,11 @@
-import '../../../../ExportFile/export_file.dart';
+
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:meter_reader/Utils/common_widgets/text_form_widget.dart';
+import 'package:meter_reader/features/billHistory/domain/bloc/bill_history_bloc.dart';
+import 'package:meter_reader/features/billHistory/presentation/widget/bill_history_box_widget.dart';
 
 class BillHistoryPage extends StatefulWidget {
   const BillHistoryPage({Key? key}) : super(key: key);
@@ -31,16 +38,15 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
                   elevation: 0,),
                 Container(
                     alignment: Alignment.bottomCenter,
-                    child: CustomTextEmailField(
+                    child: TextFieldWidget(
                       onChanged: (value) {
                         BlocProvider.of<BillHistoryBloc>(context).add(
                             BillHistorySearchKeywordEvent(searchKeyword: value));
                       },
                       enabled: true,
                       keyboardType: TextInputType.number,
-                      validate: false,
                       hintText: "BP Number/Meter Number",
-                      filledColor: Colors.white,
+
                     )
                 ),
               ],

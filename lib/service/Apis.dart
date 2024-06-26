@@ -3,7 +3,7 @@ class Apis {
   static String baseUrl = 'http://142.79.231.30:8097/api/';
   static String auth = baseUrl + 'auth';
   static String getPendingBillsMeterReader =
-      baseUrl + 'customer/getPendingBillsMeterReader';
+      baseUrl + 'customer/getPendingBillsMeterReader?';
   static String generate = baseUrl + 'customer/meter-reading/generate';
   static String billPrintData = baseUrl + 'customer/getBillsbyBillID?bill_id=';
   static String billHistoryAApi =

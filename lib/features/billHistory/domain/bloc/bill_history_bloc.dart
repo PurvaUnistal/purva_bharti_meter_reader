@@ -1,4 +1,11 @@
-import '../../../../ExportFile/export_file.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meter_reader/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
+import 'package:meter_reader/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:meter_reader/features/billHistory/domain/model/bill_history_model.dart';
+import 'package:meter_reader/features/billHistory/helper/bill_history_helper.dart';
+
 part 'bill_history_event.dart';
 part 'bill_history_state.dart';
 
@@ -23,9 +30,8 @@ class BillHistoryBloc extends Bloc<BillHistoryEvent, BillHistoryState> {
 
   _pageLoad(BillHistoryPageLoadEvent event, emit) async {
     emit(BillHistoryPageLoadState());
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    _schema = pref.getString(GlobalConstants.schema) ?? "";
-    _userId = pref.getString(GlobalConstants.id) ?? "";
+    _schema = await SharedPref.getString(key: PrefsValue.schema);
+    _userId = await SharedPref.getString(key: PrefsValue.userId);
     _billHistorySearchList = [];
     _billHistoryList = [];
      var res =  await BillHistoryHelper.fetchBillHistoryData(context: event.context,
