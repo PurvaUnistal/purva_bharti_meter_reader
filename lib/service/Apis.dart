@@ -1,6 +1,6 @@
 class Apis {
-  static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
- // static String baseUrl = 'http://142.79.231.30:8097/api/';
+ // static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
+  static String baseUrl = 'http://142.79.231.30:8097/api/';
   static String auth = baseUrl + 'auth';
   static String getPendingBillsMeterReader =
       baseUrl + 'customer/getPendingBillsMeterReader';

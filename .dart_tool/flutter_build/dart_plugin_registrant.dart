@@ -43,7 +43,6 @@ class _PluginRegistrant {
           '`camera_android` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -53,7 +52,6 @@ class _PluginRegistrant {
           '`geocoding_android` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -63,7 +61,6 @@ class _PluginRegistrant {
           '`geolocator_android` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -73,7 +70,6 @@ class _PluginRegistrant {
           '`image_picker_android` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -83,7 +79,6 @@ class _PluginRegistrant {
           '`path_provider_android` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -93,7 +88,6 @@ class _PluginRegistrant {
           '`shared_preferences_android` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
     } else if (Platform.isIOS) {
@@ -104,7 +98,6 @@ class _PluginRegistrant {
           '`camera_avfoundation` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -114,7 +107,6 @@ class _PluginRegistrant {
           '`geocoding_ios` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -124,7 +116,6 @@ class _PluginRegistrant {
           '`geolocator_apple` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -134,7 +125,6 @@ class _PluginRegistrant {
           '`image_picker_ios` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -144,7 +134,6 @@ class _PluginRegistrant {
           '`path_provider_foundation` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -154,7 +143,6 @@ class _PluginRegistrant {
           '`shared_preferences_foundation` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
     } else if (Platform.isLinux) {
@@ -165,7 +153,6 @@ class _PluginRegistrant {
           '`device_info_plus` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -175,7 +162,6 @@ class _PluginRegistrant {
           '`package_info_plus` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -185,7 +171,6 @@ class _PluginRegistrant {
           '`path_provider_linux` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -195,7 +180,6 @@ class _PluginRegistrant {
           '`shared_preferences_linux` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
     } else if (Platform.isMacOS) {
@@ -206,7 +190,6 @@ class _PluginRegistrant {
           '`geolocator_apple` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -216,7 +199,6 @@ class _PluginRegistrant {
           '`path_provider_foundation` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -226,7 +208,6 @@ class _PluginRegistrant {
           '`shared_preferences_foundation` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
     } else if (Platform.isWindows) {
@@ -237,7 +218,6 @@ class _PluginRegistrant {
           '`device_info_plus` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -247,7 +227,6 @@ class _PluginRegistrant {
           '`package_info_plus` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -257,7 +236,6 @@ class _PluginRegistrant {
           '`path_provider_windows` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
       try {
@@ -267,7 +245,6 @@ class _PluginRegistrant {
           '`shared_preferences_windows` threw an error: $err. '
           'The app may not function as expected until you remove this plugin from pubspec.yaml'
         );
-        rethrow;
       }
 
     }
