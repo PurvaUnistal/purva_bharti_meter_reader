@@ -1,12 +1,11 @@
 class AssetPath {
   static String appLogo = 'assets/icons/pbg_logo.png';
-  static String complaint = 'assets/icons/complaint.png';
-  static String payment = 'assets/icons/payment.png';
+  static String smartgasnet = 'assets/icons/smartgasnet.png';
 }
 
 class AppString {
   static String release = "Release";
-  static String reDate = "17/5/2024";
+  static String reDate = "27/6/2024";
   static String scheme = "scheme";
   static String userName = "User Name";
   static String no = "No";

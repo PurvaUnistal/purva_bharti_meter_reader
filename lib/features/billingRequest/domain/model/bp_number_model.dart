@@ -23,27 +23,6 @@ class BpNumberModel {
       print('catch error model--> : $exception');
     }
 
-    // if (json['data'] != String) {
-    //   try{
-    //     if(status == "first") {
-    //   data = new List<DataList>();
-    //   json['data'].forEach((v) {
-    //     data.add(new DataList.fromJson(v));
-    //   });
-    //     }
-    //     else if (status == "second") {
-    //       data = new List<Datum>();
-    //       json['data'].forEach((v) {
-    //         data.add(new Datum.fromJson(v));
-    //       });
-    //
-    //     } }
-    //   catch(exception ) {
-    //     data = json['data'];
-    //   }
-    //
-    //
-    // }
   }
 
   Map<String, dynamic> toJson() {
@@ -157,6 +136,9 @@ class DataList {
   dynamic newMeterOldReading;
   dynamic oldMeterReadingDate;
   dynamic newMeterInstallDate;
+  dynamic lastBillGeneratedDate;
+  dynamic lastBillPayDate;
+  dynamic lastBillPreviousOutstanding;
 
   DataList({
     this.firstName,
@@ -256,6 +238,9 @@ class DataList {
     this.newMeterOldReading,
     this.oldMeterReadingDate,
     this.newMeterInstallDate,
+    this.lastBillGeneratedDate,
+    this.lastBillPayDate,
+    this.lastBillPreviousOutstanding,
   });
 
   DataList.fromJson(Map<String, dynamic> json) {
@@ -356,7 +341,10 @@ class DataList {
     oldMeterCurrentReading = json["old_meter_current_reading"] ?? "0.00";
     newMeterOldReading = json["new_meter_old_reading"] ?? "0.00";
     oldMeterReadingDate = json["old_meter_reading_date"] ?? "";
-    newMeterInstallDate = json["new_meter_install_date"] ?? "";
+    lastBillGeneratedDate= json["last_bill_generated_date"] ?? "";
+    lastBillPayDate= json["last_bill_pay_date"] ?? "";
+    lastBillPreviousOutstanding= json["last_bill_previous_outstanding"] ?? "";
+
   }
 
   Map<String, dynamic> toJson() {
@@ -459,96 +447,14 @@ class DataList {
     data['new_meter_old_reading'] = this.newMeterOldReading;
     data['old_meter_reading_date'] = this.oldMeterReadingDate;
     data['new_meter_install_date'] = this.newMeterInstallDate;
+    data["last_bill_generated_date"] = this.lastBillGeneratedDate.toIso8601String();
+    data["last_bill_pay_date"] = this.lastBillPayDate.toIso8601String();
+    data["last_bill_previous_outstanding"] = this.lastBillPreviousOutstanding;
     return data;
   }
 }
 
-class Datum {
-  Datum({
-    this.billNo,
-    this.amount,
-    this.billDueDate,
-    this.billGeneratedDate,
-    this.houseNumber,
-    this.locality,
-    this.town,
-    this.pinCode,
-    this.address,
-    this.crn,
-    this.meterSerialNumber,
-    this.oldReading,
-    this.currentBillReading,
-    this.perScmAmt,
-    this.bpNumber,
-    this.firstName,
-    this.middleName,
-    this.lastName,
-    this.billFetchRef,
-  });
 
-  String? billNo;
-  String? amount;
-  DateTime? billDueDate;
-  DateTime? billGeneratedDate;
-  String? houseNumber;
-  String? locality;
-  String? town;
-  String? pinCode;
-  String? address;
-  String? crn;
-  String? meterSerialNumber;
-  String? oldReading;
-  int? currentBillReading;
-  String? perScmAmt;
-  String? bpNumber;
-  String? firstName;
-  String? middleName;
-  String? lastName;
-  String? billFetchRef;
-
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        billNo: json["bill_no"],
-        amount: json["amount"],
-        billDueDate: DateTime.parse(json["bill_due_date"]),
-        billGeneratedDate: DateTime.parse(json["bill_generated_date"]),
-        houseNumber: json["house_number"],
-        locality: json["locality"],
-        town: json["town"],
-        pinCode: json["pin_code"],
-        address: json["address"],
-        crn: json["crn"],
-        meterSerialNumber: json["meter_serial_number"],
-        oldReading: json["old_reading"],
-        currentBillReading: json["current_bill_reading"],
-        perScmAmt: json["per_scm_amt"],
-        bpNumber: json["bp_number"],
-        firstName: json["first_name"],
-        middleName: json["middle_name"],
-        lastName: json["last_name"],
-        billFetchRef: json["bill_fetch_ref"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "bill_no": billNo,
-        "amount": amount,
-        "bill_due_date": billDueDate?.toIso8601String(),
-        "bill_generated_date": billGeneratedDate?.toIso8601String(),
-        "house_number": houseNumber,
-        "locality": locality,
-        "town": town,
-        "pin_code": pinCode,
-        "address": address,
-        "crn": crn,
-        "meter_serial_number": meterSerialNumber,
-        "old_reading": oldReading,
-        "current_bill_reading": currentBillReading,
-        "per_scm_amt": perScmAmt,
-        "bp_number": bpNumber,
-        "first_name": firstName,
-        "middle_name": middleName,
-        "last_name": lastName,
-      };
-}
 
 class BPNumberRequestModel {
   final String? schema;

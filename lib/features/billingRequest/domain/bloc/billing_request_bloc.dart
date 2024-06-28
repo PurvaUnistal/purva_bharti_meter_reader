@@ -1,4 +1,5 @@
-﻿import 'dart:developer';
+﻿import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
   BillingRequestBloc() : super(BillingRequestInitState()){
     on<BillingRequestPageLoadingEvent>(_pageLoader);
     on<SyncSearchBPNumberEvent>(_syncSearchBPNumber);
+    on<BillingHideShowEvent>(_billingHideShow);
     on<SelectMeterCameraEvent>(_selectMeterCamera);
     on<SelectMeterGalleryEvent>(_selectMeterGallery);
     on<OnChange1Event>(_onChange1Event);
@@ -33,12 +35,14 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     on<OnChange9Event>(_onChange9Event);
     on<OnChange10Event>(_onChange10Event);
     on<BillingRequestPreviewEvent>(_preview);
+
     on<BillingRequestSubmitEvent>(_submit);
 
   }
   String userName = "";
   String scheme = "";
   File meterFile = File("");
+  bool isHideShowDetails = false;
   bool isPageLoader = false,
       isBtnLoader = false,
       isSyncLoader = false,
@@ -94,6 +98,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
   _pageLoader(BillingRequestPageLoadingEvent event, emit) async {
     emit(BillingRequestInitState());
     isPageLoader = false;
+    isHideShowDetails = false;
     isBtnLoader = false;
     isSyncLoader = false;
     meterReadCon1 = false;
@@ -208,7 +213,10 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
         bpNumber: bpNumberController.text.trim().toString(),emit: emit);
     _eventCompleted(emit);
   }
-
+  _billingHideShow(BillingHideShowEvent event, emit) {
+    isHideShowDetails = event.isHideShow;
+    _eventCompleted(emit);
+  }
   _selectMeterCamera(SelectMeterCameraEvent event, emit) async{
     var photo = await BillingRequestHelper.cameraCapture();
     if(photo.path.isNotEmpty){
@@ -510,6 +518,18 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                         : "Meter Current Reading : ",
                     trailing: myReading.toStringAsFixed(3),
                   ),
+                  RowWidget(
+                    leading: "Last Bill Generated Date : ",
+                    trailing: listOfBPNumber[0].lastBillGeneratedDate,
+                  ),
+                  RowWidget(
+                    leading: "Last Bill Pay Date : ",
+                    trailing: listOfBPNumber[0].lastBillPayDate,
+                  ),
+                  RowWidget(
+                    leading: "Outstanding Amount : ",
+                    trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
+                  ),
                   SizedBox(
                     height: 8,
                   ),
@@ -527,8 +547,30 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                                   context: context,
                                   builder: (BuildContext context) {
                                     return CustomDialogBox(
-                                        msg: "Reading is Ok",
-                                        myReading: actualResult.toString(),
+                                      child: Column(
+                                        children: [
+                                          RowWidget(
+                                            leading: "Message : ",
+                                            trailing: "Reading is Ok",
+                                          ),
+                                          RowWidget(
+                                            leading: "Consumption Reading : ",
+                                            trailing: actualResult.toString(),
+                                          ),
+                                          RowWidget(
+                                            leading: "Last Bill Generated Date : ",
+                                            trailing: listOfBPNumber[0].lastBillGeneratedDate,
+                                          ),
+                                          RowWidget(
+                                            leading: "Last Bill Pay Date : ",
+                                            trailing: listOfBPNumber[0].lastBillPayDate,
+                                          ),
+                                          RowWidget(
+                                            leading: "Outstanding Amount : ",
+                                            trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
+                                          ),
+                                        ],
+                                      ),
                                         onPressed: () {
                                           BlocProvider.of<BillingRequestBloc>(context).add(
                                               BillingRequestSubmitEvent(context: context));
@@ -540,8 +582,30 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                                   context: context,
                                   builder: (BuildContext context) {
                                     return CustomDialogBox(
-                                        msg: " Less then 5",
-                                        myReading: actualResult.toString(),
+                                        child: Column(
+                                          children: [
+                                            RowWidget(
+                                              leading: "Message : ",
+                                              trailing: "Less then 5",
+                                            ),
+                                            RowWidget(
+                                              leading: "Consumption Reading : ",
+                                              trailing: actualResult.toString(),
+                                            ),
+                                            RowWidget(
+                                              leading: "Last Bill Generated Date : ",
+                                              trailing: listOfBPNumber[0].lastBillGeneratedDate,
+                                            ),
+                                            RowWidget(
+                                              leading: "Last Bill Pay Date : ",
+                                              trailing: listOfBPNumber[0].lastBillPayDate,
+                                            ),
+                                            RowWidget(
+                                              leading: "Outstanding Amount : ",
+                                              trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
+                                            ),
+                                          ],
+                                        ),
                                         onPressed: () {
                                           BlocProvider.of<BillingRequestBloc>(context).add(
                                               BillingRequestSubmitEvent(context: context));
@@ -553,8 +617,30 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                                   context: context,
                                   builder: (BuildContext context) {
                                     return CustomDialogBox(
-                                        msg: " Greater then 25",
-                                        myReading: actualResult.toString(),
+                                        child: Column(
+                                          children: [
+                                            RowWidget(
+                                              leading: "Message : ",
+                                              trailing: "Greater then 25",
+                                            ),
+                                            RowWidget(
+                                              leading: "Consumption Reading : ",
+                                              trailing: actualResult.toString(),
+                                            ),
+                                            RowWidget(
+                                              leading: "Last Bill Generated Date : ",
+                                              trailing: listOfBPNumber[0].lastBillGeneratedDate,
+                                            ),
+                                            RowWidget(
+                                              leading: "Last Bill Pay Date : ",
+                                              trailing: listOfBPNumber[0].lastBillPayDate,
+                                            ),
+                                            RowWidget(
+                                              leading: "Outstanding Amount : ",
+                                              trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
+                                            ),
+                                          ],
+                                        ),
                                         onPressed: () {
                                           BlocProvider.of<BillingRequestBloc>(context).add(
                                               BillingRequestSubmitEvent(context: context));
@@ -567,8 +653,30 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                                 context: context,
                                 builder: (BuildContext context) {
                                   return CustomDialogBox(
-                                      msg: "Negative value is not Valid",
-                                      myReading: actualResult.toString(),
+                                      child: Column(
+                                        children: [
+                                          RowWidget(
+                                            leading: "Message : ",
+                                            trailing: "Negative value is not Valid",
+                                          ),
+                                          RowWidget(
+                                            leading: "Consumption Reading : ",
+                                            trailing: actualResult.toString(),
+                                          ),
+                                          RowWidget(
+                                            leading: "Last Bill Generated Date : ",
+                                            trailing: listOfBPNumber[0].lastBillGeneratedDate,
+                                          ),
+                                          RowWidget(
+                                            leading: "Last Bill Pay Date : ",
+                                            trailing: listOfBPNumber[0].lastBillPayDate,
+                                          ),
+                                          RowWidget(
+                                            leading: "Outstanding Amount : ",
+                                            trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
+                                          ),
+                                        ],
+                                      ),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       });
@@ -652,6 +760,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       userName: userName,
       scheme: scheme,
       isPageLoader: isPageLoader,
+      isHideShowDetails: isHideShowDetails,
       isBtnLoader: isBtnLoader,
       isSyncLoader: isSyncLoader,
       meterReadCon1: meterReadCon1,

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meter_reader/Utils/common_widgets/Loader/CircleLoader.dart';
 import 'package:meter_reader/Utils/common_widgets/Loader/DottedLoader.dart';
@@ -93,19 +92,9 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
                   _searchTextField(dataState: dataState),
                   _verticalSpace(),
                   _nameController(dataState: dataState),
-                  _verticalSpace(),
-                  _buildNameController(dataState: dataState),
-                  _verticalSpace(),
-                  /* _colonyNameController(dataState: dataState),
-                  _verticalSpace(),*/
-                  _streetNameController(dataState: dataState),
-                  _verticalSpace(),
-                  _townController(dataState: dataState),
-                  _verticalSpace(),
-                  _districtController(dataState: dataState),
-                  _verticalSpace(),
-                  _pinCodeController(dataState: dataState),
-                  _verticalSpace(),
+                  _hideShowBtn(dataState: dataState),
+                  _visibleAddDetails(dataState: dataState),
+               //   _verticalSpace(),
                   _meterNumberController(dataState: dataState),
                   _verticalSpace(),
                   _bpNumberController(dataState: dataState),
@@ -163,6 +152,40 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
       enabled: false,
       inputType: TextInputType.text,
       controller: dataState.custNameController,
+    );
+  }
+  Widget _hideShowBtn({required BillingRequestFetchDataState dataState}){
+    return Align(
+      alignment: Alignment.topRight,
+      child: IconButton(
+        icon: Icon(
+          dataState.isHideShowDetails ? Icons.arrow_drop_down_outlined : Icons.arrow_drop_up_outlined,
+          color: Colors.green.shade800,
+        ),
+        onPressed: () {
+          BlocProvider.of<BillingRequestBloc>(context).add(BillingHideShowEvent(
+              isHideShow: dataState.isHideShowDetails == true ? false : true));
+        },
+      ),
+    );
+  }
+  Widget _visibleAddDetails({required BillingRequestFetchDataState dataState}){
+    return Visibility(
+      visible: dataState.isHideShowDetails,
+        child: Column(
+      children: [
+        _buildNameController(dataState: dataState),
+        _verticalSpace(),
+        _streetNameController(dataState: dataState),
+        _verticalSpace(),
+        _townController(dataState: dataState),
+        _verticalSpace(),
+        _districtController(dataState: dataState),
+        _verticalSpace(),
+        _pinCodeController(dataState: dataState),
+        _verticalSpace(),
+      ],
+    )
     );
   }
   Widget _buildNameController({required BillingRequestFetchDataState dataState}) {
@@ -263,7 +286,7 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   Widget _meterText(){
     return Container(
       alignment: Alignment.centerLeft,
-      child: Text("Meter Reading:", style: Styles.labels
+      child: Text("Meter Reading : ", style: Styles.labels
       ),
     );
   }

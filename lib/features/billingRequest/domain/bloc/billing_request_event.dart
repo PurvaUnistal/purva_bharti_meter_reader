@@ -147,6 +147,14 @@ class BillingRequestPreviewEvent extends BillingRequestEvent {
   List<Object?> get props => [context];
 }
 
+class BillingHideShowEvent extends BillingRequestEvent {
+  final bool isHideShow;
+  BillingHideShowEvent({required this.isHideShow});
+  @override
+  // TODO: implement props
+  List<Object> get props => [isHideShow];
+}
+
 class BillingRequestSubmitEvent extends BillingRequestEvent {
   final BuildContext context;
   BillingRequestSubmitEvent({required this.context});

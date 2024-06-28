@@ -17,7 +17,7 @@ class RowWidget extends StatelessWidget {
             children: [
               Flexible(
                   child: Text(
-                leading.toUpperCase(),
+                leading,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
               )),
               Flexible(

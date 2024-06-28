@@ -91,7 +91,7 @@ class _LoginViewState extends State<LoginView> {
             left: .0,
             right: .0,
             child: _logoWidget(),
-          )
+          ),
         ],
       ),
     );
@@ -106,6 +106,18 @@ class _LoginViewState extends State<LoginView> {
         AssetPath.appLogo,
         width: w * 0.4,
         height: h * 0.16,
+      ),
+    );
+  }
+  Widget _smartGasNetLogo() {
+    var h = MediaQuery.of(context).size.height;
+    var w = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.all(23.0),
+      child: Image.asset(
+        AssetPath.smartgasnet,
+        width: w * 0.2,
+        height: h * 0.2,
       ),
     );
   }

@@ -23,6 +23,7 @@ class BillingRequestInitState extends BillingRequestState {
 class BillingRequestFetchDataState extends BillingRequestState {
   final String userName;
   final String scheme;
+  final bool isHideShowDetails;
   final bool isPageLoader;
   final bool isBtnLoader;
   final bool isSyncLoader;
@@ -75,6 +76,7 @@ class BillingRequestFetchDataState extends BillingRequestState {
     required this.userName,
     required this.scheme,
     required this.isPageLoader,
+    required this.isHideShowDetails,
     required this.isBtnLoader,
     required this.isSyncLoader,
     required this.meterReadCon1,
@@ -128,6 +130,7 @@ class BillingRequestFetchDataState extends BillingRequestState {
     userName,
     scheme,
     isPageLoader,
+    isHideShowDetails,
     isBtnLoader,
     isSyncLoader,
     meterReadCon1,
