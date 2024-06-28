@@ -3,7 +3,7 @@ class GenerateModel {
   int? code;
   String? pdf;
   String? message;
-  dynamic? billId;
+  dynamic billId;
 
   GenerateModel({this.error, this.code, this.pdf, this.message, this.billId});
 
@@ -53,16 +53,16 @@ class GenerateRequestModel{
   });
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      "bpNumber": bpNumber?.trim(),
-      "meter_reading": meter_reading.toString().trim(),
-      "meter_serial": meter_serial.toString().trim(),
-      "meter_image_file": meter_image_file.toString().trim(),
-      "schema": schema.toString().trim(),
-      "generate_by_customer": generate_by_customer.toString().trim(),
-      "latitude": latitude.toString().trim(),
-      "longitude": longitude.toString().trim(),
-      "old_reading": old_reading.toString().trim(),
-      "user_id": user_id?.trim(),
+      "bpNumber": bpNumber ?? "",
+      "meter_reading": meter_reading ?? "",
+      "meter_serial": meter_serial ?? "",
+      "meter_image_file": meter_image_file ?? "",
+      "schema": schema ?? "",
+      "generate_by_customer": generate_by_customer ?? "",
+      "latitude": latitude ?? "",
+      "longitude": longitude ?? "",
+      "old_reading": old_reading ?? "",
+      "user_id": user_id ?? "",
     };
     return map ;
   }

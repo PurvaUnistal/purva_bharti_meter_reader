@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meter_reader/Utils/common_widgets/Loader/CircleLoader.dart';
 import 'package:meter_reader/Utils/common_widgets/Loader/DottedLoader.dart';
@@ -91,13 +92,23 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
                 children: [
                   _searchTextField(dataState: dataState),
                   _verticalSpace(),
-                  _nameController(dataState: dataState),
-                  _hideShowBtn(dataState: dataState),
+                  Row(
+                    children: [
+                      Flexible(
+                          flex: 10,
+                          child: _nameController(dataState: dataState)),
+                      Flexible(
+                        flex: 2,
+                          child: _hideShowBtn(dataState: dataState)),
+                    ],
+                  ),
+                  _verticalSpace(),
                   _visibleAddDetails(dataState: dataState),
-               //   _verticalSpace(),
                   _meterNumberController(dataState: dataState),
                   _verticalSpace(),
                   _bpNumberController(dataState: dataState),
+                  _verticalSpace(),
+                  _mobileNumberController(dataState: dataState),
                   _verticalSpace(),
                   _preReadingController(dataState: dataState),
                   _verticalSpace(),
@@ -158,6 +169,14 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
     return Align(
       alignment: Alignment.topRight,
       child: IconButton(
+       style: ButtonStyle(
+           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+               RoundedRectangleBorder(
+                   borderRadius: BorderRadius.circular(20.0),
+                   side: BorderSide(color: AppColor.primer)
+               )
+           )
+       ),
         icon: Icon(
           dataState.isHideShowDetails ? Icons.arrow_drop_down_outlined : Icons.arrow_drop_up_outlined,
           color: Colors.green.shade800,
@@ -263,6 +282,15 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
       enabled: false,
       inputType: TextInputType.number,
       controller: dataState.bpNumberController,
+    );
+  }
+  Widget _mobileNumberController({required BillingRequestFetchDataState dataState}) {
+    return TextFieldWidget(
+      hintText: AppString.mobileNumber,
+      label: AppString.mobileNumber,
+      enabled: false,
+      inputType: TextInputType.number,
+      controller: dataState.mobileNumberController,
     );
   }
   Widget _preReadingController({required BillingRequestFetchDataState dataState}) {

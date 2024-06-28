@@ -64,9 +64,8 @@ class ApiHelper {
       }
       String token = await SharedPref.getString(key: PrefsValue.token) ?? "";
       Map<String, String> headers = {"Authorization": token};
-      var res =
-          await post(Uri.parse(urlEndPoint), body: body, headers: headers);
-      print(res.body);
+      var res = await post(Uri.parse(urlEndPoint), body: body, headers: headers);
+      log(res.body);
       if (res.statusCode == 200) {
         return jsonDecode(res.body);
       } else if (res.statusCode == 403) {
@@ -93,9 +92,8 @@ class ApiHelper {
     required String keyWord1,
   }) async {
     String token = await SharedPref.getString(key: PrefsValue.token) ?? "";
-    try {
-      if (await ConnectivityHelper.allConnectivityCheck(context: context) ==
-          false) {
+   try {
+      if (await ConnectivityHelper.allConnectivityCheck(context: context) == false) {
         return null;
       }
       Map<String, String> headers = {"Authorization": token};
@@ -107,26 +105,37 @@ class ApiHelper {
             contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
         request.files.add(uploadFile1);
       }
-
       request.fields.addAll(body);
       request.headers.addAll(headers);
-      var response = await request.send();
+    var response = await request.send();
+    if (response.statusCode == 200) {
       var responseData = await response.stream.toBytes();
       var result = json.decode(String.fromCharCodes(responseData));
-      if (response.statusCode == 200) {
-        log("result-->${result.toString()}");
-        return result;
-      } else if (response.statusCode == 401) {
-        return result;
-      } else if (response.statusCode == 415) {
-        return result;
-      } else if (response.statusCode == 400) {
-        return result;
-      } else {
-        return null;
-      }
+      log("result-->${result.toString()}");
+      return result;
+    } else if (response.statusCode == 401) {
+      var responseData = await response.stream.toBytes();
+      var result = json.decode(String.fromCharCodes(responseData));
+      log(result.toString());
+      return result;
+    } else if (response.statusCode == 415) {
+      var responseData = await response.stream.toBytes();
+      var result = json.decode(String.fromCharCodes(responseData));
+      log(result.toString());
+      return result;
+    } else if (response.statusCode == 400) {
+      var responseData = await response.stream.toBytes();
+      var result = json.decode(String.fromCharCodes(responseData));
+      log(result.toString());
+      return result;
+    } else {
+      var responseData = await response.stream.toBytes();
+      var result = json.decode(String.fromCharCodes(responseData));
+      log(result.toString());
+      return result;
+    }
     } catch (e) {
-      log(e.toString());
+      log("postDataWithFile-->${e.toString()}");
       return null;
     }
   }

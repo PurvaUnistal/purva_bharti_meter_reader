@@ -11,9 +11,10 @@ class Styles {
   );
 
   static TextStyle title = TextStyle(
-      fontSize: 12, color: Colors.green.shade800, fontWeight: FontWeight.bold);
+      fontSize: 12, color:AppColor.primer, fontWeight: FontWeight.bold);
+
   static TextStyle title1 =
-      TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 15, color:AppColor.primer, fontWeight: FontWeight.bold);
 
   static TextStyle subTitle =
       const TextStyle(fontSize: 8, fontWeight: FontWeight.w800);

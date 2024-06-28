@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meter_reader/Utils/Utils.dart';
+import 'package:meter_reader/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:meter_reader/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:meter_reader/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:meter_reader/Utils/common_widgets/app_bar_widget.dart';
@@ -61,6 +62,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
   BpNumberModel bpNumberModel = BpNumberModel();
   List<DataList> listOfBPNumber = [];
   TextEditingController bpNumberController = TextEditingController();
+  TextEditingController mobileNumberController = TextEditingController();
   TextEditingController custNameController = TextEditingController();
   TextEditingController buildingNoController = TextEditingController();
   TextEditingController colonyController = TextEditingController();
@@ -115,6 +117,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     listOfBPNumber = [];
     bpNumberModel = BpNumberModel();
     bpNumberController.text = "";
+    mobileNumberController.text = "";
     custNameController.text = "";
     buildingNoController.text = "";
     colonyController.text = "";
@@ -184,6 +187,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
               previousReadingController.text = listOfBPNumber[i].replaceStatus! == 1
                   ? listOfBPNumber[i].newMeterOldReading.toString()
                   : listOfBPNumber[i].oldReading.toString();
+              mobileNumberController.text =  listOfBPNumber[i].mobileNumber ??"";
             }
           } else {
             Utils.errorSnackBar(msg: res.data!, context: context);
@@ -430,7 +434,64 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       log("submit-->${e.toString()}");
     }
   }
+  _submit(BillingRequestSubmitEvent event, emit) async {
+   // try{
+      double sum = double.parse(
+          meterRead1Controller.text +
+              meterRead2Controller.text +
+              meterRead3Controller.text +
+              meterRead4Controller.text +
+              meterRead5Controller.text +
+              meterRead6Controller.text +
+              meterRead7Controller.text +
+              meterRead8Controller.text +
+              meterRead9Controller.text +
+              meterRead10Controller.text);
+      var checkValid = await BillingRequestHelper.textValidationCheck(
+          context: event.context,
+          bpNumber: bpNumberController.text.trim().toString(),
+          custName: custNameController.text.trim().toString(),
+          meterSerial: meterNumberController.text.trim().toString(),
+          previousReading: previousReadingController.text.trim().toString(),
+          currentReading: sum.toString(),
+          meterFile: meterFile.path.toString());
+      if(checkValid == true){
+        isBtnLoader = true;
+        _eventCompleted(emit);
+        var res = await BillingRequestHelper.generateNGC(
+            context: event.context,
+            bpNumber: bpNumberController.text.trim().toString(),
+            meterReading: (sumAllMeterReadController / 1000).toString(),
+            meterSerial: meterNumberController.text.trim().toString(),
+            latitude: latController.text.trim().toString(),
+            longitude: longController.text.trim().toString(),
+            oldReading: previousReadingController.text.trim().toString(),
+            meterFile: meterFile.path.toString());
+        if(res != null){
+          isBtnLoader = false;
+          _eventCompleted(emit);
+          await  Utils.successSnackBar(msg: res.message!, context: event.context);
+          BlocProvider.of<BillPrintBloc>(event.context).add(
+              BillPrintPageLoaderEvent(
+                  context: event.context,
+                  billId: res.billId.toString(),
+                  schema: scheme));
+          Navigator.push(event.context,
+              MaterialPageRoute(builder: (context) => BillPrinterPage()));
+        } else{
+          isBtnLoader = false;
+          _eventCompleted(emit);
+        }
+      }
+  /*  }catch(e){
+      isBtnLoader = false;
+      _eventCompleted(emit);
+      log("submit-->${e.toString()}");
+    }*/
+  }
+
   Future<void> processDialog({required BuildContext context}) async {
+    await  subNormalMethod();
     double myReadingValue = double.parse(
         meterRead1Controller.text +
             meterRead2Controller.text +
@@ -455,7 +516,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                   listOfBPNumber[0].replaceStatus.toString() +
                   ")",
             ),
-            body: Container(
+            body: SingleChildScrollView(
               child: Column(
                 children: [
                   RowWidget(
@@ -465,10 +526,6 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                   RowWidget(
                     leading: "Customer Name : ",
                     trailing: custNameController.text.toString(),
-                  ),
-                  RowWidget(
-                    leading: "Customer Address : ",
-                    trailing: custAddController.text.toString(),
                   ),
                   RowWidget(
                     leading: "Meter Number : ",
@@ -530,157 +587,81 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                     leading: "Outstanding Amount : ",
                     trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
                   ),
+                  if (actualResult >= 0)...[
+                    if (actualResult > 5 && actualResult < 25)...[
+                      Column(
+                        children: [
+                          RowWidget(
+                            leading: "Message : ",
+                            trailing: "This Reading is valid",
+                          ),
+                          RowWidget(
+                            leading: "Consumption Reading : ",
+                            trailing: actualResult.toString(),
+                          ),
+                        ],
+                      )
+                    ] else if (actualResult < 5) ...[
+                      Column(
+                        children: [
+                          RowWidget(
+                            leading: "Message : ",
+                            trailing: "This Reading is Less then 5",
+                          ),
+                          RowWidget(
+                            leading: "Consumption Reading : ",
+                            trailing: actualResult.toString(),
+                          ),
+                        ],
+                      )
+                    ]
+                    else...[
+                        RowWidget(
+                          leading: "Message : ",
+                          trailing: "This Reading is Greater then 25",
+                        ),
+                        RowWidget(
+                          leading: "Consumption Reading : ",
+                          trailing: actualResult.toString(),
+                        ),
+                      ]]else...[
+                    RowWidget(
+                      leading: "Message : ",
+                      trailing: "This Negative Reading is not Valid",
+                    ),
+                    RowWidget(
+                      leading: "Consumption Reading : ",
+                      trailing: actualResult.toString(),
+                    ),
+                  ],
+
                   SizedBox(
                     height: 8,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ButtonWidget(
+                      isBtnLoader == true ?  DottedLoaderWidget()
+                          : ButtonWidget(
                         text: "Accept",
-                        onPressed: () {
-                          subNormalMethod();
+                        onPressed: (){
                           if (actualResult >= 0) {
                             if (actualResult > 5 && actualResult < 25) {
                               print("Greater then 25");
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return CustomDialogBox(
-                                      child: Column(
-                                        children: [
-                                          RowWidget(
-                                            leading: "Message : ",
-                                            trailing: "Reading is Ok",
-                                          ),
-                                          RowWidget(
-                                            leading: "Consumption Reading : ",
-                                            trailing: actualResult.toString(),
-                                          ),
-                                          RowWidget(
-                                            leading: "Last Bill Generated Date : ",
-                                            trailing: listOfBPNumber[0].lastBillGeneratedDate,
-                                          ),
-                                          RowWidget(
-                                            leading: "Last Bill Pay Date : ",
-                                            trailing: listOfBPNumber[0].lastBillPayDate,
-                                          ),
-                                          RowWidget(
-                                            leading: "Outstanding Amount : ",
-                                            trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
-                                          ),
-                                        ],
-                                      ),
-                                        onPressed: () {
-                                          BlocProvider.of<BillingRequestBloc>(context).add(
-                                              BillingRequestSubmitEvent(context: context));
-                                        });
-                                  });
-                            } else if (actualResult < 5) {
+                              BlocProvider.of<BillingRequestBloc>(context).add(
+                                  BillingRequestSubmitEvent(context: context));
+                            }else if(actualResult < 5){
                               print("less then 5");
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return CustomDialogBox(
-                                        child: Column(
-                                          children: [
-                                            RowWidget(
-                                              leading: "Message : ",
-                                              trailing: "Less then 5",
-                                            ),
-                                            RowWidget(
-                                              leading: "Consumption Reading : ",
-                                              trailing: actualResult.toString(),
-                                            ),
-                                            RowWidget(
-                                              leading: "Last Bill Generated Date : ",
-                                              trailing: listOfBPNumber[0].lastBillGeneratedDate,
-                                            ),
-                                            RowWidget(
-                                              leading: "Last Bill Pay Date : ",
-                                              trailing: listOfBPNumber[0].lastBillPayDate,
-                                            ),
-                                            RowWidget(
-                                              leading: "Outstanding Amount : ",
-                                              trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
-                                            ),
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          BlocProvider.of<BillingRequestBloc>(context).add(
-                                              BillingRequestSubmitEvent(context: context));
-                                        });
-                                  });
-                            } else {
+                              BlocProvider.of<BillingRequestBloc>(context).add(
+                                  BillingRequestSubmitEvent(context: context));
+                            }else{
                               print("25--->" + " Greater then 25");
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return CustomDialogBox(
-                                        child: Column(
-                                          children: [
-                                            RowWidget(
-                                              leading: "Message : ",
-                                              trailing: "Greater then 25",
-                                            ),
-                                            RowWidget(
-                                              leading: "Consumption Reading : ",
-                                              trailing: actualResult.toString(),
-                                            ),
-                                            RowWidget(
-                                              leading: "Last Bill Generated Date : ",
-                                              trailing: listOfBPNumber[0].lastBillGeneratedDate,
-                                            ),
-                                            RowWidget(
-                                              leading: "Last Bill Pay Date : ",
-                                              trailing: listOfBPNumber[0].lastBillPayDate,
-                                            ),
-                                            RowWidget(
-                                              leading: "Outstanding Amount : ",
-                                              trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
-                                            ),
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          BlocProvider.of<BillingRequestBloc>(context).add(
-                                              BillingRequestSubmitEvent(context: context));
-                                        });
-                                  });
+                              BlocProvider.of<BillingRequestBloc>(context).add(
+                                  BillingRequestSubmitEvent(context: context));
                             }
-                          } else {
+                          }else{
                             print("Negative value is not Valid");
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return CustomDialogBox(
-                                      child: Column(
-                                        children: [
-                                          RowWidget(
-                                            leading: "Message : ",
-                                            trailing: "Negative value is not Valid",
-                                          ),
-                                          RowWidget(
-                                            leading: "Consumption Reading : ",
-                                            trailing: actualResult.toString(),
-                                          ),
-                                          RowWidget(
-                                            leading: "Last Bill Generated Date : ",
-                                            trailing: listOfBPNumber[0].lastBillGeneratedDate,
-                                          ),
-                                          RowWidget(
-                                            leading: "Last Bill Pay Date : ",
-                                            trailing: listOfBPNumber[0].lastBillPayDate,
-                                          ),
-                                          RowWidget(
-                                            leading: "Outstanding Amount : ",
-                                            trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
-                                          ),
-                                        ],
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      });
-                                });
+                            Navigator.of(context).pop();
                           }
                         },
                       ),
@@ -699,61 +680,6 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
         });
   }
 
-  _submit(BillingRequestSubmitEvent event, emit) async {
-    try{
-      double sum = double.parse(
-          meterRead1Controller.text +
-              meterRead2Controller.text +
-              meterRead3Controller.text +
-              meterRead4Controller.text +
-              meterRead5Controller.text +
-              meterRead6Controller.text +
-              meterRead7Controller.text +
-              meterRead8Controller.text +
-              meterRead9Controller.text +
-              meterRead10Controller.text);
-      var checkValid = await BillingRequestHelper.textValidationCheck(
-          context: event.context,
-          bpNumber: bpNumberController.text.trim().toString(),
-          custName: custNameController.text.trim().toString(),
-          meterSerial: meterNumberController.text.trim().toString(),
-          previousReading: previousReadingController.text.trim().toString(),
-          currentReading: sum.toString(),
-          meterFile: meterFile.path.toString());
-      if(checkValid == true){
-        isPageLoader = true;
-        _eventCompleted(emit);
-        var res = await BillingRequestHelper.generateNGC(
-            context: event.context,
-            bpNumber: bpNumberController.text.trim().toString(),
-            meterReading: (sumAllMeterReadController / 1000).toString(),
-            meterSerial: meterNumberController.text.trim().toString(),
-            latitude: latController.text.trim().toString(),
-            longitude: longController.text.trim().toString(),
-            oldReading: previousReadingController.text.trim().toString(),
-            meterFile: meterFile.path.toString());
-        if(res != null){
-          isPageLoader = false;
-          _eventCompleted(emit);
-          Utils.successSnackBar(msg: res.message!, context: event.context);
-          BlocProvider.of<BillPrintBloc>(event.context).add(
-              BillPrintPageLoaderEvent(
-                  context: event.context,
-                  billId: res.billId.toString(),
-                  schema: scheme));
-          Navigator.push(event.context,
-              MaterialPageRoute(builder: (context) => BillPrinterPage()));
-        } else{
-          isPageLoader = false;
-          _eventCompleted(emit);
-        }
-      }
-    }catch(e){
-      isPageLoader = false;
-      _eventCompleted(emit);
-      log("submit-->${e.toString()}");
-    }
-  }
 
   _eventCompleted(emit) {
     emit(BillingRequestFetchDataState(
@@ -777,6 +703,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       bpNumberModel: bpNumberModel,
       listOfBPNumber: listOfBPNumber,
       bpNumberController: bpNumberController,
+      mobileNumberController: mobileNumberController,
       custNameController: custNameController,
       buildingNoController: buildingNoController,
       streetNameController: streetNameController,

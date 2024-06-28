@@ -113,8 +113,7 @@ class BillingRequestHelper{
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     String userId = await SharedPref.getString(key: PrefsValue.userId);
-    String dmaId = await SharedPref.getString(key: PrefsValue.dmaId);
-    try {
+
       Map<String, String> para = {
         "schema": schema,
         "user_id": userId,
@@ -126,6 +125,8 @@ class BillingRequestHelper{
         "longitude": longitude,
         "old_reading": oldReading,
       };
+      log("para-->${para}");
+    //    try {
       var res = await ApiHelper.postDataWithFile(
           urlEndPoint: Apis.generate,
         body: para,
@@ -136,13 +137,14 @@ class BillingRequestHelper{
       if (res != null && res["error"] == false) {
         return GenerateModel.fromJson(res);
       } else if (res != null && res["error"] == true) {
-        Utils.errorSnackBar(msg: res["data"], context: context);
+        await Utils.errorSnackBar(msg: res["message"], context: context);
         return null;
       }
-    } catch (e) {
+   /* } catch (e) {
       log("generate-->${e.toString()}");
+      Utils.errorSnackBar(msg: e.toString(), context: context);
       return null;
-    }
+    }*/
     return null;
   }
 

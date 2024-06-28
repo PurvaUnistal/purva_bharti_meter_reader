@@ -5,7 +5,7 @@ class AssetPath {
 
 class AppString {
   static String release = "Release";
-  static String reDate = "27/6/2024";
+  static String reDate = "28/6/2024";
   static String scheme = "scheme";
   static String userName = "User Name";
   static String no = "No";
@@ -22,6 +22,7 @@ class AppString {
   static String passwordValidation = "Please enter password";
   static String bpNumberSync = "BP/Meter Number...";
   static String bpNumber = "BP Number";
+  static String mobileNumber = "Mobile Number";
   static String name = "Customer Name";
   static String buildName = "Building Name";
   static String colonyName = "Colony/Society/Apartment Name";

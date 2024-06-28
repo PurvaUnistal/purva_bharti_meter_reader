@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meter_reader/Utils/common_widgets/styles_widget.dart';
 
 class RowWidget extends StatelessWidget {
   final String leading;
@@ -18,12 +19,11 @@ class RowWidget extends StatelessWidget {
               Flexible(
                   child: Text(
                 leading,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                style: Styles.texts,
               )),
               Flexible(
                   child: Text(trailing,
-                      style: TextStyle(
-                          fontWeight: FontWeight.normal, fontSize: 12)))
+                      style:Styles.title1))
             ],
           ),
         ),
