@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:meter_reader/Utils/common_widgets/styles_widget.dart';
 
-class RowWidget extends StatelessWidget {
+class ErrorRowWidget extends StatelessWidget {
   final String leading;
   final String trailing;
-  const RowWidget({Key? key, required this.leading, required this.trailing})
+  const ErrorRowWidget({Key? key, required this.leading, required this.trailing})
       : super(key: key);
 
   @override
@@ -18,12 +18,12 @@ class RowWidget extends StatelessWidget {
             children: [
               Flexible(
                   child: Text(
-                leading,
-                style: Styles.texts,
-              )),
+                    leading,
+                    style: Styles.texts,
+                  )),
               Flexible(
-                  child: Text(trailing,
-                      style:Styles.title1))
+                  child: Text(trailing,textAlign: TextAlign.center,
+                      style:Styles.titleE))
             ],
           ),
         ),

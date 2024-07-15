@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meter_reader/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
@@ -34,29 +37,27 @@ class BillHistoryBloc extends Bloc<BillHistoryEvent, BillHistoryState> {
     _userId = await SharedPref.getString(key: PrefsValue.userId);
     _billHistorySearchList = [];
     _billHistoryList = [];
-     var res =  await BillHistoryHelper.fetchBillHistoryData(context: event.context,
-          userId: userId, schema: schema);
-     if(res != "error"){
-       if(res['data'] != null){
-         _billHistoryList =  billHistoryResponse(res['data']);
-         _billHistorySearchList = billHistoryResponse(res['data']);
-         if(billHistoryList.isNotEmpty){
-           _eventCompleted(emit);
-         }else{
-           emit(BillHistoryEmptyState());
-         }
-       }else{
-         emit(BillHistoryEmptyState());
-       }
-     }else{
-       emit(BillHistoryEmptyState());
-     }
-
+    await _fetchBillHistoryData(context: event.context,);
+    _eventCompleted(emit);
   }
 
-  _searchKeyword(BillHistorySearchKeywordEvent event, emit) {
+  _fetchBillHistoryData({required BuildContext context,}) async {
+    try{
+      var res =  await BillHistoryHelper.fetchBillHistoryData(context: context,);
+      if(res != "error"){
+        if(res['data'] != null){
+          _billHistoryList =  billHistoryResponse(res['data']);
+          _billHistorySearchList = billHistoryResponse(res['data']);
+        }
+        }
+    } catch(e){
+      log("_fetchBillHistoryData-->${e.toString()}");
+    }
+  }
 
-       _billHistoryList = [];
+
+  _searchKeyword(BillHistorySearchKeywordEvent event, emit) {
+    _billHistoryList = [];
        _eventCompleted(emit);
        if(event.searchKeyword.isNotEmpty){
          List<BillHistoryModel> bpNumberList = billHistorySearchList.where((element) => element.bpNumber.toString().toLowerCase()

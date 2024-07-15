@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meter_reader/Utils/common_widgets/app_color.dart';
-import 'package:meter_reader/Utils/common_widgets/row_widget.dart';
+import 'package:meter_reader/features/billingRequest/presentation/widgets/row_widget.dart';
 import 'package:meter_reader/Utils/common_widgets/styles_widget.dart';
 
 class CustomDialogBox extends StatelessWidget {

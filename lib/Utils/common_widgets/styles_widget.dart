@@ -13,8 +13,8 @@ class Styles {
   static TextStyle title = TextStyle(
       fontSize: 12, color:AppColor.primer, fontWeight: FontWeight.bold);
 
-  static TextStyle title1 =
-      TextStyle(fontSize: 15, color:AppColor.primer, fontWeight: FontWeight.bold);
+  static TextStyle title1 = TextStyle(fontSize: 15, color:AppColor.primer, fontWeight: FontWeight.bold);
+  static TextStyle titleE = TextStyle(fontSize: 15, color:AppColor.red, fontWeight: FontWeight.bold);
 
   static TextStyle subTitle =
       const TextStyle(fontSize: 8, fontWeight: FontWeight.w800);

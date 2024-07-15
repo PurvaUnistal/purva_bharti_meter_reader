@@ -81,7 +81,7 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("${AppString.release}: ${AppString.reDate}",style: Styles.rel,),
-            Text("${AppString.scheme}: ${dataState.scheme}, ${AppString.userName}: ${dataState.userName}",style: Styles.rel,),
+            Text("${AppString.GA}: ${dataState.scheme}, ${AppString.userName}: ${dataState.userName}",style: Styles.rel,),
           ],
         ),
         Flexible(
@@ -139,6 +139,13 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
       controller: dataState.bpNumberController,
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.search,
+      onChanged: (val){
+        if(dataState.bpNumberController.text.length == 0){
+          BlocProvider.of<BillingRequestBloc>(context).add(SyncSearchBPNumberEvent(
+            context: context,
+          ));
+        }
+        },
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.deny(RegExp(r'\s')),
       ],
@@ -151,6 +158,7 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
             context: context,
           ));
         },
+
       ),
 
     );

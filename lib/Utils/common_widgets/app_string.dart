@@ -4,10 +4,10 @@ class AssetPath {
 }
 
 class AppString {
-  static String release = "Release";
-  static String reDate = "28/6/2024";
-  static String scheme = "scheme";
-  static String userName = "User Name";
+  static String release = "Release ";
+  static String reDate = "15/07/2024";
+  static String GA = "GA ";
+  static String userName = "User Name ";
   static String no = "No";
   static String preview = "Preview";
   static String submit = "Submit";

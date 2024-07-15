@@ -126,7 +126,7 @@ class BillingRequestHelper{
         "old_reading": oldReading,
       };
       log("para-->${para}");
-    //    try {
+        try {
       var res = await ApiHelper.postDataWithFile(
           urlEndPoint: Apis.generate,
         body: para,
@@ -140,11 +140,11 @@ class BillingRequestHelper{
         await Utils.errorSnackBar(msg: res["message"], context: context);
         return null;
       }
-   /* } catch (e) {
+    } catch (e) {
       log("generate-->${e.toString()}");
       Utils.errorSnackBar(msg: e.toString(), context: context);
       return null;
-    }*/
+    }
     return null;
   }
 

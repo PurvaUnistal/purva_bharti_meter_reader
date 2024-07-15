@@ -9,13 +9,16 @@ import 'package:meter_reader/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:meter_reader/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:meter_reader/Utils/common_widgets/app_bar_widget.dart';
 import 'package:meter_reader/Utils/common_widgets/button_widget.dart';
-import 'package:meter_reader/Utils/common_widgets/row_widget.dart';
+import 'package:meter_reader/features/billingRequest/presentation/widgets/ErorrRowWidget.dart';
+import 'package:meter_reader/features/billingRequest/presentation/widgets/row_widget.dart';
+import 'package:meter_reader/Utils/common_widgets/styles_widget.dart';
 import 'package:meter_reader/features/billPrint/domain/bloc/bill_print_bloc.dart';
 import 'package:meter_reader/features/billPrint/presentation/pages/bill_printer_page.dart';
 import 'package:meter_reader/features/billingRequest/domain/bloc/billing_request_event.dart';
 import 'package:meter_reader/features/billingRequest/domain/bloc/billing_request_state.dart';
 import 'package:meter_reader/features/billingRequest/domain/model/bp_number_model.dart';
 import 'package:meter_reader/features/billingRequest/helper/billing_request_helper.dart';
+import 'package:meter_reader/features/billingRequest/presentation/billing_request_page.dart';
 import 'package:meter_reader/features/billingRequest/presentation/widgets/custom_dialog_box.dart';
 
 class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
@@ -36,7 +39,6 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     on<OnChange9Event>(_onChange9Event);
     on<OnChange10Event>(_onChange10Event);
     on<BillingRequestPreviewEvent>(_preview);
-
     on<BillingRequestSubmitEvent>(_submit);
 
   }
@@ -212,9 +214,35 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
 
 
   _syncSearchBPNumber(SyncSearchBPNumberEvent event, emit) async {
-    await fetchPendingBillsApi(
-        context: event.context,
-        bpNumber: bpNumberController.text.trim().toString(),emit: emit);
+    if(bpNumberController.text.trim().length == 0){
+      mobileNumberController.text = "";
+      custNameController.text = "";
+      buildingNoController.text = "";
+      colonyController.text = "";
+      streetNameController.text = "";
+      townController.text = "";
+      districtController.text = "";
+      pinCodeController.text = "";
+      custAddController.text = "";
+      meterNumberController.text = "";
+      previousReadingController.text = "";
+    /*  meterRead1Controller.text = "";
+      meterRead2Controller.text = "";
+      meterRead3Controller.text = "";
+      meterRead4Controller.text = "";
+      meterRead5Controller.text = "";
+      meterRead6Controller.text = "";
+      meterRead7Controller.text = "";
+      meterRead8Controller.text = "";
+      meterRead9Controller.text = "";
+      meterRead10Controller.text = "";
+      meterFile = File("");*/
+      _eventCompleted(emit);
+    } else{
+      await fetchPendingBillsApi(
+          context: event.context,
+          bpNumber: bpNumberController.text.trim().toString(),emit: emit);
+    }
     _eventCompleted(emit);
   }
   _billingHideShow(BillingHideShowEvent event, emit) {
@@ -435,7 +463,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     }
   }
   _submit(BillingRequestSubmitEvent event, emit) async {
-   // try{
+    try{
       double sum = double.parse(
           meterRead1Controller.text +
               meterRead2Controller.text +
@@ -470,24 +498,29 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
         if(res != null){
           isBtnLoader = false;
           _eventCompleted(emit);
-          await  Utils.successSnackBar(msg: res.message!, context: event.context);
+          await Utils.successSnackBar(msg: res.message!, context: event.context);
           BlocProvider.of<BillPrintBloc>(event.context).add(
               BillPrintPageLoaderEvent(
                   context: event.context,
                   billId: res.billId.toString(),
                   schema: scheme));
-          Navigator.push(event.context,
-              MaterialPageRoute(builder: (context) => BillPrinterPage()));
+          Navigator.pushAndRemoveUntil<dynamic>(
+            event.context,
+            MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => BillingRequestPage(),
+            ),
+                (route) => false,//if you want to disable back feature set to false
+          );
         } else{
           isBtnLoader = false;
           _eventCompleted(emit);
         }
       }
-  /*  }catch(e){
+    }catch(e){
       isBtnLoader = false;
       _eventCompleted(emit);
       log("submit-->${e.toString()}");
-    }*/
+    }
   }
 
   Future<void> processDialog({required BuildContext context}) async {
@@ -576,7 +609,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                     trailing: myReading.toStringAsFixed(3),
                   ),
                   RowWidget(
-                    leading: "Last Bill Generated Date : ",
+                    leading: "Last Meter Reader Date : ",
                     trailing: listOfBPNumber[0].lastBillGeneratedDate,
                   ),
                   RowWidget(
@@ -597,7 +630,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                           ),
                           RowWidget(
                             leading: "Consumption Reading : ",
-                            trailing: actualResult.toString(),
+                            trailing: actualResult.toStringAsFixed(3),
                           ),
                         ],
                       )
@@ -610,31 +643,37 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                           ),
                           RowWidget(
                             leading: "Consumption Reading : ",
-                            trailing: actualResult.toString(),
+                            trailing: actualResult.toStringAsFixed(3),
                           ),
                         ],
                       )
-                    ]
-                    else...[
+                    ] else...[
                         RowWidget(
                           leading: "Message : ",
                           trailing: "This Reading is Greater then 25",
                         ),
                         RowWidget(
                           leading: "Consumption Reading : ",
-                          trailing: actualResult.toString(),
+                          trailing: actualResult.toStringAsFixed(3),
                         ),
-                      ]]else...[
-                    RowWidget(
+                      ]
+                  ] else...[
+                    ErrorRowWidget(
                       leading: "Message : ",
-                      trailing: "This Negative Reading is not Valid",
+                      trailing: "This Negative Reading is not valid",
                     ),
-                    RowWidget(
-                      leading: "Consumption Reading : ",
-                      trailing: actualResult.toString(),
-                    ),
+                    if(actualResult < 0)...[
+                      ErrorRowWidget(
+                        leading: "Consumption Reading : ",
+                        trailing: actualResult.toStringAsFixed(3),
+                      ),
+                    ] else...[
+                      RowWidget(
+                        leading: "Consumption Reading : ",
+                        trailing: actualResult.toStringAsFixed(3),
+                      ),
+                    ]
                   ],
-
                   SizedBox(
                     height: 8,
                   ),
@@ -646,21 +685,10 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                         text: "Accept",
                         onPressed: (){
                           if (actualResult >= 0) {
-                            if (actualResult > 5 && actualResult < 25) {
-                              print("Greater then 25");
-                              BlocProvider.of<BillingRequestBloc>(context).add(
-                                  BillingRequestSubmitEvent(context: context));
-                            }else if(actualResult < 5){
-                              print("less then 5");
-                              BlocProvider.of<BillingRequestBloc>(context).add(
-                                  BillingRequestSubmitEvent(context: context));
-                            }else{
-                              print("25--->" + " Greater then 25");
-                              BlocProvider.of<BillingRequestBloc>(context).add(
-                                  BillingRequestSubmitEvent(context: context));
-                            }
-                          }else{
-                            print("Negative value is not Valid");
+                            BlocProvider.of<BillingRequestBloc>(context).add(
+                                BillingRequestSubmitEvent(context: context));
+                          } else{
+                            Utils.errorSnackBar(msg: "This Negative Reading is not valid", context: context);
                             Navigator.of(context).pop();
                           }
                         },

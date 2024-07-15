@@ -1,10 +1,10 @@
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:meter_reader/Utils/common_widgets/text_form_widget.dart';
+import 'package:meter_reader/Utils/common_widgets/app_bar_widget.dart';
 import 'package:meter_reader/features/billHistory/domain/bloc/bill_history_bloc.dart';
+import 'package:meter_reader/features/billHistory/presentation/widget/CustomTextEmailField.dart';
 import 'package:meter_reader/features/billHistory/presentation/widget/bill_history_box_widget.dart';
 
 class BillHistoryPage extends StatefulWidget {
@@ -33,20 +33,21 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
             color:  Colors.green.shade800,
             child: Column(
               children: [
-                AppBar(title: Text("Bill History"),
-                  backgroundColor: Colors.green.shade800,
-                  elevation: 0,),
+                AppBarWidget(
+                  title: "Bill History",
+                  boolLeading: true,),
                 Container(
                     alignment: Alignment.bottomCenter,
-                    child: TextFieldWidget(
+                    child: CustomTextEmailField(
                       onChanged: (value) {
                         BlocProvider.of<BillHistoryBloc>(context).add(
                             BillHistorySearchKeywordEvent(searchKeyword: value));
                       },
                       enabled: true,
                       keyboardType: TextInputType.number,
+                      validate: false,
                       hintText: "BP Number/Meter Number",
-
+                      filledColor: Colors.white,
                     )
                 ),
               ],
@@ -74,8 +75,11 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
         shrinkWrap: true,
         itemCount: dataState.billHistoryList.length,
         itemBuilder: (context, index) {
-        return BillHistoryBoxWidget(billHistoryData: dataState.billHistoryList[index],
-             userId: dataState.userId.toString(), schema: dataState.schema.toString());
+        return BillHistoryBoxWidget(
+            billHistoryData: dataState.billHistoryList[index],
+             userId: dataState.userId.toString(),
+            schema: dataState.schema.toString()
+        );
     });
   }
 }

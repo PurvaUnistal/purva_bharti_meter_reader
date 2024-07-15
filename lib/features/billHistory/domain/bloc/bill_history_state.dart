@@ -14,12 +14,12 @@ class BillHistoryPageLoadState extends BillHistoryState {
   List<Object> get props => [];
 }
 
-class BillHistoryEmptyState extends BillHistoryPageLoadState {
+class BillHistoryEmptyState extends BillHistoryState {
   @override
   List<Object> get props => [];
 }
 
-class FetchBillHistoryDataState extends BillHistoryPageLoadState {
+class FetchBillHistoryDataState extends BillHistoryState {
   final List<BillHistoryModel> billHistoryList;
   final String schema;
   final String userId;
