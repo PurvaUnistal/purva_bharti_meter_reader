@@ -126,6 +126,7 @@ class BillingRequestHelper{
         "old_reading": oldReading,
       };
       log("para-->${para}");
+      log("para-->${Apis.generate}");
         try {
       var res = await ApiHelper.postDataWithFile(
           urlEndPoint: Apis.generate,

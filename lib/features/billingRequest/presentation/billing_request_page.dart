@@ -136,11 +136,11 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
       autofocus: true,
       label: AppString.bpNumberSync,
       hintText: AppString.bpNumberSync,
-      controller: dataState.bpNumberController,
+      controller: dataState.bpMeterSearchNoController,
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.search,
       onChanged: (val){
-        if(dataState.bpNumberController.text.length == 0){
+        if(dataState.bpMeterSearchNoController.text.length == 0){
           BlocProvider.of<BillingRequestBloc>(context).add(SyncSearchBPNumberEvent(
             context: context,
           ));
@@ -305,12 +305,12 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
     return TextFieldWidget(
       hintText: dataState.listOfBPNumber.isEmpty
           ? AppString.preReading1
-          : dataState.listOfBPNumber[0].replaceStatus == 1
+          : dataState.listOfBPNumber[0].replaceStatus == "1"
           ? AppString.preReading2
           : AppString.preReading1,
       label: dataState.listOfBPNumber.isEmpty
           ? AppString.preReading1
-          : dataState.listOfBPNumber[0].replaceStatus == 1
+          : dataState.listOfBPNumber[0].replaceStatus == "1"
           ? AppString.preReading2
           : AppString.preReading1,
       enabled: false,

@@ -40,9 +40,10 @@ class BillingRequestFetchDataState extends BillingRequestState {
   final File meterFile;
   final BpNumberModel? bpNumberModel;
   final List<DataList> listOfBPNumber;
-  final TextEditingController bpNumberController;
+  final TextEditingController bpMeterSearchNoController;
   final TextEditingController mobileNumberController;
   final TextEditingController custNameController;
+  final TextEditingController bpNumberController;
   final TextEditingController buildingNoController;
   final TextEditingController colonyController;
   final TextEditingController streetNameController;
@@ -93,9 +94,10 @@ class BillingRequestFetchDataState extends BillingRequestState {
     required this.meterFile,
     required this.bpNumberModel,
     required this.listOfBPNumber,
-    required this.bpNumberController,
+    required this.bpMeterSearchNoController,
     required this.mobileNumberController,
     required this.custNameController,
+    required this.bpNumberController,
     required this.buildingNoController,
     required this.colonyController,
     required this.streetNameController,
@@ -148,9 +150,10 @@ class BillingRequestFetchDataState extends BillingRequestState {
     meterFile,
     bpNumberModel,
     listOfBPNumber,
-    bpNumberController,
+    bpMeterSearchNoController,
     mobileNumberController,
     custNameController,
+    bpNumberController,
     buildingNoController,
     colonyController,
     streetNameController,

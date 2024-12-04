@@ -60,9 +60,10 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
 
   BpNumberModel bpNumberModel = BpNumberModel();
   List<DataList> listOfBPNumber = [];
-  TextEditingController bpNumberController = TextEditingController();
+  TextEditingController bpMeterSearchNoController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController custNameController = TextEditingController();
+  TextEditingController bpNumberController = TextEditingController();
   TextEditingController buildingNoController = TextEditingController();
   TextEditingController colonyController = TextEditingController();
   TextEditingController streetNameController = TextEditingController();
@@ -115,9 +116,10 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     meterFile = File("");
     listOfBPNumber = [];
     bpNumberModel = BpNumberModel();
-    bpNumberController.text = "";
+    bpMeterSearchNoController.text = "";
     mobileNumberController.text = "";
     custNameController.text = "";
+    bpNumberController.text = "";
     buildingNoController.text = "";
     colonyController.text = "";
     streetNameController.text = "";
@@ -157,7 +159,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
 
   fetchPendingBillsApi({required BuildContext context, required String bpNumber,emit}) async {
     try{
-      if (bpNumberController.text.isNotEmpty) {
+      if (bpMeterSearchNoController.text.isNotEmpty) {
         isSyncLoader = true;
         _eventCompleted(emit);
         var res = await BillingRequestHelper.getPendingBills(
@@ -169,6 +171,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
           if (bpNumberModel.success != 400) {
             listOfBPNumber = bpNumberModel.data!;
             custNameController.clear();
+            bpNumberController.clear();
             buildingNoController.clear();
             colonyController.clear();
             streetNameController.clear();
@@ -176,6 +179,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
             pinCodeController.clear();
             meterNumberController.clear();
             for (int i = 0; i < listOfBPNumber.length; i++) {
+              bpNumberController.text = listOfBPNumber[i].bpNumber ?? "-";
               custNameController.text = "${listOfBPNumber[i].firstName!} ${listOfBPNumber[i].lastName!}";
               buildingNoController.text = listOfBPNumber[i].houseNumber ?? "-";
               colonyController.text = listOfBPNumber[i].address2 ?? "-";
@@ -183,7 +187,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
               townController.text = listOfBPNumber[i].town ?? "";
               pinCodeController.text = listOfBPNumber[i].pinCode ?? "-";
               meterNumberController.text = listOfBPNumber[i].meterSerialNumber ?? "-";
-              previousReadingController.text = listOfBPNumber[i].replaceStatus! == 1
+              previousReadingController.text = listOfBPNumber[i].replaceStatus == "1"
                   ? listOfBPNumber[i].newMeterOldReading.toString()
                   : listOfBPNumber[i].oldReading.toString();
               mobileNumberController.text =  listOfBPNumber[i].mobileNumber ??"";
@@ -211,9 +215,10 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
 
 
   _syncSearchBPNumber(SyncSearchBPNumberEvent event, emit) async {
-    if(bpNumberController.text.trim().length == 0){
+    if(bpMeterSearchNoController.text.trim().length == 0){
       mobileNumberController.text = "";
       custNameController.text = "";
+      bpNumberController.text = "";
       buildingNoController.text = "";
       colonyController.text = "";
       streetNameController.text = "";
@@ -223,7 +228,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       custAddController.text = "";
       meterNumberController.text = "";
       previousReadingController.text = "";
-    /*  meterRead1Controller.text = "";
+      meterRead1Controller.text = "";
       meterRead2Controller.text = "";
       meterRead3Controller.text = "";
       meterRead4Controller.text = "";
@@ -233,12 +238,12 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       meterRead8Controller.text = "";
       meterRead9Controller.text = "";
       meterRead10Controller.text = "";
-      meterFile = File("");*/
+      meterFile = File("");
       _eventCompleted(emit);
     } else{
       await fetchPendingBillsApi(
           context: event.context,
-          bpNumber: bpNumberController.text.trim().toString(),emit: emit);
+          bpNumber: bpMeterSearchNoController.text.trim().toString(),emit: emit);
     }
     _eventCompleted(emit);
   }
@@ -410,37 +415,42 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
   double sumAllMeterReadController = 0.0;
 
   subNormalMethod() {
-    String replaceStatus = listOfBPNumber[0].replaceStatus.toString();
-    print("replaceStatus-->$replaceStatus");
-    String oldMeterCurrentReading = listOfBPNumber[0].oldMeterCurrentReading.toString();
-    String oldMeterLastReading = listOfBPNumber[0].oldMeterLastReading.toString();
-    String newMeterOldReading = listOfBPNumber[0].newMeterOldReading.toString();
-    sumAllMeterReadController = double.parse(
-        meterRead1Controller.text +
-            meterRead2Controller.text +
-            meterRead3Controller.text +
-            meterRead4Controller.text +
-            meterRead5Controller.text +
-            meterRead6Controller.text +
-            meterRead7Controller.text +
-            meterRead8Controller.text +
-            meterRead9Controller.text +
-            meterRead10Controller.text);
-    if (replaceStatus == "0") {
-      double sum = sumAllMeterReadController / 1000 - double.parse(previousReadingController.text);
-      actualResult = sum;
-    } else if (replaceStatus == "1") {
-      double oldReading = double.parse(oldMeterCurrentReading) - double.parse(oldMeterLastReading);
-      double newReading = sumAllMeterReadController / 1000 - double.parse(newMeterOldReading);
-      actualResult = oldReading + newReading;
+    if(listOfBPNumber.isNotEmpty){
+      String replaceStatus = listOfBPNumber[0].replaceStatus.toString();
+      print("replaceStatus-->$replaceStatus");
+      String oldMeterCurrentReading = listOfBPNumber[0].oldMeterCurrentReading.toString();
+      String oldMeterLastReading = listOfBPNumber[0].oldMeterLastReading.toString();
+      String newMeterOldReading = listOfBPNumber[0].newMeterOldReading.toString();
+      sumAllMeterReadController = double.parse(
+          meterRead1Controller.text +
+              meterRead2Controller.text +
+              meterRead3Controller.text +
+              meterRead4Controller.text +
+              meterRead5Controller.text +
+              meterRead6Controller.text +
+              meterRead7Controller.text +
+              meterRead8Controller.text +
+              meterRead9Controller.text +
+              meterRead10Controller.text);
+      if (replaceStatus == "0") {
+        double sum = sumAllMeterReadController / 1000 - double.parse(previousReadingController.text);
+        actualResult = sum;
+      } else if (replaceStatus == "1") {
+        double oldReading = double.parse(oldMeterCurrentReading) - double.parse(oldMeterLastReading);
+        double newReading = sumAllMeterReadController / 1000 - double.parse(newMeterOldReading);
+        actualResult = oldReading + newReading;
+      }
+    }else{
+
     }
+
   }
 
 
 
   _preview(BillingRequestPreviewEvent event, emit) async {
     try{
-      if(bpNumberController.text.isEmpty){
+      if(bpMeterSearchNoController.text.isEmpty){
         Utils.errorSnackBar(msg: "The BP Number field is required.", context: event.context);
         return false;
       }else if(meterRead10Controller.text.isEmpty || meterRead9Controller.text.isEmpty || meterRead8Controller.text.isEmpty){
@@ -474,7 +484,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
               meterRead10Controller.text);
       var checkValid = await BillingRequestHelper.textValidationCheck(
           context: event.context,
-          bpNumber: bpNumberController.text.trim().toString(),
+          bpNumber: bpMeterSearchNoController.text.trim().toString(),
           custName: custNameController.text.trim().toString(),
           meterSerial: meterNumberController.text.trim().toString(),
           previousReading: previousReadingController.text.trim().toString(),
@@ -485,7 +495,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
         _eventCompleted(emit);
         var res = await BillingRequestHelper.generateNGC(
             context: event.context,
-            bpNumber: bpNumberController.text.trim().toString(),
+            bpNumber: bpMeterSearchNoController.text.trim().toString(),
             meterReading: (sumAllMeterReadController / 1000).toString(),
             meterSerial: meterNumberController.text.trim().toString(),
             latitude: latController.text.trim().toString(),
@@ -521,127 +531,128 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
   }
 
   Future<void> processDialog({required BuildContext context}) async {
-    await  subNormalMethod();
-    double myReadingValue = double.parse(
-        meterRead1Controller.text +
-            meterRead2Controller.text +
-            meterRead3Controller.text +
-            meterRead4Controller.text +
-            meterRead5Controller.text +
-            meterRead6Controller.text +
-            meterRead7Controller.text +
-            meterRead8Controller.text +
-            meterRead9Controller.text +
-            meterRead10Controller.text);
-    var myReading = myReadingValue == '' ? 0.0 : myReadingValue / 1000;
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Scaffold(
-            appBar: AppBarWidget(
-              title: "${ listOfBPNumber[0].replaceStatus.toString() == "1"
-                  ? "Replace Status "
-                  : "Meter Reader Details"}(${listOfBPNumber[0].replaceStatus.toString()})"
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  RowWidget(
-                    leading: "BP Number : ",
-                    trailing: bpNumberController.text.toString(),
-                  ),
-                  RowWidget(
-                    leading: "Customer Name : ",
-                    trailing: custNameController.text.toString(),
-                  ),
-                  RowWidget(
-                    leading: "Meter Number : ",
-                    trailing: meterNumberController.text.toString(),
-                  ),
-                  listOfBPNumber[0].replaceStatus.toString() == "1"
-                      ? RowWidget(
-                    leading: "Old Meter Reading Date : ",
-                    trailing:
-                    listOfBPNumber[0].oldMeterReadingDate.toString(),
-                  )
-                      : Container(),
-                  listOfBPNumber[0].replaceStatus.toString() == "1"
-                      ? RowWidget(
-                    leading: "New Meter Install Date : ",
-                    trailing:
-                    listOfBPNumber[0].newMeterInstallDate.toString(),
-                  )
-                      : Container(),
-                  listOfBPNumber[0].replaceStatus.toString() == "1"
-                      ? RowWidget(
-                    leading: "Old Meter Previous Reading : ",
-                    trailing:
-                    listOfBPNumber[0].oldMeterLastReading.toString(),
-                  )
-                      : Container(),
-                  listOfBPNumber[0].replaceStatus.toString() == "1"
-                      ? RowWidget(
-                    leading: "Old Meter Current Reading : ",
-                    trailing:
-                    listOfBPNumber[0].oldMeterCurrentReading.toString(),
-                  )
-                      : Container(),
-                  listOfBPNumber[0].replaceStatus.toString() == "1"
-                      ? RowWidget(
-                    leading: "New Meter Initial Reading : ",
-                    trailing:
-                    listOfBPNumber[0].newMeterOldReading.toString(),
-                  )
-                      : RowWidget(
-                    leading: "Previous Reading : ",
-                    trailing: listOfBPNumber[0].oldReading.toString(),
-                  ),
-                  RowWidget(
-                    leading: listOfBPNumber[0].replaceStatus.toString() == "1"
-                        ? "New Meter Current Reading : "
-                        : "Meter Current Reading : ",
-                    trailing: myReading.toStringAsFixed(3),
-                  ),
-                  RowWidget(
-                    leading: "Last Meter Reader Date : ",
-                    trailing: listOfBPNumber[0].lastBillGeneratedDate,
-                  ),
-                  RowWidget(
-                    leading: "Last Bill Pay Date : ",
-                    trailing: listOfBPNumber[0].lastBillPayDate,
-                  ),
-                  RowWidget(
-                    leading: "Outstanding Amount : ",
-                    trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
-                  ),
-                  if (actualResult >= 0)...[
-                    if (actualResult > 5 && actualResult < 25)...[
-                      Column(
-                        children: [
-                          RowWidget(
-                            leading: "Message : ",
-                            trailing: "This Reading is valid",
-                          ),
-                          RowWidget(
-                            leading: "Consumption Reading : ",
-                            trailing: actualResult.toStringAsFixed(3),
-                          ),
-                        ],
-                      )
-                    ] else if (actualResult < 5) ...[
-                      Column(
-                        children: [
-                          RowWidget(
-                            leading: "Message : ",
-                            trailing: "This Reading is Less then 5",
-                          ),
-                          RowWidget(
-                            leading: "Consumption Reading : ",
-                            trailing: actualResult.toStringAsFixed(3),
-                          ),
-                        ],
-                      )
-                    ] else...[
+    if(listOfBPNumber.isNotEmpty){
+      await  subNormalMethod();
+      double myReadingValue = double.parse(
+          meterRead1Controller.text +
+              meterRead2Controller.text +
+              meterRead3Controller.text +
+              meterRead4Controller.text +
+              meterRead5Controller.text +
+              meterRead6Controller.text +
+              meterRead7Controller.text +
+              meterRead8Controller.text +
+              meterRead9Controller.text +
+              meterRead10Controller.text);
+      var myReading = myReadingValue == '' ? 0.0 : myReadingValue / 1000;
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Scaffold(
+              appBar: AppBarWidget(
+                  title: "${ listOfBPNumber[0].replaceStatus.toString() == "1"
+                      ? "Replace Status "
+                      : "Meter Reader Details"}(${listOfBPNumber[0].replaceStatus.toString()})"
+              ),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    RowWidget(
+                      leading: "BP Number : ",
+                      trailing: bpNumberController.text.toString(),
+                    ),
+                    RowWidget(
+                      leading: "Customer Name : ",
+                      trailing: custNameController.text.toString(),
+                    ),
+                    RowWidget(
+                      leading: "Meter Number : ",
+                      trailing: meterNumberController.text.toString(),
+                    ),
+                    listOfBPNumber[0].replaceStatus.toString() == "1"
+                        ? RowWidget(
+                      leading: "Old Meter Reading Date : ",
+                      trailing:
+                      listOfBPNumber[0].oldMeterReadingDate.toString(),
+                    )
+                        : Container(),
+                    listOfBPNumber[0].replaceStatus.toString() == "1"
+                        ? RowWidget(
+                      leading: "New Meter Install Date : ",
+                      trailing:
+                      listOfBPNumber[0].newMeterInstallDate.toString(),
+                    )
+                        : Container(),
+                    listOfBPNumber[0].replaceStatus.toString() == "1"
+                        ? RowWidget(
+                      leading: "Old Meter Previous Reading : ",
+                      trailing:
+                      listOfBPNumber[0].oldMeterLastReading.toString(),
+                    )
+                        : Container(),
+                    listOfBPNumber[0].replaceStatus.toString() == "1"
+                        ? RowWidget(
+                      leading: "Old Meter Current Reading : ",
+                      trailing:
+                      listOfBPNumber[0].oldMeterCurrentReading.toString(),
+                    )
+                        : Container(),
+                    listOfBPNumber[0].replaceStatus.toString() == "1"
+                        ? RowWidget(
+                      leading: "New Meter Initial Reading : ",
+                      trailing:
+                      listOfBPNumber[0].newMeterOldReading.toString(),
+                    )
+                        : RowWidget(
+                      leading: "Previous Reading : ",
+                      trailing: listOfBPNumber[0].oldReading.toString(),
+                    ),
+                    RowWidget(
+                      leading: listOfBPNumber[0].replaceStatus.toString() == "1"
+                          ? "New Meter Current Reading : "
+                          : "Meter Current Reading : ",
+                      trailing: myReading.toStringAsFixed(3),
+                    ),
+                    RowWidget(
+                      leading: "Last Meter Reader Date : ",
+                      trailing: listOfBPNumber[0].lastBillGeneratedDate,
+                    ),
+                    RowWidget(
+                      leading: "Last Bill Pay Date : ",
+                      trailing: listOfBPNumber[0].lastBillPayDate,
+                    ),
+                    RowWidget(
+                      leading: "Outstanding Amount : ",
+                      trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
+                    ),
+                    if (actualResult >= 0)...[
+                      if (actualResult > 5 && actualResult < 25)...[
+                        Column(
+                          children: [
+                            RowWidget(
+                              leading: "Message : ",
+                              trailing: "This Reading is valid",
+                            ),
+                            RowWidget(
+                              leading: "Consumption Reading : ",
+                              trailing: actualResult.toStringAsFixed(3),
+                            ),
+                          ],
+                        )
+                      ] else if (actualResult < 5) ...[
+                        Column(
+                          children: [
+                            RowWidget(
+                              leading: "Message : ",
+                              trailing: "This Reading is Less then 5",
+                            ),
+                            RowWidget(
+                              leading: "Consumption Reading : ",
+                              trailing: actualResult.toStringAsFixed(3),
+                            ),
+                          ],
+                        )
+                      ] else...[
                         RowWidget(
                           leading: "Message : ",
                           trailing: "This Reading is Greater then 25",
@@ -651,55 +662,58 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                           trailing: actualResult.toStringAsFixed(3),
                         ),
                       ]
-                  ] else...[
-                    ErrorRowWidget(
-                      leading: "Message : ",
-                      trailing: "This Negative Reading is not valid",
-                    ),
-                    if(actualResult < 0)...[
-                      ErrorRowWidget(
-                        leading: "Consumption Reading : ",
-                        trailing: actualResult.toStringAsFixed(3),
-                      ),
                     ] else...[
-                      RowWidget(
-                        leading: "Consumption Reading : ",
-                        trailing: actualResult.toStringAsFixed(3),
+                      ErrorRowWidget(
+                        leading: "Message : ",
+                        trailing: "This Negative Reading is not valid",
                       ),
-                    ]
-                  ],
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      isBtnLoader == true ?  DottedLoaderWidget()
-                          : ButtonWidget(
-                        text: "Accept",
-                        onPressed: (){
-                          if (actualResult >= 0) {
-                            BlocProvider.of<BillingRequestBloc>(context).add(
-                                BillingRequestSubmitEvent(context: context));
-                          } else{
-                            Utils.errorSnackBar(msg: "This Negative Reading is not valid", context: context);
-                            Navigator.of(context).pop();
-                          }
-                        },
-                      ),
-                      ButtonWidget(
-                        text: "Edit",
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
+                      if(actualResult < 0)...[
+                        ErrorRowWidget(
+                          leading: "Consumption Reading : ",
+                          trailing: actualResult.toStringAsFixed(3),
+                        ),
+                      ] else...[
+                        RowWidget(
+                          leading: "Consumption Reading : ",
+                          trailing: actualResult.toStringAsFixed(3),
+                        ),
+                      ]
                     ],
-                  ),
-                ],
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        isBtnLoader == true ?  DottedLoaderWidget()
+                            : ButtonWidget(
+                          text: "Accept",
+                          onPressed: (){
+                            if (actualResult >= 0) {
+                              BlocProvider.of<BillingRequestBloc>(context).add(
+                                  BillingRequestSubmitEvent(context: context));
+                            } else{
+                              Utils.errorSnackBar(msg: "This Negative Reading is not valid", context: context);
+                              Navigator.of(context).pop();
+                            }
+                          },
+                        ),
+                        ButtonWidget(
+                          text: "Edit",
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        });
+            );
+          });
+    }else{
+      return  Utils.errorSnackBar(msg: "Error: Incorrect BP/Meter Number", context: context);
+    }
   }
 
 
@@ -724,9 +738,10 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       meterFile: meterFile,
       bpNumberModel: bpNumberModel,
       listOfBPNumber: listOfBPNumber,
-      bpNumberController: bpNumberController,
+      bpMeterSearchNoController: bpMeterSearchNoController,
       mobileNumberController: mobileNumberController,
       custNameController: custNameController,
+      bpNumberController: bpNumberController,
       buildingNoController: buildingNoController,
       streetNameController: streetNameController,
       colonyController: colonyController,
