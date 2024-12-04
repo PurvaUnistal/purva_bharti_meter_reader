@@ -11,15 +11,12 @@ import 'package:meter_reader/Utils/common_widgets/app_bar_widget.dart';
 import 'package:meter_reader/Utils/common_widgets/button_widget.dart';
 import 'package:meter_reader/features/billingRequest/presentation/widgets/ErorrRowWidget.dart';
 import 'package:meter_reader/features/billingRequest/presentation/widgets/row_widget.dart';
-import 'package:meter_reader/Utils/common_widgets/styles_widget.dart';
 import 'package:meter_reader/features/billPrint/domain/bloc/bill_print_bloc.dart';
-import 'package:meter_reader/features/billPrint/presentation/pages/bill_printer_page.dart';
 import 'package:meter_reader/features/billingRequest/domain/bloc/billing_request_event.dart';
 import 'package:meter_reader/features/billingRequest/domain/bloc/billing_request_state.dart';
 import 'package:meter_reader/features/billingRequest/domain/model/bp_number_model.dart';
 import 'package:meter_reader/features/billingRequest/helper/billing_request_helper.dart';
 import 'package:meter_reader/features/billingRequest/presentation/billing_request_page.dart';
-import 'package:meter_reader/features/billingRequest/presentation/widgets/custom_dialog_box.dart';
 
 class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
   BillingRequestBloc() : super(BillingRequestInitState()){
@@ -179,7 +176,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
             pinCodeController.clear();
             meterNumberController.clear();
             for (int i = 0; i < listOfBPNumber.length; i++) {
-              custNameController.text = listOfBPNumber[i].firstName! + listOfBPNumber[i].lastName!;
+              custNameController.text = "${listOfBPNumber[i].firstName!} ${listOfBPNumber[i].lastName!}";
               buildingNoController.text = listOfBPNumber[i].houseNumber ?? "-";
               colonyController.text = listOfBPNumber[i].address2 ?? "-";
               streetNameController.text = listOfBPNumber[i].locality ?? "-";
@@ -542,12 +539,9 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
         builder: (BuildContext context) {
           return Scaffold(
             appBar: AppBarWidget(
-              title: listOfBPNumber[0].replaceStatus.toString() == "1"
+              title: "${ listOfBPNumber[0].replaceStatus.toString() == "1"
                   ? "Replace Status "
-                  : "Meter Reader Details" +
-                  "(" +
-                  listOfBPNumber[0].replaceStatus.toString() +
-                  ")",
+                  : "Meter Reader Details"}(${listOfBPNumber[0].replaceStatus.toString()})"
             ),
             body: SingleChildScrollView(
               child: Column(

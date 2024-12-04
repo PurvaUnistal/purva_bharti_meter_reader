@@ -5,7 +5,7 @@ class AssetPath {
 
 class AppString {
   static String release = "Release ";
-  static String reDate = "15/07/2024";
+  static String reDate = "04/12/2024";
   static String GA = "GA ";
   static String userName = "User Name ";
   static String no = "No";

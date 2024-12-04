@@ -129,7 +129,7 @@ class DataList {
   String? pneumaticImage;
   String? mobileNumber;
   String? custId;
-  dynamic replaceStatus;
+  String? replaceStatus;
   dynamic replaceId;
   dynamic oldMeterLastReading;
   dynamic oldMeterCurrentReading;
@@ -341,6 +341,7 @@ class DataList {
     oldMeterCurrentReading = json["old_meter_current_reading"] ?? "0.00";
     newMeterOldReading = json["new_meter_old_reading"] ?? "0.00";
     oldMeterReadingDate = json["old_meter_reading_date"] ?? "";
+    newMeterInstallDate = json["new_meter_install_date"] ?? "";
     lastBillGeneratedDate= json["last_bill_generated_date"] ?? "";
     lastBillPayDate= json["last_bill_pay_date"] ?? "";
     lastBillPreviousOutstanding= json["last_bill_previous_outstanding"] ?? "";

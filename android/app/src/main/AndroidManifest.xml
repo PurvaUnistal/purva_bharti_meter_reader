@@ -19,8 +19,8 @@
 
     <application
         android:name="${applicationName}"
-        android:label="Meter Reader"
-        android:icon="@mipmap/pbg_logo">
+        android:label="PBG Meter Reader"
+        android:icon="@mipmap/unistal_logo">
         <activity
             android:name=".MainActivity"
             android:exported="true"
