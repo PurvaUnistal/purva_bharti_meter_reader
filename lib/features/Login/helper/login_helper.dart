@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:meter_reader_new/Utils/Utils.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_string.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_string.dart';
 import 'package:meter_reader_new/features/Login/domain/model/login_model.dart';
 import 'package:meter_reader_new/service/Apis.dart';
 import 'package:meter_reader_new/service/api_helper.dart';

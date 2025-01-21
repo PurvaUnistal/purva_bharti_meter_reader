@@ -19,7 +19,7 @@ class BillHistoryBoxWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(10.0),
+      margin: EdgeInsets.symmetric(vertical: 1.0, horizontal: 8),
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(10.0),

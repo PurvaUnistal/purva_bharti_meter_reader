@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:meter_reader_new/Utils/Utils.dart';
-import 'package:meter_reader_new/Utils/common_widgets/styles_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/styles_widget.dart';
 import 'package:meter_reader_new/features/billPrint/domain/bloc/bill_print_bloc.dart';
-import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
 class BillPrinterWidget extends StatefulWidget {
   const BillPrinterWidget({Key? key}) : super(key: key);

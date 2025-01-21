@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_color.dart';
+
+import 'common_widgets/res/app_color.dart';
 
 class Utils {
   static Future<void> successSnackBar(

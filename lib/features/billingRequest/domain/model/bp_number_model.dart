@@ -140,6 +140,7 @@ class DataList {
   dynamic lastBillGeneratedDate;
   dynamic lastBillPayDate;
   dynamic lastBillPreviousOutstanding;
+  dynamic estimated_reading;
 
   DataList({
     this.firstName,
@@ -243,6 +244,7 @@ class DataList {
     this.lastBillGeneratedDate,
     this.lastBillPayDate,
     this.lastBillPreviousOutstanding,
+    this.estimated_reading,
   });
 
   DataList.fromJson(Map<String, dynamic> json) {
@@ -348,6 +350,7 @@ class DataList {
     lastBillGeneratedDate= json["last_bill_generated_date"] ?? "";
     lastBillPayDate= json["last_bill_pay_date"] ?? "";
     lastBillPreviousOutstanding= json["last_bill_previous_outstanding"] ?? "";
+    estimated_reading= json["estimated_reading"] ?? "0";
 
   }
 
@@ -452,9 +455,10 @@ class DataList {
     data['new_meter_old_reading'] = this.newMeterOldReading;
     data['old_meter_reading_date'] = this.oldMeterReadingDate;
     data['new_meter_install_date'] = this.newMeterInstallDate;
-    data["last_bill_generated_date"] = this.lastBillGeneratedDate.toIso8601String();
+    data["last_bill_generated_date"] = this.lastBillGeneratedDate;
     data["last_bill_pay_date"] = this.lastBillPayDate.toIso8601String();
     data["last_bill_previous_outstanding"] = this.lastBillPreviousOutstanding;
+    data["estimated_reading"] = this.estimated_reading;
     return data;
   }
 }

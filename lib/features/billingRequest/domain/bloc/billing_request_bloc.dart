@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meter_reader_new/Utils/Utils.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_bar_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/button_widget.dart';
 import 'package:meter_reader_new/features/billingRequest/presentation/widgets/ErorrRowWidget.dart';
 import 'package:meter_reader_new/features/billingRequest/presentation/widgets/row_widget.dart';
@@ -18,8 +20,8 @@ import 'package:meter_reader_new/features/billingRequest/domain/model/bp_number_
 import 'package:meter_reader_new/features/billingRequest/helper/billing_request_helper.dart';
 import 'package:meter_reader_new/features/billingRequest/presentation/billing_request_page.dart';
 
-class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
-  BillingRequestBloc() : super(BillingRequestInitState()){
+class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> {
+  BillingRequestBloc() : super(BillingRequestInitState()) {
     on<BillingRequestPageLoadingEvent>(_pageLoader);
     on<SyncSearchBPNumberEvent>(_syncSearchBPNumber);
     on<BillingHideShowEvent>(_billingHideShow);
@@ -36,9 +38,10 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     on<OnChange9Event>(_onChange9Event);
     on<OnChange10Event>(_onChange10Event);
     on<BillingRequestPreviewEvent>(_preview);
+    on<MapTypeButtonEvent>(_mapTypeButtonEvent);
     on<BillingRequestSubmitEvent>(_submit);
-
   }
+
   String userName = "";
   String scheme = "";
   File meterFile = File("");
@@ -57,9 +60,9 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       meterReadCon9 = false,
       meterReadCon10 = true;
 
-
   BpNumberModel bpNumberModel = BpNumberModel();
   List<DataList> listOfBPNumber = [];
+ // List<TextEditingController> currentReadingController = [];
   TextEditingController bpMeterSearchNoController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController custNameController = TextEditingController();
@@ -85,6 +88,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
   TextEditingController meterRead10Controller = TextEditingController();
   TextEditingController latController = TextEditingController();
   TextEditingController longController = TextEditingController();
+  TextEditingController userAddressController = TextEditingController();
 
   FocusNode meterRead1Node = FocusNode();
   FocusNode meterRead2Node = FocusNode();
@@ -96,6 +100,12 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
   FocusNode meterRead8Node = FocusNode();
   FocusNode meterRead9Node = FocusNode();
   FocusNode meterRead10Node = FocusNode();
+
+  Set<Marker> markers = {};
+  LatLng latLng = LatLng(0.0, 0.0);
+  double accuracy = 0.0;
+  MapType currentMapType = MapType.normal;
+  Completer<GoogleMapController> mapController = Completer();
 
   _pageLoader(BillingRequestPageLoadingEvent event, emit) async {
     emit(BillingRequestInitState());
@@ -115,6 +125,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     meterReadCon10 = true;
     meterFile = File("");
     listOfBPNumber = [];
+  //  currentReadingController = [];
     bpNumberModel = BpNumberModel();
     bpMeterSearchNoController.text = "";
     mobileNumberController.text = "";
@@ -141,6 +152,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     meterRead10Controller.text = "";
     latController.text = "";
     longController.text = "";
+    userAddressController.text = "";
     meterRead1Node = FocusNode();
     meterRead2Node = FocusNode();
     meterRead3Node = FocusNode();
@@ -151,14 +163,25 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     meterRead8Node = FocusNode();
     meterRead9Node = FocusNode();
     meterRead10Node = FocusNode();
+    markers = {};
+    latLng = LatLng(0.0, 0.0);
+    currentMapType = MapType.normal;
+    mapController = Completer();
     userName = await SharedPref.getString(key: PrefsValue.userName);
     scheme = await SharedPref.getString(key: PrefsValue.schema);
-    await _setLocation();
+   /* for(int i = 0; i < 10; i++){
+      currentReadingController.add(
+          TextEditingController()
+      );
+    }*/
+    accuracy = 0.0;
+    await _setLocation(context: event.context);
     _eventCompleted(emit);
   }
 
-  fetchPendingBillsApi({required BuildContext context, required String bpNumber,emit}) async {
-    try{
+  fetchPendingBillsApi(
+      {required BuildContext context, required String bpNumber, emit}) async {
+    try {
       if (bpMeterSearchNoController.text.isNotEmpty) {
         isSyncLoader = true;
         _eventCompleted(emit);
@@ -180,24 +203,28 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
             meterNumberController.clear();
             for (int i = 0; i < listOfBPNumber.length; i++) {
               bpNumberController.text = listOfBPNumber[i].bpNumber ?? "-";
-              custNameController.text = "${listOfBPNumber[i].firstName!} ${listOfBPNumber[i].lastName!}";
+              custNameController.text =
+                  "${listOfBPNumber[i].firstName!} ${listOfBPNumber[i].lastName!}";
               buildingNoController.text = listOfBPNumber[i].houseNumber ?? "-";
               districtController.text = listOfBPNumber[i].district_names ?? "-";
               colonyController.text = listOfBPNumber[i].address2 ?? "-";
               streetNameController.text = listOfBPNumber[i].locality ?? "-";
               townController.text = listOfBPNumber[i].town ?? "";
               pinCodeController.text = listOfBPNumber[i].pinCode ?? "-";
-              meterNumberController.text = listOfBPNumber[i].meterSerialNumber ?? "-";
-              previousReadingController.text = listOfBPNumber[i].replaceStatus == "1"
-                  ? listOfBPNumber[i].newMeterOldReading.toString()
-                  : listOfBPNumber[i].oldReading.toString();
-              mobileNumberController.text =  listOfBPNumber[i].mobileNumber ??"";
+              meterNumberController.text =
+                  listOfBPNumber[i].meterSerialNumber ?? "-";
+              previousReadingController.text =
+                  listOfBPNumber[i].replaceStatus == "1"
+                      ? listOfBPNumber[i].newMeterOldReading.toString()
+                      : listOfBPNumber[i].oldReading.toString();
+              mobileNumberController.text =
+                  listOfBPNumber[i].mobileNumber ?? "";
             }
           } else {
             Utils.errorSnackBar(msg: res.data!, context: context);
             return null;
           }
-        }else{
+        } else {
           isSyncLoader = false;
           _eventCompleted(emit);
         }
@@ -205,7 +232,8 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       } else {
         Utils.errorSnackBar(msg: "Please enter BP Number", context: context);
         return null;
-      }}catch(e){
+      }
+    } catch (e) {
       isSyncLoader = false;
       _eventCompleted(emit);
       log(e.toString());
@@ -214,9 +242,8 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     }
   }
 
-
   _syncSearchBPNumber(SyncSearchBPNumberEvent event, emit) async {
-    if(bpMeterSearchNoController.text.trim().length == 0){
+    if (bpMeterSearchNoController.text.trim().length == 0) {
       mobileNumberController.text = "";
       custNameController.text = "";
       bpNumberController.text = "";
@@ -241,20 +268,23 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       meterRead10Controller.text = "";
       meterFile = File("");
       _eventCompleted(emit);
-    } else{
+    } else {
       await fetchPendingBillsApi(
           context: event.context,
-          bpNumber: bpMeterSearchNoController.text.trim().toString(),emit: emit);
+          bpNumber: bpMeterSearchNoController.text.trim().toString(),
+          emit: emit);
     }
     _eventCompleted(emit);
   }
+
   _billingHideShow(BillingHideShowEvent event, emit) {
     isHideShowDetails = event.isHideShow;
     _eventCompleted(emit);
   }
-  _selectMeterCamera(SelectMeterCameraEvent event, emit) async{
+
+  _selectMeterCamera(SelectMeterCameraEvent event, emit) async {
     var photo = await BillingRequestHelper.cameraCapture();
-    if(photo.path.isNotEmpty){
+    if (photo.path.isNotEmpty) {
       meterFile = photo;
     }
     _eventCompleted(emit);
@@ -262,96 +292,134 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
 
   _selectMeterGallery(SelectMeterGalleryEvent event, emit) async {
     var photo = await BillingRequestHelper.galleryCapture();
-    if(photo.path.isNotEmpty){
+    if (photo.path.isNotEmpty) {
       meterFile = photo;
     }
     _eventCompleted(emit);
   }
 
-  _setLocation() async {
-    var getLocation = await BillingRequestHelper.getCurrentLocation();
-    latController = TextEditingController(text: getLocation?.latitude.toString());
-    longController = TextEditingController(text: getLocation?.longitude.toString());
-    return getLocation;
+  Future<void> _setLocation({required BuildContext context}) async {
+    try {
+      final getLocation = await BillingRequestHelper.getCurrentLocationForcefully(context: context);
+      if (getLocation == null) {
+        throw Exception("Failed to get location");
+      }
+
+      accuracy = getLocation.accuracy;
+      latLng = LatLng(getLocation.latitude, getLocation.longitude);
+      latController.text = getLocation.latitude.toString();
+      longController.text = getLocation.longitude.toString();
+      debugPrint("Location set to: ${latLng.latitude}, ${latLng.longitude}");
+
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(getLocation.latitude, getLocation.longitude);
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks.first;
+        userAddressController.text =
+        '${place.name}, ${place.subLocality}, ${place.locality}, ${place.subAdministrativeArea}, '
+            '${place.administrativeArea}, ${place.country}';
+        debugPrint("userAddressController-->${userAddressController.text}");
+      } else {
+        userAddressController.text = "Address not found";
+        debugPrint("No placemark found for the location.");
+      }
+
+      // Ensure markers set is properly updated
+      markers.clear();
+      markers.add(Marker(
+        markerId: MarkerId(latLng.toString()),
+        position: latLng,
+        infoWindow: InfoWindow(
+          title: "User Address",
+          snippet: userAddressController.text,
+        ),
+        icon: BitmapDescriptor.defaultMarker,
+      ));
+
+    } catch (e) {
+      debugPrint("Error setting location: $e");
+    /*  ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to set location: $e")),*/
+
+    }
   }
 
+
   _onChange1Event(OnChange1Event event, emit) async {
-    if(meterRead1Controller.text.isNotEmpty && meterRead1Controller.text.length == 1){
-      meterReadCon1 =  true;
+    if (meterRead1Controller.text.isNotEmpty &&
+        meterRead1Controller.text.length == 1) {
+      meterReadCon1 = true;
       FocusScope.of(event.context).unfocus();
-    }else{
-      meterReadCon1 =  false;
+    } else {
+      meterReadCon1 = false;
     }
     _eventCompleted(emit);
   }
 
   _onChange2Event(OnChange2Event event, emit) async {
-    if (meterRead2Controller.text.isNotEmpty && meterRead2Controller.text.length == 1) {
+    if (meterRead2Controller.text.isNotEmpty &&
+        meterRead2Controller.text.length == 1) {
       meterReadCon1 = true;
       FocusScope.of(event.context).requestFocus(meterRead1Node);
     } else {
       meterRead1Controller.clear();
       meterReadCon1 = false;
     }
-
     _eventCompleted(emit);
   }
 
-
   _onChange3Event(OnChange3Event event, emit) async {
-    if (meterRead3Controller.text.isNotEmpty && meterRead3Controller.text.length == 1) {
+    if (meterRead3Controller.text.isNotEmpty &&
+        meterRead3Controller.text.length == 1) {
       meterReadCon2 = true;
       FocusScope.of(event.context).requestFocus(meterRead2Node);
     } else {
       meterRead2Controller.clear();
       meterReadCon2 = false;
     }
-
     _eventCompleted(emit);
   }
 
-
   _onChange4Event(OnChange4Event event, emit) async {
-    if (meterRead4Controller.text.isNotEmpty && meterRead4Controller.text.length == 1) {
+    if (meterRead4Controller.text.isNotEmpty &&
+        meterRead4Controller.text.length == 1) {
       meterReadCon3 = true;
       FocusScope.of(event.context).requestFocus(meterRead3Node);
     } else {
       meterRead3Controller.clear();
       meterReadCon3 = false;
     }
-
     _eventCompleted(emit);
   }
 
-
   _onChange5Event(OnChange5Event event, emit) async {
-    if (meterRead5Controller.text.isNotEmpty && meterRead5Controller.text.length == 1) {
+    if (meterRead5Controller.text.isNotEmpty &&
+        meterRead5Controller.text.length == 1) {
       meterReadCon4 = true;
       FocusScope.of(event.context).requestFocus(meterRead4Node);
     } else {
       meterRead4Controller.clear();
       meterReadCon4 = false;
     }
-
     _eventCompleted(emit);
   }
 
-
   _onChange6Event(OnChange6Event event, emit) async {
-    if (meterRead6Controller.text.isNotEmpty && meterRead6Controller.text.length == 1) {
+    if (meterRead6Controller.text.isNotEmpty &&
+        meterRead6Controller.text.length == 1) {
       meterReadCon5 = true;
       FocusScope.of(event.context).requestFocus(meterRead5Node);
     } else {
       meterRead5Controller.clear();
       meterReadCon5 = false;
     }
-
     _eventCompleted(emit);
   }
 
-
   _onChange7Event(OnChange7Event event, emit) async {
-    if (meterRead7Controller.text.isNotEmpty && meterRead7Controller.text.length == 1) {
+    if (meterRead7Controller.text.isNotEmpty &&
+        meterRead7Controller.text.length == 1) {
       meterReadCon6 = true;
       FocusScope.of(event.context).requestFocus(meterRead6Node);
     } else {
@@ -362,30 +430,24 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
     _eventCompleted(emit);
   }
 
-
   _onChange8Event(OnChange8Event event, emit) async {
-    // Check if the 8th meter reading input is valid
-    if (meterRead8Controller.text.isNotEmpty && meterRead8Controller.text.length == 1) {
+    if (meterRead8Controller.text.isNotEmpty &&
+        meterRead8Controller.text.length == 1) {
       meterReadCon7 = true;
       FocusScope.of(event.context).requestFocus(meterRead7Node);
     } else {
-      // Clear the 7th meter reading input and set the state accordingly
       meterRead7Controller.clear();
       meterReadCon7 = false;
     }
-
     _eventCompleted(emit);
   }
 
-
-
   _onChange9Event(OnChange9Event event, emit) async {
-    // Check if the 9th meter reading input is valid
-    if (meterRead9Controller.text.isNotEmpty && meterRead9Controller.text.length == 1) {
+    if (meterRead9Controller.text.isNotEmpty &&
+        meterRead9Controller.text.length == 1) {
       meterReadCon8 = true;
       FocusScope.of(event.context).requestFocus(meterRead8Node);
     } else {
-      // Clear the 8th meter reading input and update its state
       meterRead8Controller.clear();
       meterReadCon8 = false;
     }
@@ -394,17 +456,16 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
   }
 
   _onChange10Event(OnChange10Event event, emit) async {
-    if (meterRead10Controller.text.isNotEmpty && meterRead10Controller.text.length == 1) {
+    if (meterRead10Controller.text.isNotEmpty &&
+        meterRead10Controller.text.length == 1) {
       meterReadCon9 = true;
       FocusScope.of(event.context).requestFocus(meterRead9Node);
     } else {
       meterRead9Controller.clear();
       meterReadCon9 = false;
     }
-
     _eventCompleted(emit);
   }
-
 
   double actualResult = 0.0;
   double sumAllMeterReadController = 0.0;
@@ -414,9 +475,17 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       String replaceStatus = listOfBPNumber[0].replaceStatus.toString();
       print("replaceStatus-->$replaceStatus");
       String oldMeterCurrentReading = listOfBPNumber[0].oldMeterCurrentReading.toString();
+      String estimatedReading = listOfBPNumber[0].estimated_reading.toString();
       String oldMeterLastReading = listOfBPNumber[0].oldMeterLastReading.toString();
       String newMeterOldReading = listOfBPNumber[0].newMeterOldReading.toString();
-      sumAllMeterReadController = double.parse(
+/*      List<String> value2 = [];
+      for(var dataReading in currentReadingController){
+        if(dataReading.text.toString().isNotEmpty){
+          value2.add(dataReading.text.toString());
+        }
+      }
+      sumAllMeterReadController =double.parse("${value2.toString().replaceAll("[", "").toString().replaceAll("]", "").replaceAll(",", "").replaceAll(" ", "")}");*/
+      sumAllMeterReadController =    double.parse(
           meterRead1Controller.text +
               meterRead2Controller.text +
               meterRead3Controller.text +
@@ -427,80 +496,92 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
               meterRead8Controller.text +
               meterRead9Controller.text +
               meterRead10Controller.text);
+      // if (replaceStatus == "0") {
+      //   double sum = sumAllMeterReadController / 1000 - double.parse(previousReadingController.text);
+      //   actualResult = sum;
+      // } else if (replaceStatus == "1") {
+      //   double oldReading = double.parse(oldMeterCurrentReading) - double.parse(oldMeterLastReading);
+      //   double newReading = sumAllMeterReadController / 1000 - double.parse(newMeterOldReading);
+      //   actualResult = oldReading + newReading;
+      // }
       if (replaceStatus == "0") {
         double sum = sumAllMeterReadController / 1000 - double.parse(previousReadingController.text);
         actualResult = sum;
       } else if (replaceStatus == "1") {
-        double oldReading = double.parse(oldMeterCurrentReading) - double.parse(oldMeterLastReading);
+        double oldReading = double.parse(estimatedReading) - double.parse(oldMeterLastReading);
         double newReading = sumAllMeterReadController / 1000 - double.parse(newMeterOldReading);
         actualResult = oldReading + newReading;
       }
-    }else{
-
+    } else {
+      print("listOfBPNumber is empty. Unable to calculate.");
+      actualResult = 0.0;
     }
-
   }
 
-
-
   _preview(BillingRequestPreviewEvent event, emit) async {
-    try{
-      if(bpMeterSearchNoController.text.isEmpty){
-        Utils.errorSnackBar(msg: "The BP Number field is required.", context: event.context);
+    try {
+      if (bpMeterSearchNoController.text.isEmpty) {
+        Utils.errorSnackBar(
+            msg: "The BP Number field is required.", context: event.context);
         return false;
-      }else if(meterRead10Controller.text.isEmpty || meterRead9Controller.text.isEmpty || meterRead8Controller.text.isEmpty){
-        Utils.errorSnackBar(msg: "Please Enter three Initial Meter Reading.", context: event.context);
+      } else if (meterRead10Controller.text.isEmpty ||
+          meterRead9Controller.text.isEmpty ||
+          meterRead8Controller.text.isEmpty) {
+        Utils.errorSnackBar(
+            msg: "Please Enter three Initial Meter Reading.",
+            context: event.context);
         return false;
-      }else if(meterFile.path.isEmpty){
-        Utils.errorSnackBar(msg: "Please Enter Meter Image.", context: event.context);
+      } else if (meterFile.path.isEmpty) {
+        Utils.errorSnackBar(
+            msg: "Please Enter Meter Image.", context: event.context);
         return false;
-      }else{
-        return processDialog(context: event.context);
-
+      } else {
+        return processDialog(ctn: event.context);
       }
-    }catch(e){
+    } catch (e) {
       isPageLoader = false;
       _eventCompleted(emit);
       log("submit-->${e.toString()}");
     }
   }
+
   _submit(BillingRequestSubmitEvent event, emit) async {
-    try{
-      double sum = double.parse(
-          meterRead1Controller.text +
-              meterRead2Controller.text +
-              meterRead3Controller.text +
-              meterRead4Controller.text +
-              meterRead5Controller.text +
-              meterRead6Controller.text +
-              meterRead7Controller.text +
-              meterRead8Controller.text +
-              meterRead9Controller.text +
-              meterRead10Controller.text);
+    try {
+      double sum = double.parse(meterRead1Controller.text +
+          meterRead2Controller.text +
+          meterRead3Controller.text +
+          meterRead4Controller.text +
+          meterRead5Controller.text +
+          meterRead6Controller.text +
+          meterRead7Controller.text +
+          meterRead8Controller.text +
+          meterRead9Controller.text +
+          meterRead10Controller.text);
       var checkValid = await BillingRequestHelper.textValidationCheck(
           context: event.context,
-          bpNumber: bpMeterSearchNoController.text.trim().toString(),
+          bpNumber: bpNumberController.text.trim().toString(),
           custName: custNameController.text.trim().toString(),
           meterSerial: meterNumberController.text.trim().toString(),
           previousReading: previousReadingController.text.trim().toString(),
           currentReading: sum.toString(),
           meterFile: meterFile.path.toString());
-      if(checkValid == true){
+      if (checkValid == true) {
         isBtnLoader = true;
         _eventCompleted(emit);
         var res = await BillingRequestHelper.generateNGC(
             context: event.context,
-            bpNumber: bpMeterSearchNoController.text.trim().toString(),
+            bpNumber: bpNumberController.text.trim().toString(),
             meterReading: (sumAllMeterReadController / 1000).toString(),
             meterSerial: meterNumberController.text.trim().toString(),
             latitude: latController.text.trim().toString(),
             longitude: longController.text.trim().toString(),
             oldReading: previousReadingController.text.trim().toString(),
             meterFile: meterFile.path.toString());
-        if(res != null){
+        if (res != null) {
           isBtnLoader = false;
           _eventCompleted(emit);
-          await Utils.successSnackBar(msg: res.message!, context: event.context);
+          await Utils.successSnackBar(
+              msg: res.message!, context: event.context);
           BlocProvider.of<BillPrintBloc>(event.context).add(
               BillPrintPageLoaderEvent(
                   context: event.context,
@@ -511,44 +592,49 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
             MaterialPageRoute<dynamic>(
               builder: (BuildContext context) => BillingRequestPage(),
             ),
-                (route) => false,//if you want to disable back feature set to false
+            (route) => false,
           );
-        } else{
+        } else {
           isBtnLoader = false;
           _eventCompleted(emit);
         }
       }
-    }catch(e){
+    } catch (e) {
       isBtnLoader = false;
       _eventCompleted(emit);
       log("submit-->${e.toString()}");
     }
   }
 
-  Future<void> processDialog({required BuildContext context}) async {
-    if(listOfBPNumber.isNotEmpty){
-      await  subNormalMethod();
-      double myReadingValue = double.parse(
-          meterRead1Controller.text +
-              meterRead2Controller.text +
-              meterRead3Controller.text +
-              meterRead4Controller.text +
-              meterRead5Controller.text +
-              meterRead6Controller.text +
-              meterRead7Controller.text +
-              meterRead8Controller.text +
-              meterRead9Controller.text +
-              meterRead10Controller.text);
+  Future<void> processDialog({required BuildContext ctn}) async {
+    if (listOfBPNumber.isNotEmpty) {
+      await subNormalMethod();
+  /*    List<String> value2 = [];
+      for(var dataReading in currentReadingController){
+        if(dataReading.text.toString().isNotEmpty){
+          value2.add(dataReading.text.toString());
+        }
+      }
+      double  myReadingValue =double.parse("${value2.toString().replaceAll("[", "").toString().replaceAll("]", "").replaceAll(",", "").replaceAll(" ", "")}");
+*/
+      double myReadingValue = double.parse(meterRead1Controller.text +
+          meterRead2Controller.text +
+          meterRead3Controller.text +
+          meterRead4Controller.text +
+          meterRead5Controller.text +
+          meterRead6Controller.text +
+          meterRead7Controller.text +
+          meterRead8Controller.text +
+          meterRead9Controller.text +
+          meterRead10Controller.text);
       var myReading = myReadingValue == '' ? 0.0 : myReadingValue / 1000;
       return showDialog(
-          context: context,
+          context: ctn,
           builder: (BuildContext context) {
             return Scaffold(
               appBar: AppBarWidget(
-                  title: "${ listOfBPNumber[0].replaceStatus.toString() == "1"
-                      ? "Replace Status "
-                      : "Meter Reader Details"}(${listOfBPNumber[0].replaceStatus.toString()})"
-              ),
+                  title:
+                      "${listOfBPNumber[0].replaceStatus.toString() == "1" ? "Replace Status " : "Meter Reader Details"}(${listOfBPNumber[0].replaceStatus.toString()})"),
               body: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -566,42 +652,54 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                     ),
                     listOfBPNumber[0].replaceStatus.toString() == "1"
                         ? RowWidget(
-                      leading: "Old Meter Reading Date : ",
-                      trailing:
-                      listOfBPNumber[0].oldMeterReadingDate.toString(),
+                            leading: "Old Meter Reading Date : ",
+                            trailing: listOfBPNumber[0]
+                                .oldMeterReadingDate
+                                .toString(),
+                          )
+                        : Container(),
+                    listOfBPNumber[0].replaceStatus.toString() == "1"
+                        ? RowWidget(
+                            leading: "New Meter Install Date : ",
+                            trailing: listOfBPNumber[0]
+                                .newMeterInstallDate
+                                .toString(),
+                          )
+                        : Container(),
+                    listOfBPNumber[0].replaceStatus.toString() == "1"
+                        ? RowWidget(
+                            leading: "Old Meter Previous Reading : ",
+                            trailing: listOfBPNumber[0]
+                                .oldMeterLastReading
+                                .toString(),
+                          )
+                        : Container(),
+                    listOfBPNumber[0].replaceStatus.toString() == "1"
+                        ? RowWidget(
+                      leading: "Old Meter Estimated Reading : ",
+                      trailing: listOfBPNumber[0]
+                          .estimated_reading
+                          .toString(),
                     )
                         : Container(),
                     listOfBPNumber[0].replaceStatus.toString() == "1"
                         ? RowWidget(
-                      leading: "New Meter Install Date : ",
-                      trailing:
-                      listOfBPNumber[0].newMeterInstallDate.toString(),
-                    )
+                            leading: "Old Meter Current Reading : ",
+                            trailing: listOfBPNumber[0]
+                                .oldMeterCurrentReading
+                                .toString(),
+                          )
                         : Container(),
                     listOfBPNumber[0].replaceStatus.toString() == "1"
                         ? RowWidget(
-                      leading: "Old Meter Previous Reading : ",
-                      trailing:
-                      listOfBPNumber[0].oldMeterLastReading.toString(),
-                    )
-                        : Container(),
-                    listOfBPNumber[0].replaceStatus.toString() == "1"
-                        ? RowWidget(
-                      leading: "Old Meter Current Reading : ",
-                      trailing:
-                      listOfBPNumber[0].oldMeterCurrentReading.toString(),
-                    )
-                        : Container(),
-                    listOfBPNumber[0].replaceStatus.toString() == "1"
-                        ? RowWidget(
-                      leading: "New Meter Initial Reading : ",
-                      trailing:
-                      listOfBPNumber[0].newMeterOldReading.toString(),
-                    )
+                            leading: "New Meter Initial Reading : ",
+                            trailing:
+                                listOfBPNumber[0].newMeterOldReading.toString(),
+                          )
                         : RowWidget(
-                      leading: "Previous Reading : ",
-                      trailing: listOfBPNumber[0].oldReading.toString(),
-                    ),
+                            leading: "Previous Reading : ",
+                            trailing: listOfBPNumber[0].oldReading.toString(),
+                          ),
                     RowWidget(
                       leading: listOfBPNumber[0].replaceStatus.toString() == "1"
                           ? "New Meter Current Reading : "
@@ -610,18 +708,19 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                     ),
                     RowWidget(
                       leading: "Last Meter Reader Date : ",
-                      trailing: listOfBPNumber[0].lastBillGeneratedDate,
+                      //  trailing: listOfBPNumber[0].lastBillGeneratedDate,
+                      trailing: listOfBPNumber[0].oldMeterReadingDate,
                     ),
-                    RowWidget(
+                    /*RowWidget(
                       leading: "Last Bill Pay Date : ",
                       trailing: listOfBPNumber[0].lastBillPayDate,
                     ),
                     RowWidget(
                       leading: "Outstanding Amount : ",
                       trailing: listOfBPNumber[0].lastBillPreviousOutstanding,
-                    ),
-                    if (actualResult >= 0)...[
-                      if (actualResult > 5 && actualResult < 25)...[
+                    ),*/
+                    if (actualResult >= 0) ...[
+                      if (actualResult > 5 && actualResult < 25) ...[
                         Column(
                           children: [
                             RowWidget(
@@ -647,7 +746,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                             ),
                           ],
                         )
-                      ] else...[
+                      ] else ...[
                         RowWidget(
                           leading: "Message : ",
                           trailing: "This Reading is Greater then 25",
@@ -657,17 +756,17 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                           trailing: actualResult.toStringAsFixed(3),
                         ),
                       ]
-                    ] else...[
+                    ] else ...[
                       ErrorRowWidget(
                         leading: "Message : ",
                         trailing: "This Negative Reading is not valid",
                       ),
-                      if(actualResult < 0)...[
+                      if (actualResult < 0) ...[
                         ErrorRowWidget(
                           leading: "Consumption Reading : ",
                           trailing: actualResult.toStringAsFixed(3),
                         ),
-                      ] else...[
+                      ] else ...[
                         RowWidget(
                           leading: "Consumption Reading : ",
                           trailing: actualResult.toStringAsFixed(3),
@@ -680,23 +779,28 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        isBtnLoader == true ?  DottedLoaderWidget()
+                        isBtnLoader == true
+                            ? DottedLoaderWidget()
                             : ButtonWidget(
-                          text: "Accept",
-                          onPressed: (){
-                            if (actualResult >= 0) {
-                              BlocProvider.of<BillingRequestBloc>(context).add(
-                                  BillingRequestSubmitEvent(context: context));
-                            } else{
-                              Utils.errorSnackBar(msg: "This Negative Reading is not valid", context: context);
-                              Navigator.of(context).pop();
-                            }
-                          },
-                        ),
+                                text: "Accept",
+                                onPressed: () {
+                                  if (actualResult >= 0) {
+                                    BlocProvider.of<BillingRequestBloc>(ctn)
+                                        .add(BillingRequestSubmitEvent(
+                                            context: ctn));
+                                  } else {
+                                    Utils.errorSnackBar(
+                                        msg:
+                                            "This Negative Reading is not valid",
+                                        context: ctn);
+                                    Navigator.of(ctn).pop();
+                                  }
+                                },
+                              ),
                         ButtonWidget(
                           text: "Edit",
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Navigator.of(ctn).pop();
                           },
                         ),
                       ],
@@ -706,11 +810,17 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
               ),
             );
           });
-    }else{
-      return  Utils.errorSnackBar(msg: "Error: Incorrect BP/Meter Number", context: context);
+    } else {
+      return Utils.errorSnackBar(
+          msg: "Error: Incorrect BP/Meter Number", context: ctn);
     }
   }
 
+  _mapTypeButtonEvent(MapTypeButtonEvent event, emit) async {
+    currentMapType =
+        currentMapType == MapType.normal ? MapType.satellite : MapType.normal;
+    _eventCompleted(emit);
+  }
 
   _eventCompleted(emit) {
     emit(BillingRequestFetchDataState(
@@ -759,14 +869,20 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState>{
       meterRead1Node: meterRead1Node,
       meterRead2Node: meterRead2Node,
       meterRead3Node: meterRead3Node,
-      meterRead4Node:meterRead4Node,
+      meterRead4Node: meterRead4Node,
       meterRead5Node: meterRead5Node,
       meterRead6Node: meterRead6Node,
       meterRead7Node: meterRead7Node,
       meterRead8Node: meterRead8Node,
       meterRead9Node: meterRead9Node,
       meterRead10Node: meterRead10Node,
-    )
-    );
+      currentMapType: currentMapType,
+      latLng: latLng,
+      markers: markers,
+      mapController: mapController,
+      userAddressController: userAddressController,
+      accuracy: accuracy,
+     // currentReadingController: currentReadingController,
+    ));
   }
 }

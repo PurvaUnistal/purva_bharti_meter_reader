@@ -8,35 +8,28 @@ import 'package:http_parser/http_parser.dart';
 import 'package:meter_reader_new/Utils/Utils.dart';
 import 'package:meter_reader_new/Utils/common_widgets/InternetConnectivity/connectivity_helper.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:meter_reader_new/Utils/common_widgets/common_session_dialog_box.dart';
+import 'package:meter_reader_new/service/Apis.dart';
 import 'package:mime/mime.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiHelper {
-  static Future<dynamic> getData(
-      {var urlEndPoint, required BuildContext context}) async {
+  static Future<dynamic> getData({var urlEndPoint, required BuildContext context}) async {
     try {
-      if (await ConnectivityHelper.allConnectivityCheck(context: context) ==
-          false) {
+      if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
         return null;
       }
-      String token = await SharedPref.getString(key: PrefsValue.token) ?? "";
-      Map<String, String> headers = {"Authorization": token};
-      final response = await get(Uri.parse(urlEndPoint),headers: headers);
-      log("URL-->${urlEndPoint.toString()}");
+      String url = Apis.baseUrl + urlEndPoint;
+      final response = await get(Uri.parse(url));
+      log("URL-->${url.toString()}");
       log(urlEndPoint + "==> " + response.body);
       if (response.statusCode == 200) {
-        return jsonDecode(response.body.toString());
-      } else if (response.statusCode == 400) {
-        return jsonDecode(response.body.toString());
-      } else if (response.statusCode == 401) {
-        return jsonDecode(response.body.toString());
-      } else if (response.statusCode == 404) {
-        return jsonDecode(response.body.toString());
-      } else if (response.statusCode == 500) {
-        return jsonDecode(response.body.toString());
+        return response.body.toString();
+      }
+      if (response.statusCode == 400) {
+        return response.body.toString();
       } else {
-        log("apiError-->ApiHelperElse");
+        log("Api.error-->${Api.error}");
         return null;
       }
     } catch (e) {
@@ -46,8 +39,7 @@ class ApiHelper {
         Utils.warningSnackBar(msg: "No Internet", context: context);
       } else if (e is TimeoutException) {
         log("TimeoutException : ${e.toString()}");
-        Utils.warningSnackBar(
-            msg: "Timeout, Please try again", context: context);
+        Utils.warningSnackBar(msg: "Timeout, Please try again", context: context);
       } else {
         log("Unhandled exception : ${e.toString()}");
         Utils.warningSnackBar(msg: e.toString(), context: context);
@@ -56,16 +48,15 @@ class ApiHelper {
     }
   }
 
-  static Future<dynamic> postData({required String urlEndPoint, var body, required BuildContext context}) async {
+  static Future<dynamic> postData({required String urlEndPoint, var body, required BuildContext context, Map<String, String>? headers}) async {
     try {
-      if (await ConnectivityHelper.allConnectivityCheck(context: context) ==
-          false) {
+      if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
         return null;
       }
-      String token = await SharedPref.getString(key: PrefsValue.token) ?? "";
-      Map<String, String> headers = {"Authorization": token};
-      var res = await post(Uri.parse(urlEndPoint), body: body, headers: headers);
-      log(res.body);
+      String url = Apis.baseUrl + urlEndPoint;
+      var res = await post(Uri.parse(url), body: body,headers: headers);
+      print(res.body);
+      //  if(urlEndPoint)
       if (res.statusCode == 200) {
         return jsonDecode(res.body);
       } else if (res.statusCode == 403) {
@@ -73,8 +64,6 @@ class ApiHelper {
       } else if (res.statusCode == 401) {
         return jsonDecode(res.body);
       } else if (res.statusCode == 415) {
-        return jsonDecode(res.body);
-      }else if (res.statusCode == 500) {
         return jsonDecode(res.body);
       }
     } catch (e) {
@@ -87,58 +76,73 @@ class ApiHelper {
   static Future<dynamic> postDataWithFile({
     var urlEndPoint,
     var body,
-    required BuildContext context,
-    required String filePath1,
-    required String keyWord1,
+    required  List<ImageRequestObject> imageRequestObject,
+    required BuildContext context
   }) async {
-    String token = await SharedPref.getString(key: PrefsValue.token) ?? "";
-   try {
-      if (await ConnectivityHelper.allConnectivityCheck(context: context) == false) {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String token = pref.getString(PrefsValue.token) ?? "";
+    try {
+      if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
         return null;
       }
       Map<String, String> headers = {"Authorization": token};
-      var request = MultipartRequest("POST", Uri.parse(urlEndPoint));
-      if (filePath1.isNotEmpty) {
-        final mimeTypeData =
-            lookupMimeType(filePath1, headerBytes: [0xFF, 0xD8])!.split('/');
-        var uploadFile1 = await MultipartFile.fromPath(keyWord1, filePath1,
-            contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
-        request.files.add(uploadFile1);
+      String url = Apis.baseUrl + urlEndPoint;
+      var request = MultipartRequest("POST", Uri.parse(url));
+
+      for(int i=0; i< imageRequestObject.length ; i++) {
+        var element = imageRequestObject[i];
+        if (element.path!.isNotEmpty && !element.path!.startsWith("http")) {
+          final mimeTypeData = lookupMimeType(element.path!, headerBytes: [0xFF, 0xD8])!.split('/');
+          var file = await MultipartFile.fromPath(element.key!, element.path!, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+          request.files.add(file);
+        } else {
+          body[element.key] = element.path;
+        }
       }
       request.fields.addAll(body);
       request.headers.addAll(headers);
-    var response = await request.send();
-    if (response.statusCode == 200) {
+      var response = await request.send();
       var responseData = await response.stream.toBytes();
       var result = json.decode(String.fromCharCodes(responseData));
-      log("result-->${result.toString()}");
-      return result;
-    } else if (response.statusCode == 401) {
-      var responseData = await response.stream.toBytes();
-      var result = json.decode(String.fromCharCodes(responseData));
-      log(result.toString());
-      return result;
-    } else if (response.statusCode == 415) {
-      var responseData = await response.stream.toBytes();
-      var result = json.decode(String.fromCharCodes(responseData));
-      log(result.toString());
-      return result;
-    } else if (response.statusCode == 400) {
-      var responseData = await response.stream.toBytes();
-      var result = json.decode(String.fromCharCodes(responseData));
-      log(result.toString());
-      return result;
-    } else {
-      var responseData = await response.stream.toBytes();
-      var result = json.decode(String.fromCharCodes(responseData));
-      log(result.toString());
-      return result;
-    }
+      if (response.statusCode == 200) {
+        log("result-->${result.toString()}");
+        return result;
+      } else if (response.statusCode == 401) {
+        log("result-->${result.toString()}");
+        return result;
+      } else if (response.statusCode == 415) {
+        Utils.errorSnackBar(msg: result['data'].toString(), context:context);
+        log(result['data'].toString());
+        return null;
+      } else if (response.statusCode == 400) {
+        return result;
+      } else {
+        return null;
+      }
     } catch (e) {
       log("postDataWithFile-->${e.toString()}");
       return null;
     }
   }
+
+  static Future<bool> isInternetConnected() async {
+    bool isConnect = false;
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        isConnect = true;
+      }
+    } on SocketException catch (_) {}
+
+    return isConnect;
+  }
 }
 
 enum Api { error }
+
+class ImageRequestObject {
+  String? key;
+  String? path;
+
+  ImageRequestObject(this.key, this.path);
+}

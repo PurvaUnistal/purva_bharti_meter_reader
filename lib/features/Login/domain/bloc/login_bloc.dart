@@ -9,6 +9,7 @@ import 'package:meter_reader_new/features/Login/domain/bloc/login_event.dart';
 import 'package:meter_reader_new/features/Login/domain/bloc/login_state.dart';
 import 'package:meter_reader_new/features/Login/domain/model/login_model.dart';
 import 'package:meter_reader_new/features/Login/helper/login_helper.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitState()) {
@@ -77,6 +78,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           if (res.user != null) {
             _loginModel = res;
             if (res.status == 200 && res.user?.role == "billing") {
+              PackageInfo packageInfo = await PackageInfo.fromPlatform();
+              String buildNumber = packageInfo.buildNumber;
+              await SharedPref.setString(key: PrefsValue.buildNumber,value: buildNumber);
               await SharedPref.setString(
                   key: PrefsValue.passwordVal, value: password);
               await SharedPref.setString(

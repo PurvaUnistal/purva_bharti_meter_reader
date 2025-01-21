@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_color.dart';
-import 'package:meter_reader_new/Utils/common_widgets/styles_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/styles_widget.dart';
+
+import 'res/app_color.dart';
 
 class ImageWidget extends StatelessWidget {
   final File imgFile;

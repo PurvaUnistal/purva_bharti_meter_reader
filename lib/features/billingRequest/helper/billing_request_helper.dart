@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,20 +15,108 @@ import 'package:permission_handler/permission_handler.dart';
 
 class BillingRequestHelper{
 
-  static Future<Position?> getCurrentLocation() async {
-    await Geolocator.requestPermission();
-    await Permission.locationAlways.request();
-    final androidInfo = await DeviceInfoPlugin().androidInfo;
-    if (Platform.isAndroid) {
-      if (androidInfo.version.sdkInt <= 32) {
-        Position   position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        log('latitude : ${position.latitude} longitude : ${position.longitude}');
-        return position;
-      }  else {
-        log("location-->${"Something worng"}");
+  // static Future<Position?> getCurrentLocation() async {
+  //   await Geolocator.requestPermission();
+  //   await Permission.locationAlways.request();
+  //   if (Platform.isAndroid) {
+  //     Position position = await Geolocator.getCurrentPosition(
+  //         desiredAccuracy: LocationAccuracy.high,
+  //         forceAndroidLocationManager: true,
+  //         locationSettings: LocationSettings(
+  //
+  //         ));
+  //     log('latitude : ${position.latitude} longitude : ${position.longitude}');
+  //     return position;
+  //   }
+  //   return null;
+  // }
+
+  static Future<Position> getCurrentLocationForcefully({
+    required BuildContext context,
+  }) async {
+    while (true) {
+      // 1. Check GPS service
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await _showForceLocationDialog(context);
+        await Future.delayed(const Duration(seconds: 2));
+        continue;
+      }
+
+      // 2. Check permission
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          continue;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        await _showPermissionSettingsDialog(context);
+        await Future.delayed(const Duration(seconds: 2));
+        continue;
+      }
+
+      // 3. Fetch location
+      try {
+        return await Geolocator.getCurrentPosition(
+          locationSettings: AndroidSettings(
+            accuracy: LocationAccuracy.high,
+            forceLocationManager: true,
+          ),
+        );
+      } catch (_) {
+        // Retry if location fetch fails
+        await Future.delayed(const Duration(seconds: 2));
       }
     }
-    return null;
+  }
+
+  static Future<void> _showForceLocationDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        title: const Text("Location Required"),
+        content: const Text(
+          "Location services are mandatory to continue. "
+              "Please enable GPS.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await Geolocator.openLocationSettings();
+            },
+            child: const Text("ENABLE GPS"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Future<void> _showPermissionSettingsDialog(
+      BuildContext context) async {
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        title: const Text("Permission Required"),
+        content: const Text(
+          "Location permission is permanently denied. "
+              "Please enable it from app settings.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await Geolocator.openAppSettings();
+            },
+            child: const Text("OPEN SETTINGS"),
+          ),
+        ],
+      ),
+    );
   }
 
   static Future<BpNumberModel?> getPendingBills({
@@ -46,9 +134,9 @@ class BillingRequestHelper{
     try {
       var res = await ApiHelper.getData(
           urlEndPoint: Apis.getPendingBillsMeterReader + json, context: context);
-      if (res != null && res["error"] == false) {
-        return BpNumberModel.fromJson(res);
-      }else if (res != null && res["error"] == true) {
+      if (res != null && res != true) {
+        return BpNumberModel.fromJson(jsonDecode(res));
+      }else if (res != null && res == true) {
         Utils.errorSnackBar(msg: res["data"], context: context);
         return null;
       }
@@ -131,8 +219,9 @@ class BillingRequestHelper{
           urlEndPoint: Apis.generate,
         body: para,
         context: context,
-        keyWord1: 'meter_image_file',
-        filePath1: meterFile,
+        imageRequestObject: [
+          ImageRequestObject("meter_image_file", meterFile.isEmpty ? "" : meterFile.toString()),
+        ]
       );
       if (res != null && res["error"] == false) {
         return GenerateModel.fromJson(res);

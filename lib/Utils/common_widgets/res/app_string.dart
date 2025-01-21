@@ -1,11 +1,15 @@
-class AssetPath {
-  static String appLogo = 'assets/icons/pbg_logo.png';
+import 'app_config.dart';
+
+class AppIcon {
+  static String pbgplLogo = 'assets/icons/pbg_logo.png';
+  static String mglLogo = 'assets/icons/mgl_logo.png';
   static String smartgasnet = 'assets/icons/smartgasnet.png';
 }
 
 class AppString {
-  static String release = "Release ";
-  static String reDate = "16/12/2024";
+  static String version =
+      "Version : ${AppConfig.instanceInit()?.buildName} Meter Reader(14/08/2025)";
+  static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String GA = "GA ";
   static String userName = "User Name ";
   static String no = "No";

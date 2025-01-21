@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_color.dart';
 
 class MeterNumber extends StatelessWidget {
   final TextEditingController controller;

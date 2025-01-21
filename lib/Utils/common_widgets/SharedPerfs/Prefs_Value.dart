@@ -13,6 +13,7 @@ class PrefsValue {
   static String gaId = "gaId";
   static String cookies = "cookies";
   static String pwdChanged = "pwdChanged";
+  static String buildNumber = "buildNumber";
 
   static String workCompletedDate = "Work Completed Date";
   static String custRegNo = "customerRegistrationNo";

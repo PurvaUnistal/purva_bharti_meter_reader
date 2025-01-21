@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_string.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_string.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/enums.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -37,25 +40,31 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   );
 
   Future<void> toLogin() async {
-    String emailId = await SharedPref.getString(key: PrefsValue.emailId);
-    String password = await SharedPref.getString(key: PrefsValue.passwordVal);
-    Timer(
-      const Duration(seconds: 2),
-      () async {
-        if (emailId.isNotEmpty || password.isNotEmpty) {
-          Navigator.pushReplacementNamed(
-            context,
-            RoutesName.billingRequest,
-          );
-        } else {
-          Navigator.pushReplacementNamed(
-            context,
-            RoutesName.login,
-          );
-        }
-      },
-    );
+
+    final email = await SharedPref.getString(key: PrefsValue.emailId);
+    final password = await SharedPref.getString(key: PrefsValue.passwordVal);
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    final newVersion  = await packageInfo.buildNumber;
+    AppConfig.instanceInit()?.setBuildName(buildName: packageInfo.buildNumber);
+    final oldVersion = await SharedPref.getString(key: PrefsValue.buildNumber);
+    Timer(const Duration(seconds: 3), () {
+      if (!mounted) return;
+      if (oldVersion == newVersion && (email.isNotEmpty || password.isNotEmpty)) {
+        Navigator.pushReplacementNamed(
+          context,
+          RoutesName.billingRequest,
+        );
+      }
+      else {
+        Navigator.pushReplacementNamed(
+          context,
+          RoutesName.login,
+        );
+      }
+    });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +76,11 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
-              AssetPath.appLogo,
+              AppConfig.instanceInit()!.client == Client.purvaBharti
+                  ? AppIcon.pbgplLogo
+                  :AppConfig.instanceInit()!.client == Client.mahaNagar
+                  ? AppIcon.mglLogo
+                  : AppIcon.pbgplLogo,
               width: 200,
               height: 200,
             ),

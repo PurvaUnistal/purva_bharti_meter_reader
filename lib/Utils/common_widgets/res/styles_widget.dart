@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_color.dart';
+import 'app_color.dart';
 
 class Styles {
   static TextStyle rel = TextStyle(
-      color: AppColor.primer, fontWeight: FontWeight.w800, fontSize: 8);
+      color: AppColor.white, fontWeight: FontWeight.w800, fontSize: 8);
+
   static TextStyle login = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.bold,

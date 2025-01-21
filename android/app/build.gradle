@@ -21,15 +21,13 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
+
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
+
 
 android {
-    namespace "com.unistal.pbg.meter_reader"
-    compileSdk 34
+    namespace "com"
+    compileSdkVersion 36
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -47,11 +45,37 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.unistal.pbg.meter_reader"
-        minSdkVersion 24
-        targetSdkVersion 34
+        applicationId "com"
+        minSdkVersion 21
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+    }
+
+    flavorDimensions "app"
+    productFlavors {
+        prodPBGPL {
+            dimension "app"
+            applicationIdSuffix ".unistal.pbg.meter_reader"
+            resValue "string", "app_name", "PBGPL Meter Reader"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/pbg_logo",
+                    appIconRound: "@mipmap/pbg_logo"
+            ]
+            def keystorePropertiesFile = rootProject.file('key.properties')
+            if (keystorePropertiesFile.exists()) {
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+            }
+        }
+        prodMGL {
+            dimension "app"
+            applicationIdSuffix ".unistal.mgl.meter_reader"
+            resValue "string", "app_name", "MGL Meter Reader"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/mgl_logo",
+                    appIconRound: "@mipmap/mgl_logo"
+            ]
+        }
     }
 
     signingConfigs {
@@ -68,12 +92,22 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
+            minifyEnabled true // Enables code shrinking and obfuscation
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
         }
+    }
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+        exclude 'META-INF/proguard/coroutines.pro'
     }
 }
 
 flutter {
     source = "../.."
 }
-
+dependencies {
+    implementation("com.google.android.play:app-update:2.1.0")
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
+}
 

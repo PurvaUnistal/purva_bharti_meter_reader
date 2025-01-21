@@ -1,13 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Routes/routes_name.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_bar_widget.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_color.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_string.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_color.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_string.dart';
+import 'package:meter_reader_new/Utils/common_widgets/background_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/button_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/enums.dart';
 import 'package:meter_reader_new/Utils/common_widgets/text_form_widget.dart';
 import 'package:meter_reader_new/features/Login/domain/bloc/login_bloc.dart';
 import 'package:meter_reader_new/features/Login/domain/bloc/login_event.dart';
@@ -36,25 +38,31 @@ class _LoginViewState extends State<LoginView> {
       appBar: AppBarWidget(
         title: RoutesName.login,
         boolLeading: false,
+
       ),
       body: SafeArea(
-        child: BlocBuilder<LoginBloc, LoginState>(
-          builder: (context, state) {
-            if (state is LoginFetchDataState) {
-              return Center(
-                child: _buildLayout(dataState: state),
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+        child: BackgroundWidget(
+          child: BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state) {
+              if (state is LoginFetchDataState) {
+                return Center(
+                  child: _buildLayout(dataState: state),
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
         ),
       ),
     );
   }
 
   Widget _buildLayout({required LoginFetchDataState dataState}) {
-    var h = MediaQuery.of(context).size.height;
+    var h = MediaQuery
+        .of(context)
+        .size
+        .height;
     return SingleChildScrollView(
       child: Stack(
         clipBehavior: Clip.none,
@@ -67,6 +75,8 @@ class _LoginViewState extends State<LoginView> {
               child: Container(
                 height: h * 0.6,
                 child: Card(
+                  elevation: 8,
+                  shadowColor: AppColor.primer1,
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Column(
@@ -98,24 +108,41 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Widget _logoWidget() {
-    var h = MediaQuery.of(context).size.height;
-    var w = MediaQuery.of(context).size.width;
+    var h = MediaQuery
+        .of(context)
+        .size
+        .height;
+    var w = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Padding(
       padding: const EdgeInsets.all(23.0),
       child: Image.asset(
-        AssetPath.appLogo,
+        AppConfig.instanceInit()!.client == Client.purvaBharti
+            ? AppIcon.pbgplLogo
+            :AppConfig.instanceInit()!.client == Client.mahaNagar
+            ? AppIcon.mglLogo
+            : AppIcon.pbgplLogo,
         width: w * 0.4,
         height: h * 0.16,
       ),
     );
   }
+
   Widget _smartGasNetLogo() {
-    var h = MediaQuery.of(context).size.height;
-    var w = MediaQuery.of(context).size.width;
+    var h = MediaQuery
+        .of(context)
+        .size
+        .height;
+    var w = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Padding(
       padding: const EdgeInsets.all(23.0),
       child: Image.asset(
-        AssetPath.smartgasnet,
+        AppIcon.smartgasnet,
         width: w * 0.2,
         height: h * 0.2,
       ),
@@ -140,7 +167,7 @@ class _LoginViewState extends State<LoginView> {
     return TextFieldWidget(
       label: AppString.passwordLabel,
       hintText: AppString.passwordLabel,
-      autofillHints: const [ AutofillHints.password,AutofillHints.email],
+      autofillHints: const [ AutofillHints.password, AutofillHints.email],
       keyboardType: TextInputType.visiblePassword,
       prefixIcon: Icon(Icons.password, color: AppColor.primer,
       ),
@@ -165,18 +192,21 @@ class _LoginViewState extends State<LoginView> {
   Widget _loginBtnWidget({required LoginFetchDataState dataState}) {
     return dataState.isPageLoader == false
         ? ButtonWidget(
-            text: AppString.login,
-            onPressed: () {
-              FocusScope.of(context).unfocus();
-              TextInput.finishAutofillContext();
-              BlocProvider.of<LoginBloc>(context).add(
-                  LoginSubmitDataEvent(context: context, isLoginLoading: true));
-            })
+        text: AppString.login,
+        onPressed: () {
+          FocusScope.of(context).unfocus();
+          TextInput.finishAutofillContext();
+          BlocProvider.of<LoginBloc>(context).add(
+              LoginSubmitDataEvent(context: context, isLoginLoading: true));
+        })
         : DottedLoaderWidget();
   }
 
   Widget _sizedBox() {
-    var h = MediaQuery.of(context).size.height;
+    var h = MediaQuery
+        .of(context)
+        .size
+        .height;
     return SizedBox(
       height: h * 0.03,
     );

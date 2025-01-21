@@ -1,8 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:meter_reader_new/Utils/common_widgets/app_bar_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/background_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_color.dart';
 import 'package:meter_reader_new/features/billHistory/domain/bloc/bill_history_bloc.dart';
 import 'package:meter_reader_new/features/billHistory/presentation/widget/CustomTextEmailField.dart';
 import 'package:meter_reader_new/features/billHistory/presentation/widget/bill_history_box_widget.dart';
@@ -30,7 +31,7 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(130.0),
           child: Container(
-            color:  Colors.green.shade800,
+            color:  AppColor.primer,
             child: Column(
               children: [
                 AppBarWidget(
@@ -54,18 +55,22 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
             ),
           ),
         ),
-        body: BlocBuilder<BillHistoryBloc, BillHistoryState>(
-          builder: (context, state) {
-            if(state is BillHistoryPageLoadState){
-              return Center(child: SpinKitCubeGrid(color: Colors.green.shade800, size: 50),);
-            } else if(state is BillHistoryEmptyState){
-               return Center(child:  Text("No Data Found", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w800),),);
-            } else if(state is FetchBillHistoryDataState){
-              return _listBuilder(dataState: state);
-            } else{
-              return const SizedBox.shrink();
-            }
-          },
+        body: SafeArea(
+          child: BackgroundWidget(
+            child: BlocBuilder<BillHistoryBloc, BillHistoryState>(
+              builder: (context, state) {
+                if(state is BillHistoryPageLoadState){
+                  return Center(child: SpinKitCubeGrid(color: Colors.green.shade800, size: 50),);
+                } else if(state is BillHistoryEmptyState){
+                   return Center(child:  Text("No Data Found", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w800),),);
+                } else if(state is FetchBillHistoryDataState){
+                  return _listBuilder(dataState: state);
+                } else{
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+          ),
         )
     );
   }

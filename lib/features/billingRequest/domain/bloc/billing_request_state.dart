@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meter_reader_new/features/billingRequest/domain/model/bp_number_model.dart';
 
 abstract class BillingRequestState extends Equatable {}
@@ -63,6 +65,7 @@ class BillingRequestFetchDataState extends BillingRequestState {
   final TextEditingController meterRead8Controller;
   final TextEditingController meterRead9Controller;
   final TextEditingController meterRead10Controller;
+  final TextEditingController userAddressController;
   final FocusNode meterRead1Node;
   final FocusNode meterRead2Node;
   final FocusNode meterRead3Node;
@@ -73,6 +76,12 @@ class BillingRequestFetchDataState extends BillingRequestState {
   final FocusNode meterRead8Node;
   final FocusNode meterRead9Node;
   final FocusNode meterRead10Node;
+  final Set<Marker> markers;
+  final LatLng latLng;
+  final MapType currentMapType;
+  final Completer<GoogleMapController> mapController;
+  final double accuracy;
+//  final List<TextEditingController> currentReadingController;
 
   BillingRequestFetchDataState({
     required this.userName,
@@ -127,6 +136,13 @@ class BillingRequestFetchDataState extends BillingRequestState {
     required this.meterRead8Node,
     required this.meterRead9Node,
     required this.meterRead10Node,
+    required this.markers,
+    required this.latLng,
+    required this.currentMapType,
+    required this.mapController,
+    required this.userAddressController,
+    required this.accuracy,
+  //  required this.currentReadingController,
   });
   @override
   // TODO: implement props
@@ -183,5 +199,13 @@ class BillingRequestFetchDataState extends BillingRequestState {
     meterRead8Node,
     meterRead9Node,
     meterRead10Node,
+    currentMapType,
+    markers,
+    latLng,
+    currentMapType,
+    mapController,
+    userAddressController,
+    accuracy,
+   // currentReadingController,
   ];
 }
