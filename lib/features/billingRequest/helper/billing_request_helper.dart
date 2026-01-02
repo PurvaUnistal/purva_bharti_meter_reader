@@ -15,64 +15,45 @@ import 'package:permission_handler/permission_handler.dart';
 
 class BillingRequestHelper{
 
-  // static Future<Position?> getCurrentLocation() async {
-  //   await Geolocator.requestPermission();
-  //   await Permission.locationAlways.request();
-  //   if (Platform.isAndroid) {
-  //     Position position = await Geolocator.getCurrentPosition(
-  //         desiredAccuracy: LocationAccuracy.high,
-  //         forceAndroidLocationManager: true,
-  //         locationSettings: LocationSettings(
-  //
-  //         ));
-  //     log('latitude : ${position.latitude} longitude : ${position.longitude}');
-  //     return position;
-  //   }
-  //   return null;
-  // }
+  static Future<Position> getCurrentLocationForcefully(
+      {required BuildContext context}) async {
 
-  static Future<Position> getCurrentLocationForcefully({
-    required BuildContext context,
-  }) async {
-    while (true) {
-      // 1. Check GPS service
-      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        await _showForceLocationDialog(context);
-        await Future.delayed(const Duration(seconds: 2));
-        continue;
-      }
-
-      // 2. Check permission
-      LocationPermission permission = await Geolocator.checkPermission();
-
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          continue;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        await _showPermissionSettingsDialog(context);
-        await Future.delayed(const Duration(seconds: 2));
-        continue;
-      }
-
-      // 3. Fetch location
-      try {
-        return await Geolocator.getCurrentPosition(
-          locationSettings: AndroidSettings(
-            accuracy: LocationAccuracy.high,
-            forceLocationManager: true,
-          ),
-        );
-      } catch (_) {
-        // Retry if location fetch fails
-        await Future.delayed(const Duration(seconds: 2));
-      }
+    // 1. Ensure GPS is ON
+    while (!await Geolocator.isLocationServiceEnabled()) {
+      await _showForceLocationDialog(context);
+      await Future.delayed(const Duration(seconds: 2));
     }
+
+    // 2. Permission check
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      await _showPermissionSettingsDialog(context);
+      throw Exception("Permission denied forever");
+    }
+
+    // 3. Android 12+ precise location enforcement
+    final accuracyStatus = await Geolocator.getLocationAccuracy();
+    if (accuracyStatus != LocationAccuracyStatus.precise) {
+      await Geolocator.openAppSettings();
+      throw Exception("Precise location required");
+    }
+
+    // 4. Fetch GPS location (WAIT FOR FIX)
+    return await Geolocator.getCurrentPosition(
+      locationSettings:  AndroidSettings(
+        accuracy: LocationAccuracy.bestForNavigation,
+        forceLocationManager: true,
+        intervalDuration: Duration(seconds: 1),
+      ),
+    );
   }
+
+
 
   static Future<void> _showForceLocationDialog(BuildContext context) async {
     await showDialog(
@@ -81,13 +62,12 @@ class BillingRequestHelper{
       builder: (_) => AlertDialog(
         title: const Text("Location Required"),
         content: const Text(
-          "Location services are mandatory to continue. "
-              "Please enable GPS.",
+          "Location services are mandatory to continue. Please enable GPS.",
         ),
         actions: [
           TextButton(
-            onPressed: () async {
-              await Geolocator.openLocationSettings();
+            onPressed: () {
+              Geolocator.openLocationSettings();
             },
             child: const Text("ENABLE GPS"),
           ),
@@ -104,13 +84,12 @@ class BillingRequestHelper{
       builder: (_) => AlertDialog(
         title: const Text("Permission Required"),
         content: const Text(
-          "Location permission is permanently denied. "
-              "Please enable it from app settings.",
+          "Location permission is permanently denied. Please enable it from app settings.",
         ),
         actions: [
           TextButton(
-            onPressed: () async {
-              await Geolocator.openAppSettings();
+            onPressed: () {
+              Geolocator.openAppSettings();
             },
             child: const Text("OPEN SETTINGS"),
           ),

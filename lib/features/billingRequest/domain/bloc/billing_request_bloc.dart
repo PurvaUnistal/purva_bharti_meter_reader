@@ -19,6 +19,8 @@ import 'package:meter_reader_new/features/billingRequest/domain/bloc/billing_req
 import 'package:meter_reader_new/features/billingRequest/domain/model/bp_number_model.dart';
 import 'package:meter_reader_new/features/billingRequest/helper/billing_request_helper.dart';
 import 'package:meter_reader_new/features/billingRequest/presentation/billing_request_page.dart';
+import 'package:meter_reader_new/service/location/location_helper.dart';
+import 'package:meter_reader_new/service/location/location_model.dart';
 
 class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> {
   BillingRequestBloc() : super(BillingRequestInitState()) {
@@ -175,12 +177,22 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
       );
     }*/
     accuracy = 0.0;
-    await _setLocation(context: event.context);
+    var location = await LocationHelper.getLocationOfflineMode(context: event.context);
+    LocationModel locationData = LocationModel();
+    if (location != null) {
+      locationData = location;
+      accuracy = locationData.accuracy!;
+      latLng = LatLng(location.lat, location.long);
+      latController.text = location.lat.toString();
+      longController.text = location.long.toString();
+    } else {
+      return null;
+    }
+  //  await _setLocation(context: event.context);
     _eventCompleted(emit);
   }
 
-  fetchPendingBillsApi(
-      {required BuildContext context, required String bpNumber, emit}) async {
+  fetchPendingBillsApi({required BuildContext context, required String bpNumber, emit}) async {
     try {
       if (bpMeterSearchNoController.text.isNotEmpty) {
         isSyncLoader = true;
