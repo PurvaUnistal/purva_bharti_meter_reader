@@ -8,7 +8,7 @@ class AppIcon {
 
 class AppString {
   static String version =
-      "Version : ${AppConfig.instanceInit()?.buildName} Meter Reader(14/08/2025)";
+      "Version : ${AppConfig.instanceInit()?.buildName} Meter Reader(02/01/2026)";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String GA = "GA ";
   static String userName = "User Name ";

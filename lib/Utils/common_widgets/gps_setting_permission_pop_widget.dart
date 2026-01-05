@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_igl_mdpe/ExportFile/app_export_file.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_color.dart';
+import 'package:meter_reader_new/Utils/common_widgets/text_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class GPSSettingPermissionPopWidget extends StatelessWidget {
@@ -52,7 +53,7 @@ class GPSSettingPermissionPopWidget extends StatelessWidget {
         textAlign: TextAlign.center,
         color: AppColor.black,
         fontWeight: FontWeight.w500,
-        fontSize: AppFont.font_12,
+        fontSize: 12,
       ),
     );
   }
@@ -61,11 +62,11 @@ class GPSSettingPermissionPopWidget extends StatelessWidget {
     return TextButton(
         style: ButtonStyle(
             padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(15)),
-            foregroundColor: MaterialStateProperty.all<Color>(AppColor.themeColor),
+            foregroundColor: MaterialStateProperty.all<Color>(AppColor.primer),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
-                    side: BorderSide(color: AppColor.themeColor)
+                    side: BorderSide(color: AppColor.primer)
                 )
             )
         ),
@@ -80,9 +81,9 @@ class GPSSettingPermissionPopWidget extends StatelessWidget {
           child: TextWidget(
             "Open Setting",
             textAlign: TextAlign.center,
-            fontSize: AppFont.font_16,
+            fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: AppColor.themeColor,
+            color: AppColor.primer,
           ),
         )
     );
