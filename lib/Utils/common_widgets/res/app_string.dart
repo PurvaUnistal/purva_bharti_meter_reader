@@ -1,14 +1,22 @@
+import 'package:meter_reader_new/Utils/common_widgets/res/enums.dart';
+
 import 'app_config.dart';
 
 class AppIcon {
   static String pbgplLogo = 'assets/icons/pbg_logo.png';
   static String mglLogo = 'assets/icons/mgl_logo.png';
+  static String hngplLogo = 'assets/icons/hngpl_logo.png';
   static String smartgasnet = 'assets/icons/smartgasnet.png';
 }
 
 class AppString {
-  static String version =
-      "Version : ${AppConfig.instanceInit()?.buildName} Meter Reader(02/01/2026)";
+  static const Map<Client, String> _releaseDates = {
+    Client.mahaNagar: "22-07-2025",
+    Client.purvaBharti: "10-09-2026",
+    Client.hngpl: "19-09-2026",
+  };
+
+  static String get version => "Version : 1.0.0 - LMC-${_releaseDates[AppConfig.instanceInit()!.client] ?? ""}";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String GA = "GA ";
   static String userName = "User Name ";
@@ -27,6 +35,7 @@ class AppString {
   static String bpNumberSync = "BP/Meter Number...";
   static String bpNumber = "BP Number";
   static String mobileNumber = "Mobile Number";
+  static String correctionFactor = "Correction Factor";
   static String name = "Customer Name";
   static String buildName = "Building Name";
   static String colonyName = "Colony/Society/Apartment Name";

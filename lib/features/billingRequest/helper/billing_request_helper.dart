@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:meter_reader_new/Utils/Utils.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
 import 'package:meter_reader_new/features/billingRequest/domain/model/bp_number_model.dart';
 import 'package:meter_reader_new/features/billingRequest/domain/model/generate_model.dart';
 import 'package:meter_reader_new/service/Apis.dart';
@@ -102,12 +103,12 @@ class BillingRequestHelper{
     required BuildContext context,
     required String bpNumber,
   }) async {
-    String schema = await SharedPref.getString(
-      key: PrefsValue.schema,
-    );
+    String schema = await SharedPref.getString(key: PrefsValue.schema,);
+    String? propertyCategoryId =  AppConfig.instanceInit()?.propertyTypeModel.id.toString();
     Map<String, String> para = {
       "schema": schema,
       "bpNumber_search": bpNumber,
+      "property_category_id": propertyCategoryId ?? "",
     };
     String json = Uri(queryParameters: para).query;
     try {
@@ -168,6 +169,53 @@ class BillingRequestHelper{
     }
   }
 
+  static Future<dynamic> textValidationCheckCom({
+    required BuildContext context,
+    required String bpNumber,
+    required String custName,
+    required String meterSerial,
+    required String previousReading,
+    required String currentReading,
+    required String correctionFactor,
+    required String meterFile,
+  }) async {
+    try {
+      if (bpNumber.isEmpty) {
+        Utils.errorSnackBar(msg: "The BP Number field is required.", context: context);
+        return false;
+      } else if (custName.isEmpty) {
+        Utils.errorSnackBar(msg: "The Name field is required.", context: context);
+        return false;
+      } else if (correctionFactor.isEmpty) {
+        Utils.errorSnackBar(msg: "The Correction Factor is required.", context: context);
+        return false;
+      } else if (meterSerial.isEmpty) {
+        Utils.errorSnackBar(msg: "The Meter Number field is required.", context: context);
+        return false;
+      } else if (previousReading.isEmpty) {
+        Utils.errorSnackBar(msg: "The Previous Reading field is required.", context: context);
+        return false;
+      } else if (currentReading.isEmpty || currentReading == "0.0") {
+        Utils.errorSnackBar(msg: "The New Meter Reading field is required.", context: context);
+        return false;
+      }
+      else if (double.parse(previousReading) > double.parse(currentReading)/ 1000) {
+        Utils.errorSnackBar(msg: "New Reading should be more than Previous Reading.", context: context);
+        return false;
+      }
+      else if (meterFile.isEmpty) {
+        Utils.errorSnackBar(msg: "The Meter File field is required.", context: context);
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      log("textValidationCheck--->${e.toString()}");
+      return true;
+    }
+  }
+
+
   static Future<GenerateModel?> generateNGC({
     required BuildContext context,
     required String bpNumber,
@@ -193,6 +241,7 @@ class BillingRequestHelper{
         "old_reading": oldReading,
       };
       log("para-->${para}");
+      log("Apis.generate-->${Apis.generate}");
         try {
       var res = await ApiHelper.postDataWithFile(
           urlEndPoint: Apis.generate,
@@ -201,6 +250,57 @@ class BillingRequestHelper{
         imageRequestObject: [
           ImageRequestObject("meter_image_file", meterFile.isEmpty ? "" : meterFile.toString()),
         ]
+      );
+      if (res != null && res["error"] == false) {
+        return GenerateModel.fromJson(res);
+      } else if (res != null && res["error"] == true) {
+        await Utils.errorSnackBar(msg: res["message"], context: context);
+        return null;
+      }
+    } catch (e) {
+      log("generate-->${e.toString()}");
+      Utils.errorSnackBar(msg: e.toString(), context: context);
+      return null;
+    }
+    return null;
+  }
+
+  static Future<GenerateModel?> cgenerateNGC({
+    required BuildContext context,
+    required String bpNumber,
+    required String meterReading,
+    required String meterSerial,
+    required String latitude,
+    required String longitude,
+    required String oldReading,
+    required String correctionFactor,
+    required String meterFile,
+  }) async {
+    String schema = await SharedPref.getString(key: PrefsValue.schema);
+    String userId = await SharedPref.getString(key: PrefsValue.userId);
+
+    Map<String, String> para = {
+      "schema": schema,
+      "user_id": userId,
+      "bpNumber": bpNumber,
+      "meter_reading": meterReading,
+      "meter_serial": meterSerial,
+      "generate_by_customer": "0",
+      "latitude": latitude,
+      "longitude": longitude,
+      "old_reading": oldReading,
+      "cfc_reading": correctionFactor,
+    };
+    log("para-->${para}");
+    log("Apis.generate-->${Apis.generate}");
+    try {
+      var res = await ApiHelper.postDataWithFile(
+          urlEndPoint: Apis.cgenerate,
+          body: para,
+          context: context,
+          imageRequestObject: [
+            ImageRequestObject("meter_image_file", meterFile.isEmpty ? "" : meterFile.toString()),
+          ]
       );
       if (res != null && res["error"] == false) {
         return GenerateModel.fromJson(res);

@@ -45,6 +45,7 @@ class BillingRequestFetchDataState extends BillingRequestState {
   final TextEditingController bpMeterSearchNoController;
   final TextEditingController bpNumberController;
   final TextEditingController mobileNumberController;
+  final TextEditingController correctionFactorController;
   final TextEditingController custNameController;
   final TextEditingController buildingNoController;
   final TextEditingController colonyController;
@@ -106,6 +107,7 @@ class BillingRequestFetchDataState extends BillingRequestState {
     required this.bpMeterSearchNoController,
     required this.bpNumberController,
     required this.mobileNumberController,
+    required this.correctionFactorController,
     required this.custNameController,
     required this.buildingNoController,
     required this.colonyController,
@@ -169,6 +171,7 @@ class BillingRequestFetchDataState extends BillingRequestState {
     bpMeterSearchNoController,
     bpNumberController,
     mobileNumberController,
+    correctionFactorController,
     custNameController,
     buildingNoController,
     colonyController,

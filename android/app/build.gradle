@@ -67,13 +67,22 @@ android {
                 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
             }
         }
-        prodMGL {
+//        prodMGL {
+//            dimension "app"
+//            applicationIdSuffix ".unistal.mgl.meter_reader"
+//            resValue "string", "app_name", "MGL Meter Reader"
+//            manifestPlaceholders = [
+//                    appIcon: "@mipmap/mgl_logo",
+//                    appIconRound: "@mipmap/mgl_logo"
+//            ]
+//        }
+        prodHNGPL {
             dimension "app"
-            applicationIdSuffix ".unistal.mgl.meter_reader"
-            resValue "string", "app_name", "MGL Meter Reader"
+            applicationIdSuffix ".unistal.hngpl.meter_reader"
+            resValue "string", "app_name", "HNGPL Meter Reader"
             manifestPlaceholders = [
-                    appIcon: "@mipmap/mgl_logo",
-                    appIconRound: "@mipmap/mgl_logo"
+                    appIcon: "@mipmap/hngpl_logo",
+                    appIconRound: "@mipmap/hngpl_logo"
             ]
         }
     }

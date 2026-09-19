@@ -27,7 +27,6 @@ class BackgroundWidget extends StatelessWidget {
                           textAlign: TextAlign.start,
                           style:  TextStyle(
                               color: AppColor.white, fontWeight: FontWeight.w800, fontSize: 8),
-                         // style: Styles.rel,
                         ),
                       ),
                       Flexible(

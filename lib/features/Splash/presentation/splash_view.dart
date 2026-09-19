@@ -52,7 +52,8 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
       if (oldVersion == newVersion && (email.isNotEmpty || password.isNotEmpty)) {
         Navigator.pushReplacementNamed(
           context,
-          RoutesName.billingRequest,
+         // RoutesName.billingRequest,
+          RoutesName.homePage,
         );
       }
       else {
@@ -80,6 +81,8 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
                   ? AppIcon.pbgplLogo
                   :AppConfig.instanceInit()!.client == Client.mahaNagar
                   ? AppIcon.mglLogo
+                  : AppConfig.instanceInit()!.client == Client.hngpl
+                  ? AppIcon.hngplLogo
                   : AppIcon.pbgplLogo,
               width: 200,
               height: 200,

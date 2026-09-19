@@ -141,6 +141,7 @@ class DataList {
   dynamic lastBillPayDate;
   dynamic lastBillPreviousOutstanding;
   dynamic estimated_reading;
+  String? cfcReading;
 
   DataList({
     this.firstName,
@@ -245,6 +246,7 @@ class DataList {
     this.lastBillPayDate,
     this.lastBillPreviousOutstanding,
     this.estimated_reading,
+    this.cfcReading,
   });
 
   DataList.fromJson(Map<String, dynamic> json) {
@@ -351,6 +353,7 @@ class DataList {
     lastBillPayDate= json["last_bill_pay_date"] ?? "";
     lastBillPreviousOutstanding= json["last_bill_previous_outstanding"] ?? "";
     estimated_reading= json["estimated_reading"] ?? "0";
+    cfcReading= json["cfc_reading"] ?? "";
 
   }
 
@@ -459,6 +462,7 @@ class DataList {
     data["last_bill_pay_date"] = this.lastBillPayDate.toIso8601String();
     data["last_bill_previous_outstanding"] = this.lastBillPreviousOutstanding;
     data["estimated_reading"] = this.estimated_reading;
+    data["cfc_reading"] = this.cfcReading;
     return data;
   }
 }

@@ -121,8 +121,10 @@ class _LoginViewState extends State<LoginView> {
       child: Image.asset(
         AppConfig.instanceInit()!.client == Client.purvaBharti
             ? AppIcon.pbgplLogo
-            :AppConfig.instanceInit()!.client == Client.mahaNagar
+            : AppConfig.instanceInit()!.client == Client.mahaNagar
             ? AppIcon.mglLogo
+            : AppConfig.instanceInit()!.client == Client.hngpl
+            ? AppIcon.hngplLogo
             : AppIcon.pbgplLogo,
         width: w * 0.4,
         height: h * 0.16,

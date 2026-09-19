@@ -97,7 +97,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                   key: PrefsValue.userRole, value: res.user!.role!);
               Navigator.pushReplacementNamed(
                 event.context,
-                RoutesName.billingRequest,
+              //  RoutesName.billingRequest,
+                RoutesName.homePage,
               );
             }
           }

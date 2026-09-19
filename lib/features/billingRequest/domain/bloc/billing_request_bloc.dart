@@ -11,6 +11,8 @@ import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.da
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/button_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/enums.dart';
 import 'package:meter_reader_new/features/billingRequest/presentation/widgets/ErorrRowWidget.dart';
 import 'package:meter_reader_new/features/billingRequest/presentation/widgets/row_widget.dart';
 import 'package:meter_reader_new/features/billPrint/domain/bloc/bill_print_bloc.dart';
@@ -22,7 +24,8 @@ import 'package:meter_reader_new/features/billingRequest/presentation/billing_re
 import 'package:meter_reader_new/service/location/location_helper.dart';
 import 'package:meter_reader_new/service/location/location_model.dart';
 
-class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> {
+class BillingRequestBloc
+    extends Bloc<BillingRequestEvent, BillingRequestState> {
   BillingRequestBloc() : super(BillingRequestInitState()) {
     on<BillingRequestPageLoadingEvent>(_pageLoader);
     on<SyncSearchBPNumberEvent>(_syncSearchBPNumber);
@@ -64,9 +67,11 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
 
   BpNumberModel bpNumberModel = BpNumberModel();
   List<DataList> listOfBPNumber = [];
- // List<TextEditingController> currentReadingController = [];
+
+  // List<TextEditingController> currentReadingController = [];
   TextEditingController bpMeterSearchNoController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController correctionFactorController = TextEditingController();
   TextEditingController custNameController = TextEditingController();
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController buildingNoController = TextEditingController();
@@ -127,10 +132,11 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
     meterReadCon10 = true;
     meterFile = File("");
     listOfBPNumber = [];
-  //  currentReadingController = [];
+    //  currentReadingController = [];
     bpNumberModel = BpNumberModel();
     bpMeterSearchNoController.text = "";
     mobileNumberController.text = "";
+    correctionFactorController.text = "";
     custNameController.text = "";
     bpNumberController.text = "";
     buildingNoController.text = "";
@@ -171,13 +177,14 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
     mapController = Completer();
     userName = await SharedPref.getString(key: PrefsValue.userName);
     scheme = await SharedPref.getString(key: PrefsValue.schema);
-   /* for(int i = 0; i < 10; i++){
+    /* for(int i = 0; i < 10; i++){
       currentReadingController.add(
           TextEditingController()
       );
     }*/
     accuracy = 0.0;
-    var location = await LocationHelper.getLocationOfflineMode(context: event.context);
+    var location =
+        await LocationHelper.getLocationOfflineMode(context: event.context);
     LocationModel locationData = LocationModel();
     if (location != null) {
       locationData = location;
@@ -188,11 +195,12 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
     } else {
       return null;
     }
-  //  await _setLocation(context: event.context);
+    //  await _setLocation(context: event.context);
     _eventCompleted(emit);
   }
 
-  fetchPendingBillsApi({required BuildContext context, required String bpNumber, emit}) async {
+  fetchPendingBillsApi(
+      {required BuildContext context, required String bpNumber, emit}) async {
     try {
       if (bpMeterSearchNoController.text.isNotEmpty) {
         isSyncLoader = true;
@@ -229,8 +237,8 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
                   listOfBPNumber[i].replaceStatus == "1"
                       ? listOfBPNumber[i].newMeterOldReading.toString()
                       : listOfBPNumber[i].oldReading.toString();
-              mobileNumberController.text =
-                  listOfBPNumber[i].mobileNumber ?? "";
+              mobileNumberController.text = listOfBPNumber[i].mobileNumber ?? "";
+              correctionFactorController.text = listOfBPNumber[i].cfcReading ?? "";
             }
           } else {
             Utils.errorSnackBar(msg: res.data!, context: context);
@@ -257,6 +265,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
   _syncSearchBPNumber(SyncSearchBPNumberEvent event, emit) async {
     if (bpMeterSearchNoController.text.trim().length == 0) {
       mobileNumberController.text = "";
+      correctionFactorController.text = "";
       custNameController.text = "";
       bpNumberController.text = "";
       buildingNoController.text = "";
@@ -312,7 +321,9 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
 
   Future<void> _setLocation({required BuildContext context}) async {
     try {
-      final getLocation = await BillingRequestHelper.getCurrentLocationForcefully(context: context);
+      final getLocation =
+          await BillingRequestHelper.getCurrentLocationForcefully(
+              context: context);
       if (getLocation == null) {
         throw Exception("Failed to get location");
       }
@@ -323,13 +334,13 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
       longController.text = getLocation.longitude.toString();
       debugPrint("Location set to: ${latLng.latitude}, ${latLng.longitude}");
 
-      List<Placemark> placemarks =
-      await placemarkFromCoordinates(getLocation.latitude, getLocation.longitude);
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          getLocation.latitude, getLocation.longitude);
 
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
         userAddressController.text =
-        '${place.name}, ${place.subLocality}, ${place.locality}, ${place.subAdministrativeArea}, '
+            '${place.name}, ${place.subLocality}, ${place.locality}, ${place.subAdministrativeArea}, '
             '${place.administrativeArea}, ${place.country}';
         debugPrint("userAddressController-->${userAddressController.text}");
       } else {
@@ -348,15 +359,12 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
         ),
         icon: BitmapDescriptor.defaultMarker,
       ));
-
     } catch (e) {
       debugPrint("Error setting location: $e");
-    /*  ScaffoldMessenger.of(context).showSnackBar(
+      /*  ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to set location: $e")),*/
-
     }
   }
-
 
   _onChange1Event(OnChange1Event event, emit) async {
     if (meterRead1Controller.text.isNotEmpty &&
@@ -483,13 +491,16 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
   double sumAllMeterReadController = 0.0;
 
   subNormalMethod() {
-    if(listOfBPNumber.isNotEmpty){
+    if (listOfBPNumber.isNotEmpty) {
       String replaceStatus = listOfBPNumber[0].replaceStatus.toString();
       print("replaceStatus-->$replaceStatus");
-      String oldMeterCurrentReading = listOfBPNumber[0].oldMeterCurrentReading.toString();
+      String oldMeterCurrentReading =
+          listOfBPNumber[0].oldMeterCurrentReading.toString();
       String estimatedReading = listOfBPNumber[0].estimated_reading.toString();
-      String oldMeterLastReading = listOfBPNumber[0].oldMeterLastReading.toString();
-      String newMeterOldReading = listOfBPNumber[0].newMeterOldReading.toString();
+      String oldMeterLastReading =
+          listOfBPNumber[0].oldMeterLastReading.toString();
+      String newMeterOldReading =
+          listOfBPNumber[0].newMeterOldReading.toString();
 /*      List<String> value2 = [];
       for(var dataReading in currentReadingController){
         if(dataReading.text.toString().isNotEmpty){
@@ -497,17 +508,16 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
         }
       }
       sumAllMeterReadController =double.parse("${value2.toString().replaceAll("[", "").toString().replaceAll("]", "").replaceAll(",", "").replaceAll(" ", "")}");*/
-      sumAllMeterReadController =    double.parse(
-          meterRead1Controller.text +
-              meterRead2Controller.text +
-              meterRead3Controller.text +
-              meterRead4Controller.text +
-              meterRead5Controller.text +
-              meterRead6Controller.text +
-              meterRead7Controller.text +
-              meterRead8Controller.text +
-              meterRead9Controller.text +
-              meterRead10Controller.text);
+      sumAllMeterReadController = double.parse(meterRead1Controller.text +
+          meterRead2Controller.text +
+          meterRead3Controller.text +
+          meterRead4Controller.text +
+          meterRead5Controller.text +
+          meterRead6Controller.text +
+          meterRead7Controller.text +
+          meterRead8Controller.text +
+          meterRead9Controller.text +
+          meterRead10Controller.text);
       // if (replaceStatus == "0") {
       //   double sum = sumAllMeterReadController / 1000 - double.parse(previousReadingController.text);
       //   actualResult = sum;
@@ -517,11 +527,14 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
       //   actualResult = oldReading + newReading;
       // }
       if (replaceStatus == "0") {
-        double sum = sumAllMeterReadController / 1000 - double.parse(previousReadingController.text);
+        double sum = sumAllMeterReadController / 1000 -
+            double.parse(previousReadingController.text);
         actualResult = sum;
       } else if (replaceStatus == "1") {
-        double oldReading = double.parse(estimatedReading) - double.parse(oldMeterLastReading);
-        double newReading = sumAllMeterReadController / 1000 - double.parse(newMeterOldReading);
+        double oldReading =
+            double.parse(estimatedReading) - double.parse(oldMeterLastReading);
+        double newReading =
+            sumAllMeterReadController / 1000 - double.parse(newMeterOldReading);
         actualResult = oldReading + newReading;
       }
     } else {
@@ -569,7 +582,19 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
           meterRead8Controller.text +
           meterRead9Controller.text +
           meterRead10Controller.text);
-      var checkValid = await BillingRequestHelper.textValidationCheck(
+      var checkValid = AppConfig.instanceInit()?.propertyTypeModel.name != null &&
+          AppConfig.instanceInit()?.propertyTypeModel.name == "Commercial"
+          ? await BillingRequestHelper.textValidationCheckCom(
+          context: event.context,
+          bpNumber: bpNumberController.text.trim().toString(),
+          custName: custNameController.text.trim().toString(),
+          meterSerial: meterNumberController.text.trim().toString(),
+          previousReading: previousReadingController.text.trim().toString(),
+          currentReading: sum.toString(),
+          meterFile: meterFile.path.toString(),
+          correctionFactor: correctionFactorController.text.trim().toString(),
+      )
+          :await BillingRequestHelper.textValidationCheck(
           context: event.context,
           bpNumber: bpNumberController.text.trim().toString(),
           custName: custNameController.text.trim().toString(),
@@ -580,15 +605,28 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
       if (checkValid == true) {
         isBtnLoader = true;
         _eventCompleted(emit);
-        var res = await BillingRequestHelper.generateNGC(
-            context: event.context,
-            bpNumber: bpNumberController.text.trim().toString(),
-            meterReading: (sumAllMeterReadController / 1000).toString(),
-            meterSerial: meterNumberController.text.trim().toString(),
-            latitude: latController.text.trim().toString(),
-            longitude: longController.text.trim().toString(),
-            oldReading: previousReadingController.text.trim().toString(),
-            meterFile: meterFile.path.toString());
+        var res = AppConfig.instanceInit()?.propertyTypeModel.name != null &&
+                AppConfig.instanceInit()?.propertyTypeModel.name == "Commercial"
+            ? await BillingRequestHelper.cgenerateNGC(
+                context: event.context,
+                bpNumber: bpNumberController.text.trim().toString(),
+                meterReading: (sumAllMeterReadController / 1000).toString(),
+                meterSerial: meterNumberController.text.trim().toString(),
+                latitude: latController.text.trim().toString(),
+                longitude: longController.text.trim().toString(),
+                oldReading: previousReadingController.text.trim().toString(),
+                meterFile: meterFile.path.toString(),
+                correctionFactor: AppConfig.instanceInit()!.client == Client.purvaBharti || AppConfig.instanceInit()!.client == Client.hngpl ?correctionFactorController.text.toString() :"",
+        )
+            : await BillingRequestHelper.generateNGC(
+                context: event.context,
+                bpNumber: bpNumberController.text.trim().toString(),
+                meterReading: (sumAllMeterReadController / 1000).toString(),
+                meterSerial: meterNumberController.text.trim().toString(),
+                latitude: latController.text.trim().toString(),
+                longitude: longController.text.trim().toString(),
+                oldReading: previousReadingController.text.trim().toString(),
+                meterFile: meterFile.path.toString());
         if (res != null) {
           isBtnLoader = false;
           _eventCompleted(emit);
@@ -621,7 +659,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
   Future<void> processDialog({required BuildContext ctn}) async {
     if (listOfBPNumber.isNotEmpty) {
       await subNormalMethod();
-  /*    List<String> value2 = [];
+      /*    List<String> value2 = [];
       for(var dataReading in currentReadingController){
         if(dataReading.text.toString().isNotEmpty){
           value2.add(dataReading.text.toString());
@@ -688,11 +726,10 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
                         : Container(),
                     listOfBPNumber[0].replaceStatus.toString() == "1"
                         ? RowWidget(
-                      leading: "Old Meter Estimated Reading : ",
-                      trailing: listOfBPNumber[0]
-                          .estimated_reading
-                          .toString(),
-                    )
+                            leading: "Old Meter Estimated Reading : ",
+                            trailing:
+                                listOfBPNumber[0].estimated_reading.toString(),
+                          )
                         : Container(),
                     listOfBPNumber[0].replaceStatus.toString() == "1"
                         ? RowWidget(
@@ -857,6 +894,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
       listOfBPNumber: listOfBPNumber,
       bpMeterSearchNoController: bpMeterSearchNoController,
       mobileNumberController: mobileNumberController,
+      correctionFactorController: correctionFactorController,
       custNameController: custNameController,
       bpNumberController: bpNumberController,
       buildingNoController: buildingNoController,
@@ -894,7 +932,7 @@ class BillingRequestBloc extends Bloc<BillingRequestEvent, BillingRequestState> 
       mapController: mapController,
       userAddressController: userAddressController,
       accuracy: accuracy,
-     // currentReadingController: currentReadingController,
+      // currentReadingController: currentReadingController,
     ));
   }
 }

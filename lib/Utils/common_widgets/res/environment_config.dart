@@ -20,11 +20,12 @@ class EnvironmentConfig extends InheritedWidget {
     print("flavor-->${flavors}");
     switch (flavors) {
       case EnvironmentFlavors.prodPBGPL:
-        return "https://pbgpl.smartgasnet.com/api/";
-    //   return "https://pbgpluat.smartgasnet.com/api/";
+        return "https://pbgpluat.smartgasnet.com/api/";
       case EnvironmentFlavors.prodMGL:
        // return "https://mgl.smartgasnet.com/api/";
         return "https://mgl.smartgasnet.com/api/";
+      case EnvironmentFlavors.prodHNGPL:
+        return "https://hngpl.smartgasnet.com/api/";
     }
   }
 }

@@ -12,6 +12,8 @@ import 'package:meter_reader_new/features/billHistory/domain/bloc/bill_history_b
 import 'package:meter_reader_new/features/billPrint/domain/bloc/bill_print_bloc.dart';
 import 'package:meter_reader_new/features/billingRequest/domain/bloc/billing_request_bloc.dart';
 
+import 'features/Home/domain/bloc/home_bloc.dart';
+
 class Root extends StatefulWidget {
   final Client client;
   const Root({required this.client});
@@ -33,6 +35,7 @@ class _RootState extends State<Root> {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (BuildContext context) => LoginBloc()),
+          BlocProvider(create: (BuildContext context) => HomeBloc()),
           BlocProvider(create: (BuildContext context) => BillingRequestBloc()),
           BlocProvider(create: (BuildContext context) => BillPrintBloc()),
           BlocProvider(create: (BuildContext context) => BillHistoryBloc()),

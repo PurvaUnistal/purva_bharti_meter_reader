@@ -9,12 +9,14 @@ import 'package:meter_reader_new/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_color.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_string.dart';
 import 'package:meter_reader_new/Utils/common_widgets/app_update_message_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/background_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/button_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/image_pop_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/message_box_two_button_pop.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/enums.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/styles_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/text_form_widget.dart';
 import 'package:meter_reader_new/features/billHistory/presentation/pages/bill_history_page.dart';
@@ -77,7 +79,7 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
     return Scaffold(
       appBar: AppBarWidget(
         title: RoutesName.meterReader,
-        boolLeading: false,
+        boolLeading: true,
         actions: [
           /* IconButton(
               onPressed: () {
@@ -122,9 +124,14 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   }
 
   Widget _itemBuilder({required BillingRequestFetchDataState dataState}) {
+    String propCode =
+        AppConfig.instanceInit()?.propertyTypeModel.propCode ?? "";
     return ListView(
       children: [
-        Text("Accuracy : ${dataState.accuracy.toStringAsFixed(2)}",style: TextStyle(fontWeight: FontWeight.bold),),
+        Text(
+          "Accuracy : ${dataState.accuracy.toStringAsFixed(2)}",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -146,6 +153,10 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
               _verticalSpace(),
               _mobileNumberController(dataState: dataState),
               _verticalSpace(),
+              if (propCode == "com" && AppConfig.instanceInit()!.client == Client.purvaBharti || AppConfig.instanceInit()!.client == Client.hngpl) ...[
+                _correctionFactorWidget(dataState: dataState),
+                _verticalSpace(),
+              ],
               _preReadingController(dataState: dataState),
               _verticalSpace(),
               _meterText(),
@@ -345,6 +356,15 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
       enabled: false,
       inputType: TextInputType.number,
       controller: dataState.mobileNumberController,
+    );
+  }
+
+  Widget _correctionFactorWidget({required BillingRequestFetchDataState dataState}) {
+    return TextFieldWidget(
+      star: AppString.star,
+      label: AppString.correctionFactor,
+      hintText: AppString.correctionFactor,
+      controller: dataState.correctionFactorController,
     );
   }
 

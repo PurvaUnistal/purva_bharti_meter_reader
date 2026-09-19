@@ -11,8 +11,10 @@ class Apis {
  // static String baseUrl = 'https://pbgpluat.smartgasnet.com/api/';
 //  static String baseUrl = 'http://142.79.231.30:9097/api/';
    static get auth  => 'auth';
+   static get getPropertyCategory => 'getPropertyCategory';
    static get getPendingBillsMeterReader => 'customer/getPendingBillsMeterReader?';
    static get generate  => 'customer/meter-reading/generate';
+   static get cgenerate  => 'customer/meter-reading/cgenerate';
    static get billPrintData  => 'customer/getBillsbyBillID?bill_id=';
    static get billHistoryAApi  => 'customer/getAllBillsbyUserID?user_id=';
    static get resetPassword  => "resetpassword";
