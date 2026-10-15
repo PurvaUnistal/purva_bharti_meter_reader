@@ -51,7 +51,7 @@ android {
                     appIcon: "@mipmap/pbg_logo",
                     appIconRound: "@mipmap/pbg_logo"
             ]
-            versionCode 17
+            versionCode 18
             versionName "2.0.9-PBGPL"
             def keystorePropertiesFile = rootProject.file('key.properties')
             if (keystorePropertiesFile.exists()) {

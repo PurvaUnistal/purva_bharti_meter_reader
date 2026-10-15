@@ -23,7 +23,7 @@ class AppIcon {
 class AppString {
   static const Map<Client, String> _releaseDates = {
     Client.mahaNagar: "22-07-2025",
-    Client.purvaBharti: "10-09-2026",
+    Client.purvaBharti: "15-10-2026",
     Client.hngpl: "19-09-2026",
   };
   static String get date => "-${_releaseDates[AppConfig.instanceInit()!.client] ?? ""}";
