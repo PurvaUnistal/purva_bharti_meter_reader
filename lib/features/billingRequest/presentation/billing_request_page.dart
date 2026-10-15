@@ -39,41 +39,41 @@ class BillingRequestPage extends StatefulWidget {
 class _BillingRequestPageState extends State<BillingRequestPage> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      callMethodeChannel();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   callMethodeChannel();
+    // });
     BlocProvider.of<BillingRequestBloc>(context)
         .add(BillingRequestPageLoadingEvent(context: context));
     super.initState();
   }
 
-  static const MethodChannel platform = MethodChannel('pbgpl/meterReader');
-
-  callMethodeChannel() async {
-    try {
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      String applicationId = packageInfo.packageName;
-      String androidPlayStoreUrl =
-          "https://play.google.com/store/apps/details?id=$applicationId&hl=en&gl=US";
-      final dynamic result = await platform.invokeMethod('getAppUpdate');
-      if (Platform.isAndroid) {
-        if (kDebugMode) {
-          print("Upgrade Message ============== $result");
-        }
-        if (result.toString() == "success") {
-          try {
-            AppUpdateMessage.showAlertDialog(
-                context: context, url: androidPlayStoreUrl, isLater: false);
-          } catch (e) {
-            AppUpdateMessage.showAlertDialog(
-                context: context, url: androidPlayStoreUrl);
-          }
-        }
-      }
-    } on PlatformException catch (e) {
-      return false;
-    }
-  }
+  // static const MethodChannel platform = MethodChannel('pbgpl/meterReader');
+  //
+  // callMethodeChannel() async {
+  //   try {
+  //     PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  //     String applicationId = packageInfo.packageName;
+  //     String androidPlayStoreUrl =
+  //         "https://play.google.com/store/apps/details?id=$applicationId&hl=en&gl=US";
+  //     final dynamic result = await platform.invokeMethod('getAppUpdate');
+  //     if (Platform.isAndroid) {
+  //       if (kDebugMode) {
+  //         print("Upgrade Message ============== $result");
+  //       }
+  //       if (result.toString() == "success") {
+  //         try {
+  //           AppUpdateMessage.showAlertDialog(
+  //               context: context, url: androidPlayStoreUrl, isLater: false);
+  //         } catch (e) {
+  //           AppUpdateMessage.showAlertDialog(
+  //               context: context, url: androidPlayStoreUrl);
+  //         }
+  //       }
+  //     }
+  //   } on PlatformException catch (e) {
+  //     return false;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -345,7 +345,7 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
     return TextFieldWidget(
       isRequired: true,
       labelText: AppString.correctionFactor,
-      textInputType: TextInputType.number,
+      keyboardType: TextInputType.number,
       controller: dataState.correctionFactorController,
     );
   }
@@ -625,8 +625,8 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
     return (await showDialog(
             context: context,
             builder: (BuildContext mContext) => MessageBoxTwoButtonPopWidget(
-                message: "Do you want to exit the App?",
-                okButtonText: "Exit",
+                message: "Are you sure you want to leave this page?",
+                okButtonText: "Leave",
                 onPressed: () => Navigator.of(context).pop(true)))) ??
         false;
   }

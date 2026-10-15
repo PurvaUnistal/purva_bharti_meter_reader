@@ -1,6 +1,10 @@
+import 'dart:io';
+import 'package:meter_reader_new/Utils/common_widgets/message_box_two_button_pop.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meter_reader_new/Utils/common_widgets/app_update_message_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/background_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/logout_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/app_bar_widget.dart';
@@ -11,6 +15,7 @@ import 'package:meter_reader_new/features/Home/domain/bloc/home_event.dart';
 import 'package:meter_reader_new/features/Home/domain/bloc/home_state.dart';
 import 'package:meter_reader_new/features/Home/domain/model/propert_type_model.dart';
 import 'package:meter_reader_new/features/billingRequest/presentation/billing_request_page.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // ── Tokens ───────────────────────────────────────────────────────
 class _C {
@@ -66,12 +71,43 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      callMethodeChannel();
+    });
     _load();
   }
 
   void _load() {
     BlocProvider.of<HomeBloc>(context)
         .add(HomePageLoadingEvent(context: context));
+  }
+
+  static const MethodChannel platform = MethodChannel('pbgpl/meterReader');
+
+  callMethodeChannel() async {
+    try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String applicationId = packageInfo.packageName;
+      String androidPlayStoreUrl =
+          "https://play.google.com/store/apps/details?id=$applicationId&hl=en&gl=US";
+      final dynamic result = await platform.invokeMethod('getAppUpdate');
+      if (Platform.isAndroid) {
+        if (kDebugMode) {
+          print("Upgrade Message ============== $result");
+        }
+        if (result.toString() == "success") {
+          try {
+            AppUpdateMessage.showAlertDialog(
+                context: context, url: androidPlayStoreUrl, isLater: false);
+          } catch (e) {
+            AppUpdateMessage.showAlertDialog(
+                context: context, url: androidPlayStoreUrl);
+          }
+        }
+      }
+    } on PlatformException catch (e) {
+      return false;
+    }
   }
 
   /// Tapping a tile selects it and opens the next screen straight away.
@@ -120,44 +156,57 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: BackgroundWidget(
-          child: BlocBuilder<HomeBloc, HomeState>(
-            builder: (context, state) {
-              final types =
-              state is HomeFetchDataState ? state.listOfPropertyType : null;
+      body: WillPopScope(
+        onWillPop: _onBackPressed,
+        child: SafeArea(
+          top: false,
+          bottom: false,
+          child: BackgroundWidget(
+            child: BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                final types =
+                state is HomeFetchDataState ? state.listOfPropertyType : null;
 
-              return ListView(
-                physics: const BouncingScrollPhysics(),
-                padding: EdgeInsets.fromLTRB(hPad, 20, hPad, 24 + bottom),
-                children: [
-                  if (types == null)
-                    const _SkeletonGrid()
-                  else if (types.isEmpty)
-                    _EmptyState(onRetry: _load)
-                  else ...[
-                      const Padding(
-                        padding: EdgeInsets.only(left: 4, bottom: 14),
-                        child: Text(
-                          'Tap a property type to start a reading',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: _C.muted,
+                return ListView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: EdgeInsets.fromLTRB(hPad, 20, hPad, 24 + bottom),
+                  children: [
+                    if (types == null)
+                      const _SkeletonGrid()
+                    else if (types.isEmpty)
+                      _EmptyState(onRetry: _load)
+                    else ...[
+                        const Padding(
+                          padding: EdgeInsets.only(left: 4, bottom: 14),
+                          child: Text(
+                            'Tap a property type to start a reading',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: _C.muted,
+                            ),
                           ),
                         ),
-                      ),
-                      _grid(types),
-                    ],
-                ],
-              );
-            },
+                        _grid(types),
+                      ],
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Future<bool> _onBackPressed() async {
+    return (await showDialog(
+        context: context,
+        builder: (BuildContext mContext) => MessageBoxTwoButtonPopWidget(
+            message: "Do you want to exit the App?",
+            okButtonText: "Exit",
+            onPressed: () => Navigator.of(context).pop(true)))) ??
+        false;
   }
 
   /// Two tiles per row; an odd last tile spans the full width.
