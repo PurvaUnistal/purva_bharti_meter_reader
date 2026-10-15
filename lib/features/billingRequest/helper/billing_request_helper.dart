@@ -5,13 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meter_reader_new/Utils/Utils.dart';
-import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
 import 'package:meter_reader_new/features/billingRequest/domain/model/bp_number_model.dart';
 import 'package:meter_reader_new/features/billingRequest/domain/model/generate_model.dart';
 import 'package:meter_reader_new/service/Apis.dart';
-import 'package:meter_reader_new/service/api_helper.dart';
+import 'package:meter_reader_new/service/api_server_dio.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class BillingRequestHelper{
@@ -103,7 +101,7 @@ class BillingRequestHelper{
     required BuildContext context,
     required String bpNumber,
   }) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema,);
+    String schema = AppConfig.instanceInit()!.loginData.user!.schema.toString();
     String? propertyCategoryId =  AppConfig.instanceInit()?.propertyTypeModel.id.toString();
     Map<String, String> para = {
       "schema": schema,
@@ -112,11 +110,10 @@ class BillingRequestHelper{
     };
     String json = Uri(queryParameters: para).query;
     try {
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getPendingBillsMeterReader + json, context: context);
-      if (res != null && res != true) {
-        return BpNumberModel.fromJson(jsonDecode(res));
-      }else if (res != null && res == true) {
+      var res = await ApiServerDio.getData(urlEndPoint: Apis.getPendingBillsMeterReader + json);
+      if (res["data"] != null && res["success"] == true) {
+        return BpNumberModel.fromJson(res);
+      }else if (res["data"] != null && res["success"] == false) {
         Utils.errorSnackBar(msg: res["data"], context: context);
         return null;
       }
@@ -226,8 +223,8 @@ class BillingRequestHelper{
     required String oldReading,
     required String meterFile,
   }) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
+    String schema = AppConfig.instanceInit()!.loginData.user!.schema.toString();
+    String userId =AppConfig.instanceInit()!.loginData.user!.id.toString();
 
       Map<String, String> para = {
         "schema": schema,
@@ -243,12 +240,11 @@ class BillingRequestHelper{
       log("para-->${para}");
       log("Apis.generate-->${Apis.generate}");
         try {
-      var res = await ApiHelper.postDataWithFile(
+      var res = await ApiServerDio.postDataWithFile(
           urlEndPoint: Apis.generate,
         body: para,
-        context: context,
         imageRequestObject: [
-          ImageRequestObject("meter_image_file", meterFile.isEmpty ? "" : meterFile.toString()),
+          ImageRequestObject(key: "meter_image_file",path:  meterFile.isEmpty ? "" : meterFile.toString()),
         ]
       );
       if (res != null && res["error"] == false) {
@@ -276,8 +272,8 @@ class BillingRequestHelper{
     required String correctionFactor,
     required String meterFile,
   }) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
+    String schema = AppConfig.instanceInit()!.loginData.user!.schema.toString();
+    String userId =AppConfig.instanceInit()!.loginData.user!.id.toString();
 
     Map<String, String> para = {
       "schema": schema,
@@ -294,12 +290,11 @@ class BillingRequestHelper{
     log("para-->${para}");
     log("Apis.generate-->${Apis.generate}");
     try {
-      var res = await ApiHelper.postDataWithFile(
+      var res = await ApiServerDio.postDataWithFile(
           urlEndPoint: Apis.cgenerate,
           body: para,
-          context: context,
           imageRequestObject: [
-            ImageRequestObject("meter_image_file", meterFile.isEmpty ? "" : meterFile.toString()),
+            ImageRequestObject(key: "meter_image_file",path:  meterFile.isEmpty ? "" : meterFile.toString()),
           ]
       );
       if (res != null && res["error"] == false) {

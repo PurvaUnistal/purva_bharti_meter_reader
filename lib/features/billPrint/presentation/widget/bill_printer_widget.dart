@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:meter_reader_new/features/Home/presentation/widget/bluetooth_permission_view.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:meter_reader_new/Utils/Utils.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/styles_widget.dart';
 import 'package:meter_reader_new/features/billPrint/domain/bloc/bill_print_bloc.dart';
@@ -13,185 +15,158 @@ class BillPrinterWidget extends StatefulWidget {
 }
 
 class _BillPrinterWidgetState extends State<BillPrinterWidget> {
-  late var imageBytes = null;
-  Image? image;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BillPrintBloc, BillPrintState>(
+    return BlocConsumer<BillPrintBloc, BillPrintState>(
+      // Connect / print fail hone par message dikhao
+      listenWhen: (previous, current) => current is BillPrintConnectFailedState,
+      listener: (context, state) {
+        if (state is BillPrintConnectFailedState) {
+          Utils.errorSnackBar(msg: state.message, context: context);
+        }
+      },
       builder: (context, state) {
+        // Permission check sabse pehle
+        if (state is BillPrintPermissionDeniedState) {
+          return BluetoothPermissionView(
+              permanentlyDenied: state.permanentlyDenied);
+        }
         if (state is BillPrintPageLoadState) {
           return Center(
             child: SpinKitCubeGrid(color: Colors.green.shade800, size: 50),
           );
-        } else if (state is FetchBillPrinterDataState) {
-          return _itemBuilder(dataState: state);
-        } else {
-          return const SizedBox.shrink();
         }
+        if (state is FetchBillPrinterDataState) {
+          return _itemBuilder(dataState: state);
+        }
+        return const SizedBox.shrink();
       },
     );
   }
 
+  /// print_bluetooth_thermal already gives the MAC address separately,
+  /// so there is no "name#mac" string to split.
+  void _connect(BluetoothInfo device, FetchBillPrinterDataState dataState) {
+    if (dataState.isLoader) return; // already connecting
+    final mac = device.macAdress.trim();
+    if (mac.isEmpty) {
+      Utils.errorSnackBar(msg: "Printer address not found", context: context);
+      return;
+    }
+    context.read<BillPrintBloc>().add(
+      BillPrintSetConnectEvent(mac: mac, connectedPrinterName: mac),
+    );
+  }
+
+  bool _isConnected(BluetoothInfo device, FetchBillPrinterDataState s) =>
+      s.connected && device.macAdress.trim() == s.connectedPrinterName;
+
   Widget _itemBuilder({required FetchBillPrinterDataState dataState}) {
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Bluetooth Printer List",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
+    final devices = dataState.availableBluetoothDevices;
+
+    return Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Bluetooth Printer List",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
-          Expanded(
-              child: dataState.availableBluetoothDevices.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: dataState.availableBluetoothDevices.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: ListTile(
-                            onTap: () async {
-                              String select =
-                              dataState.availableBluetoothDevices[index].macAdress;
-                              List list = select.split("#");
-                              String mac = list[1];
-                              print(mac);
-                              BlocProvider.of<BillPrintBloc>(context).add(
-                                  BillPrintSetConnectEvent(
-                                      mac: mac,
-                                      connectedPrinterName: select.toString()));
-                            },
-                            title: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Name: ${dataState.availableBluetoothDevices[index].name}', style: TextStyle(
-                                  fontWeight: FontWeight.bold
-                                ),),
-                                Text('${dataState.availableBluetoothDevices[index].macAdress}'),
-                              ],
-                            ),
-                            trailing: Checkbox(
-                              value: dataState.availableBluetoothDevices[index]
-                                          .toString() ==
-                                      dataState.connectedPrinterName
-                                  ? true
-                                  : false,
-                              onChanged: (value) {
-                                if (value == false) {
-                                  String select = dataState
-                                      .availableBluetoothDevices[index].macAdress;
-                                  List list = select.split("#");
-                                  String mac = list[1];
-                                  print(mac);
-                                  BlocProvider.of<BillPrintBloc>(context).add(
-                                      BillPrintSetConnectEvent(
-                                          mac: mac,
-                                          connectedPrinterName:
-                                              select.toString()));
-                                }
-                              },
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    dataState.availableBluetoothDevices[index]
-                                                .toString() ==
-                                            dataState.connectedPrinterName
-                                        ? "Connected"
-                                        : "Click to connect",
-                                    style: TextStyle(
-                                        color: dataState
-                                                    .availableBluetoothDevices[
-                                                        index]
-                                                    .toString() ==
-                                                dataState.connectedPrinterName
-                                            ? Colors.green
-                                            : Colors.grey)),
-                                dataState.isLoader == true
-                                    ? Align(
-                                        alignment: Alignment.center,
-                                        child: SpinKitCubeGrid(
-                                            color: Colors.green.shade800,
-                                            size: 50),
-                                      )
-                                    : SizedBox.shrink(),
-                              ],
-                            ),
-                          ),
-                        );
-                      })
-                  : Center(
-                      child: Text(
-                        "Printer Bluetooth no found \n Please check bluetooth printer connection",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 14, color: Colors.black),
+        ),
+        // One loader for the whole list instead of one inside every tile.
+        if (dataState.isLoader)
+          LinearProgressIndicator(
+            color: Colors.green.shade800,
+            backgroundColor: Colors.green.shade100,
+          ),
+        Expanded(
+          child: devices.isEmpty
+              ? const Center(
+            child: Text(
+              "Printer Bluetooth not found\nPlease pair the printer in phone Bluetooth settings",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.black),
+            ),
+          )
+              : ListView.builder(
+            itemCount: devices.length,
+            itemBuilder: (context, index) {
+              final device = devices[index];
+              final connected = _isConnected(device, dataState);
+
+              return Card(
+                child: ListTile(
+                  onTap: () => _connect(device, dataState),
+                  title: Text(
+                    'Name: ${device.name}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(device.macAdress),
+                      const SizedBox(height: 2),
+                      Text(
+                        connected ? "Connected" : "Tap to connect",
+                        style: TextStyle(
+                          color: connected ? Colors.green : Colors.grey,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    )),
-          GestureDetector(
-            onTap: () {
-              /* Navigator.push(context,MaterialPageRoute( builder: (context) => LoginScreen()), );*/
-            },
-            child: Center(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        if (dataState.availableBluetoothDevices.isNotEmpty) {
-                          if (dataState.connected == false) {
-                            Utils.errorSnackBar(
-                              msg: "Please select printer",context: context
-                            );
-                          } else {
-                            BlocProvider.of<BillPrintBloc>(context)
-                                .add(BillSetPrintEvent(context: context));
-                          }
-                        } else {
-                          Utils.errorSnackBar(
-                              msg: "Printer Bluetooth no found \n Please check bluetooth printer connection",
-                              context: context
-                          );
-                        }
-                      },
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)))),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                color: dataState.connected == true
-                                    ? Colors.green.shade800
-                                    : Colors.grey,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: Center(
-                              child: Text("Print Now",
-                                  style: Styles.login),
-                            )),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
+                  trailing: Icon(
+                    connected
+                        ? Icons.check_circle_rounded
+                        : Icons.print_outlined,
+                    color: connected ? Colors.green : Colors.grey,
+                  ),
                 ),
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: TextButton(
+            onPressed: () {
+              if (devices.isEmpty) {
+                Utils.errorSnackBar(
+                  msg:
+                  "Printer Bluetooth not found\nPlease check bluetooth printer connection",
+                  context: context,
+                );
+              } else if (!dataState.connected) {
+                Utils.errorSnackBar(
+                    msg: "Please select printer", context: context);
+              } else {
+                context
+                    .read<BillPrintBloc>()
+                    .add(BillSetPrintEvent(context: context));
+              }
+            },
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
               ),
             ),
+            child: Container(
+              height: 50,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: dataState.connected
+                    ? Colors.green.shade800
+                    : Colors.grey,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Center(child: Text("Print Now", style: Styles.login)),
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

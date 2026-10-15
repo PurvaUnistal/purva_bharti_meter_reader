@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meter_reader_new/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/app_bar_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/background_widget.dart';
 import 'package:meter_reader_new/features/billPrint/domain/bloc/bill_print_bloc.dart';
 import 'package:meter_reader_new/features/billPrint/presentation/widget/bill_printer_widget.dart';
 
@@ -33,7 +34,7 @@ class _BillPrinterPageState extends State<BillPrinterPage> {
           ),
         ],
       ),
-      body: BillPrinterWidget(),
+      body: BackgroundWidget(child: BillPrinterWidget()),
     );
   }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Loader/SpinLoader.dart';
-import 'package:meter_reader_new/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/app_bar_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/background_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_color.dart';
 import 'package:meter_reader_new/features/billingRequest/domain/bloc/billing_request_bloc.dart';

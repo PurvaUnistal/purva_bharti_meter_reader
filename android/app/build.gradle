@@ -12,15 +12,6 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
 
 def keystoreProperties = new Properties()
 
@@ -48,8 +39,6 @@ android {
         applicationId "com"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion 36
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
     }
 
     flavorDimensions "app"
@@ -62,20 +51,24 @@ android {
                     appIcon: "@mipmap/pbg_logo",
                     appIconRound: "@mipmap/pbg_logo"
             ]
+            versionCode 17
+            versionName "2.0.9-PBGPL"
             def keystorePropertiesFile = rootProject.file('key.properties')
             if (keystorePropertiesFile.exists()) {
                 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
             }
         }
-//        prodMGL {
-//            dimension "app"
-//            applicationIdSuffix ".unistal.mgl.meter_reader"
-//            resValue "string", "app_name", "MGL Meter Reader"
-//            manifestPlaceholders = [
-//                    appIcon: "@mipmap/mgl_logo",
-//                    appIconRound: "@mipmap/mgl_logo"
-//            ]
-//        }
+        prodMGL {
+            dimension "app"
+            applicationIdSuffix ".unistal.mgl.meter_reader"
+            resValue "string", "app_name", "MGL Meter Reader"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/mgl_logo",
+                    appIconRound: "@mipmap/mgl_logo"
+            ]
+            versionCode 3
+            versionName "1.0.1-MGL"
+        }
         prodHNGPL {
             dimension "app"
             applicationIdSuffix ".unistal.hngpl.meter_reader"
@@ -84,6 +77,8 @@ android {
                     appIcon: "@mipmap/hngpl_logo",
                     appIconRound: "@mipmap/hngpl_logo"
             ]
+            versionCode 01
+            versionName "1.0.0-HNGPL"
         }
     }
 

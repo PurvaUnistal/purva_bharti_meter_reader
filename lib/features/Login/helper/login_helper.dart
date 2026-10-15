@@ -7,7 +7,7 @@ import 'package:meter_reader_new/Utils/Utils.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_string.dart';
 import 'package:meter_reader_new/features/Login/domain/model/login_model.dart';
 import 'package:meter_reader_new/service/Apis.dart';
-import 'package:meter_reader_new/service/api_helper.dart';
+import 'package:meter_reader_new/service/api_server_dio.dart';
 
 class LoginHelper {
   static Future<dynamic> textFieldValidation(
@@ -54,8 +54,7 @@ class LoginHelper {
       "device": deviceId,
     };
     try {
-      var res = await ApiHelper.postData(
-          urlEndPoint: Apis.auth, body: jsonEncode(para), context: context);
+      var res = await ApiServerDio.postData(urlEndPoint: Apis.auth, body: jsonEncode(para),);
       if(res != null && res["error"] == false){
         return LoginModel.fromJson(res);
       } else if(res != null && res["error"] == true){

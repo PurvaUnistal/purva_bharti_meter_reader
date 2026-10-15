@@ -7,9 +7,9 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meter_reader_new/Utils/Utils.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Loader/DottedLoader.dart';
-import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:meter_reader_new/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/Location/location_helper.dart';
+import 'package:meter_reader_new/Utils/common_widgets/Location/location_model.dart';
+import 'package:meter_reader_new/Utils/common_widgets/app_bar_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/button_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/enums.dart';
@@ -21,8 +21,6 @@ import 'package:meter_reader_new/features/billingRequest/domain/bloc/billing_req
 import 'package:meter_reader_new/features/billingRequest/domain/model/bp_number_model.dart';
 import 'package:meter_reader_new/features/billingRequest/helper/billing_request_helper.dart';
 import 'package:meter_reader_new/features/billingRequest/presentation/billing_request_page.dart';
-import 'package:meter_reader_new/service/location/location_helper.dart';
-import 'package:meter_reader_new/service/location/location_model.dart';
 
 class BillingRequestBloc
     extends Bloc<BillingRequestEvent, BillingRequestState> {
@@ -175,8 +173,8 @@ class BillingRequestBloc
     latLng = LatLng(0.0, 0.0);
     currentMapType = MapType.normal;
     mapController = Completer();
-    userName = await SharedPref.getString(key: PrefsValue.userName);
-    scheme = await SharedPref.getString(key: PrefsValue.schema);
+    userName = AppConfig.instanceInit()!.loginData.user!.name.toString();
+    scheme =AppConfig.instanceInit()!.loginData.user!.schema.toString();
     /* for(int i = 0; i < 10; i++){
       currentReadingController.add(
           TextEditingController()

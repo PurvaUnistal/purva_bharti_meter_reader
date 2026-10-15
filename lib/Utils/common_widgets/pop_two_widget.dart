@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/environment_config.dart';
 
 class PopTwoBtnWidget extends StatelessWidget {
   final String? message;
@@ -52,7 +53,7 @@ class PopTwoBtnWidget extends StatelessWidget {
                             },
                             child: Text(
                               "Cancel",
-                              style: TextStyle(color: Colors.green.shade800),
+                              style: TextStyle(color: EnvironmentConfig.of(context)?.primaryTheme),
                             ),
                           ),
                         ),
@@ -66,7 +67,7 @@ class PopTwoBtnWidget extends StatelessWidget {
                             onPressed: onPressed,
                             child: Text(
                               okButtonText ?? "OK",
-                              style: TextStyle(color: Colors.green.shade800),
+                              style: TextStyle(color: EnvironmentConfig.of(context)?.primaryTheme),
                             ),
                           ),
                         ),

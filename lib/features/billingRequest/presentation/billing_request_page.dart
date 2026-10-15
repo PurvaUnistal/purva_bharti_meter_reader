@@ -7,7 +7,7 @@ import 'package:meter_reader_new/Utils/common_widgets/Loader/CircleLoader.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Routes/routes_name.dart';
-import 'package:meter_reader_new/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/app_bar_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_color.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_string.dart';
@@ -17,6 +17,7 @@ import 'package:meter_reader_new/Utils/common_widgets/button_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/image_pop_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/enums.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/environment_config.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/styles_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/text_form_widget.dart';
 import 'package:meter_reader_new/features/billHistory/presentation/pages/bill_history_page.dart';
@@ -180,8 +181,7 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
       maxLength: 20,
       enabled: true,
       // autoFocus: true,
-      label: AppString.bpNumberSync,
-      hintText: AppString.bpNumberSync,
+      labelText: AppString.bpNumberSync,
       controller: dataState.bpMeterSearchNoController,
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.search,
@@ -212,10 +212,9 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
 
   Widget _nameController({required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.name,
-      label: AppString.name,
+      labelText: AppString.name,
       enabled: false,
-      inputType: TextInputType.text,
+      textInputType: TextInputType.text,
       controller: dataState.custNameController,
     );
   }
@@ -233,7 +232,7 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
           dataState.isHideShowDetails
               ? Icons.arrow_drop_down_outlined
               : Icons.arrow_drop_up_outlined,
-          color: Colors.green.shade800,
+          color: EnvironmentConfig.of(context)?.primaryTheme,
         ),
         onPressed: () {
           BlocProvider.of<BillingRequestBloc>(context).add(BillingHideShowEvent(
@@ -265,10 +264,8 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   Widget _buildNameController(
       {required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.buildName,
-      label: AppString.buildName,
+      labelText: AppString.buildName,
       enabled: false,
-      inputType: TextInputType.text,
       controller: dataState.buildingNoController,
     );
   }
@@ -276,10 +273,8 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   Widget _colonyNameController(
       {required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.colonyName,
-      label: AppString.colonyName,
+      labelText: AppString.colonyName,
       enabled: false,
-      inputType: TextInputType.text,
       controller: dataState.colonyController,
     );
   }
@@ -287,20 +282,17 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   Widget _streetNameController(
       {required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.streetName,
-      label: AppString.streetName,
       enabled: false,
-      inputType: TextInputType.text,
+      labelText: AppString.streetName,
+      textInputType: TextInputType.text,
       controller: dataState.streetNameController,
     );
   }
 
   Widget _townController({required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.town,
-      label: AppString.town,
+      labelText: AppString.town,
       enabled: false,
-      inputType: TextInputType.text,
       controller: dataState.townController,
     );
   }
@@ -308,20 +300,16 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   Widget _districtController(
       {required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.district,
-      label: AppString.district,
+      labelText: AppString.district,
       enabled: false,
-      inputType: TextInputType.text,
       controller: dataState.districtController,
     );
   }
 
   Widget _pinCodeController({required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.pinCode,
-      label: AppString.pinCode,
+      labelText: AppString.pinCode,
       enabled: false,
-      inputType: TextInputType.number,
       controller: dataState.pinCodeController,
     );
   }
@@ -329,10 +317,8 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   Widget _meterNumberController(
       {required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.meterNumber,
-      label: AppString.meterNumber,
+      labelText: AppString.meterNumber,
       enabled: false,
-      inputType: TextInputType.number,
       controller: dataState.meterNumberController,
     );
   }
@@ -340,10 +326,8 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   Widget _bpNumberController(
       {required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.bpNumber,
-      label: AppString.bpNumber,
+      labelText: AppString.bpNumber,
       enabled: false,
-      inputType: TextInputType.number,
       controller: dataState.bpNumberController,
     );
   }
@@ -351,19 +335,17 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   Widget _mobileNumberController(
       {required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.mobileNumber,
-      label: AppString.mobileNumber,
+      labelText: AppString.mobileNumber,
       enabled: false,
-      inputType: TextInputType.number,
       controller: dataState.mobileNumberController,
     );
   }
 
   Widget _correctionFactorWidget({required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
-      label: AppString.correctionFactor,
-      hintText: AppString.correctionFactor,
+      isRequired: true,
+      labelText: AppString.correctionFactor,
+      textInputType: TextInputType.number,
       controller: dataState.correctionFactorController,
     );
   }
@@ -371,18 +353,13 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   Widget _preReadingController(
       {required BillingRequestFetchDataState dataState}) {
     return TextFieldWidget(
-      hintText: dataState.listOfBPNumber.isEmpty
-          ? AppString.preReading1
-          : dataState.listOfBPNumber[0].replaceStatus == 1
-              ? AppString.preReading2
-              : AppString.preReading1,
-      label: dataState.listOfBPNumber.isEmpty
+      labelText: dataState.listOfBPNumber.isEmpty
           ? AppString.preReading1
           : dataState.listOfBPNumber[0].replaceStatus == 1
               ? AppString.preReading2
               : AppString.preReading1,
       enabled: false,
-      inputType: TextInputType.number,
+      textInputType: TextInputType.number,
       controller: dataState.previousReadingController,
     );
   }
@@ -657,8 +634,7 @@ class _BillingRequestPageState extends State<BillingRequestPage> {
   void handleClick(String value) {
     switch (value) {
       case 'Logout':
-        showModalBottomSheet(
-            context: context, builder: (context) => const LogoutWidget());
+      LogoutWidget.show(context);
         break;
       case 'History':
         Navigator.push(context,

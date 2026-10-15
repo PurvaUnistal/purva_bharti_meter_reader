@@ -3,17 +3,16 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:meter_reader_new/Utils/Utils.dart';
-import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
 import 'package:meter_reader_new/features/Home/domain/model/propert_type_model.dart';
 import 'package:meter_reader_new/service/Apis.dart';
-import 'package:meter_reader_new/service/api_helper.dart';
+import 'package:meter_reader_new/service/api_server_dio.dart';
 
 class HomeHelper {
   static Future<List<PropertyTypeModel>?> getPendingBills({
     required BuildContext context,
   }) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
+    String schema = AppConfig.instanceInit()!.loginData.user!.schema.toString();
     Map<String, String> para = {
       "schema": schema,
       "type": "meterreader",
@@ -21,7 +20,7 @@ class HomeHelper {
     String json = Uri(queryParameters: para).query;
 
     try {
-      var res = await ApiHelper.getData(urlEndPoint: "${Apis.getPropertyCategory}?${json}", context: context,);
+      var res = await ApiServerDio.getData(urlEndPoint: "${Apis.getPropertyCategory}?${json}");
       if (res != null && res != true) {
         final decoded = res is String ? jsonDecode(res) : res;
         final List list = decoded is List

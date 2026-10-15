@@ -6,11 +6,13 @@ import 'package:meter_reader_new/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_color.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/enums.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/environment_config.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/singleton.dart';
 import 'package:meter_reader_new/features/Login/domain/bloc/login_bloc.dart';
 import 'package:meter_reader_new/features/billHistory/domain/bloc/bill_history_bloc.dart';
 import 'package:meter_reader_new/features/billPrint/domain/bloc/bill_print_bloc.dart';
 import 'package:meter_reader_new/features/billingRequest/domain/bloc/billing_request_bloc.dart';
+import 'package:meter_reader_new/service/api_server_dio.dart';
 
 import 'features/Home/domain/bloc/home_bloc.dart';
 
@@ -21,12 +23,33 @@ class Root extends StatefulWidget {
   State<Root> createState() => _RootState();
 }
 
-class _RootState extends State<Root> {
+class _RootState extends State<Root> with WidgetsBindingObserver {
 
   void initState() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     super.initState();
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    AppConfig.init(context);
+    ApiServerDio.init();
+    AppConfig.instanceInit()!.setClient(client: widget.client);
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: EnvironmentConfig.of(context)?.primaryTheme,
+      ),
+    );
+  }
+
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this); // listen for system changes
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Singleton.instanceInit()?.context = context;

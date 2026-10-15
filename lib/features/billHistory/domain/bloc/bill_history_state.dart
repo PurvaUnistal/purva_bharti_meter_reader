@@ -21,12 +21,8 @@ class BillHistoryEmptyState extends BillHistoryState {
 
 class FetchBillHistoryDataState extends BillHistoryState {
   final List<BillHistoryModel> billHistoryList;
-  final String schema;
-  final String userId;
   FetchBillHistoryDataState(
-      {required this.billHistoryList ,
-    required this.schema,
-    required this.userId});
+      {required this.billHistoryList});
   @override
-  List<Object> get props => [billHistoryList, schema, userId];
+  List<Object> get props => [billHistoryList];
 }

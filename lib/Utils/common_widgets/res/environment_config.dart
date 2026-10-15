@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'enums.dart';
 
 class EnvironmentConfig extends InheritedWidget {
@@ -26,6 +27,30 @@ class EnvironmentConfig extends InheritedWidget {
         return "https://mgl.smartgasnet.com/api/";
       case EnvironmentFlavors.prodHNGPL:
         return "https://hngpl.smartgasnet.com/api/";
+    }
+  }
+
+  Color get primaryTheme {
+    switch (flavors) {
+      case EnvironmentFlavors.prodPBGPL:
+        return Colors.green.shade800;
+      case EnvironmentFlavors.prodMGL:
+        return Colors.green.shade800;
+      case EnvironmentFlavors.prodHNGPL:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+}  }
+
+  Color get secondaryTheme {
+    switch (flavors) {
+      case EnvironmentFlavors.prodPBGPL:
+        return Color(0xFFF5C400);
+
+      case EnvironmentFlavors.prodMGL:
+        return Color(0xFFF5C400);
+      case EnvironmentFlavors.prodHNGPL:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 }

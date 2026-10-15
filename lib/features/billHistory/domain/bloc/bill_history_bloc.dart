@@ -19,12 +19,6 @@ class BillHistoryBloc extends Bloc<BillHistoryEvent, BillHistoryState> {
   List<BillHistoryModel>  _billHistorySearchList = [];
   List<BillHistoryModel>  get billHistorySearchList => _billHistorySearchList;
 
-  String _schema = "";
-  String get schema => _schema;
-
-  String _userId = "";
-  String get userId => _userId;
-
   BillHistoryBloc() : super(BillHistoryInitial()) {
     on<BillHistoryPageLoadEvent>(_pageLoad);
     on<BillHistorySearchKeywordEvent>(_searchKeyword);
@@ -32,8 +26,6 @@ class BillHistoryBloc extends Bloc<BillHistoryEvent, BillHistoryState> {
 
   _pageLoad(BillHistoryPageLoadEvent event, emit) async {
     emit(BillHistoryPageLoadState());
-    _schema = await SharedPref.getString(key: PrefsValue.schema);
-    _userId = await SharedPref.getString(key: PrefsValue.userId);
     _billHistorySearchList = [];
     _billHistoryList = [];
     await _fetchBillHistoryData(context: event.context,);
@@ -78,6 +70,6 @@ class BillHistoryBloc extends Bloc<BillHistoryEvent, BillHistoryState> {
   }
 
   _eventCompleted(Emitter<BillHistoryState> emit) {
-     emit(FetchBillHistoryDataState(billHistoryList: billHistoryList, schema: schema, userId: userId));
+     emit(FetchBillHistoryDataState(billHistoryList: billHistoryList));
   }
 }

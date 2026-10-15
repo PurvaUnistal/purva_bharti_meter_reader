@@ -7,6 +7,17 @@ class AppIcon {
   static String mglLogo = 'assets/icons/mgl_logo.png';
   static String hngplLogo = 'assets/icons/hngpl_logo.png';
   static String smartgasnet = 'assets/icons/smartgasnet.png';
+  static String unistalLogo = "assets/icons/unistal_logo.png";
+
+  static logo(){
+    return AppConfig.instanceInit()!.client == Client.purvaBharti
+        ? AppIcon.pbgplLogo
+        :AppConfig.instanceInit()!.client == Client.mahaNagar
+        ? AppIcon.mglLogo
+        :AppConfig.instanceInit()!.client == Client.hngpl
+        ? AppIcon.hngplLogo
+        : AppIcon.unistalLogo;
+  }
 }
 
 class AppString {
@@ -15,8 +26,7 @@ class AppString {
     Client.purvaBharti: "10-09-2026",
     Client.hngpl: "19-09-2026",
   };
-
-  static String get version => "Version : 1.0.0 - LMC-${_releaseDates[AppConfig.instanceInit()!.client] ?? ""}";
+  static String get date => "-${_releaseDates[AppConfig.instanceInit()!.client] ?? ""}";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String GA = "GA ";
   static String userName = "User Name ";

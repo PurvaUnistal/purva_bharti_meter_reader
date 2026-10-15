@@ -3,13 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Routes/routes_name.dart';
-import 'package:meter_reader_new/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:meter_reader_new/Utils/common_widgets/app_bar_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_color.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_string.dart';
 import 'package:meter_reader_new/Utils/common_widgets/background_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/button_widget.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/enums.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/environment_config.dart';
 import 'package:meter_reader_new/Utils/common_widgets/text_form_widget.dart';
 import 'package:meter_reader_new/features/Login/domain/bloc/login_bloc.dart';
 import 'package:meter_reader_new/features/Login/domain/bloc/login_event.dart';
@@ -153,8 +154,7 @@ class _LoginViewState extends State<LoginView> {
 
   Widget _emailWidget({required LoginFetchDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.emailLabel,
-      hintText: AppString.emailLabel,
+      labelText: AppString.emailLabel,
       autofillHints: const [AutofillHints.email, AutofillHints.password],
       keyboardType: TextInputType.emailAddress,
       prefixIcon: Icon(Icons.email, color: AppColor.primer,),
@@ -167,8 +167,7 @@ class _LoginViewState extends State<LoginView> {
 
   Widget _passwordWidget({required LoginFetchDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.passwordLabel,
-      hintText: AppString.passwordLabel,
+      labelText: AppString.passwordLabel,
       autofillHints: const [ AutofillHints.password, AutofillHints.email],
       keyboardType: TextInputType.visiblePassword,
       prefixIcon: Icon(Icons.password, color: AppColor.primer,
@@ -176,7 +175,7 @@ class _LoginViewState extends State<LoginView> {
       suffixIcon: IconButton(
         icon: Icon(
           dataState.isPassword ? Icons.visibility_off : Icons.visibility,
-          color: Colors.green.shade800,
+          color: EnvironmentConfig.of(context)?.primaryTheme
         ),
         onPressed: () {
           BlocProvider.of<LoginBloc>(context).add(LoginHideShowPasswordEvent(

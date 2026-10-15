@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +6,7 @@ import 'package:meter_reader_new/Utils/common_widgets/InternetConnectivity/conne
 import 'package:meter_reader_new/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
 import 'package:meter_reader_new/features/Login/domain/bloc/login_event.dart';
 import 'package:meter_reader_new/features/Login/domain/bloc/login_state.dart';
 import 'package:meter_reader_new/features/Login/domain/model/login_model.dart';
@@ -78,28 +80,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           if (res.user != null) {
             _loginModel = res;
             if (res.status == 200 && res.user?.role == "billing") {
+              await SharedPref.setString(key: PrefsValue.passwordVal, value: password);
+              await SharedPref.setString(key: PrefsValue.emailId, value: emailId);
+              String userJson = jsonEncode(res.toJson());
+              await SharedPref.setString(key: PrefsValue.userInfo, value: userJson);
+              await AppConfig.instanceInit()?.setLoginData(newLoginData: loginModel);
               PackageInfo packageInfo = await PackageInfo.fromPlatform();
+              String version = packageInfo.version;
               String buildNumber = packageInfo.buildNumber;
-              await SharedPref.setString(key: PrefsValue.buildNumber,value: buildNumber);
-              await SharedPref.setString(
-                  key: PrefsValue.passwordVal, value: password);
-              await SharedPref.setString(
-                  key: PrefsValue.emailId, value: emailId);
-              await SharedPref.setString(
-                  key: PrefsValue.userId, value: res.user!.id!);
-              await SharedPref.setString(
-                  key: PrefsValue.token, value: res.token!);
-              await SharedPref.setString(
-                  key: PrefsValue.schema, value: res.user!.schema!);
-              await SharedPref.setString(
-                  key: PrefsValue.userName, value: res.user!.name!);
-              await SharedPref.setString(
-                  key: PrefsValue.userRole, value: res.user!.role!);
-              Navigator.pushReplacementNamed(
-                event.context,
-              //  RoutesName.billingRequest,
-                RoutesName.homePage,
-              );
+              AppConfig.instanceInit()?.setBuildNumber(value: "$buildNumber($version)");
+              await SharedPref.setString(key: PrefsValue.buildNumber, value: packageInfo.buildNumber,);
+              Navigator.pushReplacementNamed(event.context, RoutesName.homePage);
             }
           }
         } else {

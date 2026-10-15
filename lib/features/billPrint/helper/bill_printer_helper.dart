@@ -5,21 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as imgs;
 import 'package:meter_reader_new/Utils/Utils.dart';
-import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:meter_reader_new/features/billPrint/domain/model/bill_printer_model.dart';
 import 'package:meter_reader_new/service/Apis.dart';
-import 'package:meter_reader_new/service/api_helper.dart';
+import 'package:meter_reader_new/service/api_server_dio.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class BillPrinterHelper {
   static Future<dynamic> fetchBillData({required BuildContext context, required dynamic billId, required String schema}) async {
-
-    String token = await SharedPref.getString(key: PrefsValue.token);
     try {
       String url = Apis.billPrintData + "$billId&schema=$schema";
       log(url);
-      var res = await ApiHelper.getData(urlEndPoint:url ,context: context);
+      var res = await ApiServerDio.getData(urlEndPoint:url);
       if(res != null && res["error"] == false){
         return res;
       } else if (res != null && res["error"] == true) {

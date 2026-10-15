@@ -1,13 +1,10 @@
 class PrefsValue {
   static String isUserLogIn = "IsUserLogIn";
   static String emailId = "emailId";
+  static String baseUrl = "baseUrl";
+  static String userInfo = "userInfo";
   static String bpNumber = "bpNumber";
   static String passwordVal = "Password";
-  static String token = "token";
-  static String schema = "schema";
-  static String userRole = "User Role";
-  static String userName = "User Name";
-  static String userId = "User Id";
   static String tpaId = "TPA Id";
   static String dmaId = "DMA Id";
   static String gaId = "gaId";

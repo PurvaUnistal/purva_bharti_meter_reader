@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:meter_reader_new/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:meter_reader_new/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:meter_reader_new/Utils/common_widgets/app_update_cleaner.dart';
+import 'package:meter_reader_new/Utils/common_widgets/res/app_color.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_config.dart';
 import 'package:meter_reader_new/Utils/common_widgets/res/app_string.dart';
-import 'package:meter_reader_new/Utils/common_widgets/res/enums.dart';
+import 'package:meter_reader_new/features/Login/domain/model/login_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashView extends StatefulWidget {
@@ -19,6 +22,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   @override
   void initState() {
     // TODO: implement initState
+    _getData();
     toLogin();
     super.initState();
   }
@@ -39,51 +43,61 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     curve: Curves.fastOutSlowIn,
   );
 
-  Future<void> toLogin() async {
-
-    final email = await SharedPref.getString(key: PrefsValue.emailId);
-    final password = await SharedPref.getString(key: PrefsValue.passwordVal);
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    final newVersion  = await packageInfo.buildNumber;
-    AppConfig.instanceInit()?.setBuildName(buildName: packageInfo.buildNumber);
-    final oldVersion = await SharedPref.getString(key: PrefsValue.buildNumber);
-    Timer(const Duration(seconds: 3), () {
-      if (!mounted) return;
-      if (oldVersion == newVersion && (email.isNotEmpty || password.isNotEmpty)) {
-        Navigator.pushReplacementNamed(
-          context,
-         // RoutesName.billingRequest,
-          RoutesName.homePage,
-        );
+  Future<LoginModel?> _getData() async {
+    try {
+      String? userJson = await SharedPref.getString(key: PrefsValue.userInfo ?? "");
+      if (userJson != '') {
+        Map<String, dynamic> userMap = jsonDecode(userJson);
+        LoginModel loginModel = LoginModel.fromJson(userMap);
+        final appConfig = AppConfig.instanceInit();
+        if (appConfig != null) {
+          await appConfig.setLoginData(newLoginData: loginModel);
+        }
+        return loginModel;
       }
-      else {
-        Navigator.pushReplacementNamed(
-          context,
-          RoutesName.login,
-        );
-      }
-    });
+    } catch (e) {
+      debugPrint("Error in _getData: $e");
+    }
+    return null;
   }
 
+  Future<void> toLogin() async {
+    String email = await SharedPref.getString(key: PrefsValue.emailId);
+    String password = await SharedPref.getString(key: PrefsValue.passwordVal);
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    AppConfig.instanceInit()?.setBuildNumber(value: "$buildNumber($version)");
+    String oldVersion = await SharedPref.getString(key: PrefsValue.buildNumber);
+    print("newVersion--${buildNumber}");
+    print("oldVersion--${oldVersion}");
+    Timer(
+      const Duration(seconds: 3),
+          () async {
+        if(oldVersion == buildNumber){
+          if (email.isNotEmpty || password.isNotEmpty) {
+            Navigator.pushReplacementNamed(context, RoutesName.homePage);
+          }
+        } else {
+          await AppUpdateCleaner.run();
+          Navigator.pushReplacementNamed(context, RoutesName.login);
+        }
+      },
+    );
+  }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColor.white,
       body: Center(
         child: ScaleTransition(
           scale: _animation,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
-              AppConfig.instanceInit()!.client == Client.purvaBharti
-                  ? AppIcon.pbgplLogo
-                  :AppConfig.instanceInit()!.client == Client.mahaNagar
-                  ? AppIcon.mglLogo
-                  : AppConfig.instanceInit()!.client == Client.hngpl
-                  ? AppIcon.hngplLogo
-                  : AppIcon.pbgplLogo,
+              AppIcon.logo(),
               width: 200,
               height: 200,
             ),
