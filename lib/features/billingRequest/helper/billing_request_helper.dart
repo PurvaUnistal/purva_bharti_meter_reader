@@ -113,7 +113,7 @@ class BillingRequestHelper{
       var res = await ApiServerDio.getData(urlEndPoint: Apis.getPendingBillsMeterReader + json);
       if (res["data"] != null && res["success"] == true) {
         return BpNumberModel.fromJson(res);
-      }else if (res["data"] != null && res["success"] == false) {
+      } else if (res["data"] != null && res["success"] == false) {
         Utils.errorSnackBar(msg: res["data"], context: context);
         return null;
       }

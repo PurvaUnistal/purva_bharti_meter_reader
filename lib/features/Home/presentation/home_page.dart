@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       callMethodeChannel();
     });
+
     _load();
   }
 
@@ -147,7 +148,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBarWidget(
-        title: "Property type",
+        title: "Property Type",
         boolLeading: false,
         actions: [
           IconButton(

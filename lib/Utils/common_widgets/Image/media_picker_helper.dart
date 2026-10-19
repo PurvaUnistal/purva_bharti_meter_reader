@@ -335,13 +335,13 @@ class MediaPickerHelper {
         _showError(context, "Fake location detected. Please turn off mock location apps.");
         return null;
       }
-      //
-      // return await ImageStampHelper.stamp(
-      //   file: file,
-      //   latitude: position.latitude,
-      //   longitude: position.longitude,
-      //   address: LocationHelper.currentAddress,
-      // );
+
+      return await ImageStampHelper.stamp(
+        file: file,
+        latitude: position.latitude,
+        longitude: position.longitude,
+        address: LocationHelper.currentAddress,
+      );
     } catch (e) {
       if (kDebugMode) print("Stamp error: $e");
       _showError(context, "Failed to process image. Please try again.");
