@@ -38,7 +38,8 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
     AppConfig.instanceInit()!.setClient(client: widget.client);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: EnvironmentConfig.of(context)?.primaryTheme,
+        statusBarColor: Colors.transparent,
+        systemStatusBarContrastEnforced: false,
       ),
     );
   }
@@ -54,7 +55,7 @@ class _RootState extends State<Root> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     Singleton.instanceInit()?.context = context;
     AppConfig.instanceInit()!.setClient(client: widget.client);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: AppColor.primer));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent,systemStatusBarContrastEnforced: false, ));
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (BuildContext context) => LoginBloc()),

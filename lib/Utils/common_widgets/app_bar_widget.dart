@@ -83,9 +83,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       titleSpacing: 8,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: primary,
+        statusBarColor:  Colors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
+        systemStatusBarContrastEnforced: false,
       ),
       iconTheme: const IconThemeData(color: Colors.white),
       shape: const RoundedRectangleBorder(
